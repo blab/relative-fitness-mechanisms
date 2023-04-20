@@ -1,0 +1,254 @@
+%Preamble
+\documentclass[11pt,oneside,letterpaper]{article}
+
+% graphicx package, useful for including eps and pdf graphics
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+% basic packages
+\usepackage{color}
+\usepackage{parskip}
+\usepackage{float}
+
+% make links a more pleasing color and don't box them
+\definecolor{blue}{rgb}{0.85,0.70,0.99}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+
+% text layout
+\usepackage{geometry}
+\geometry{textwidth=15cm} % 15.25cm for single-space, 16.25cm for double-space
+\geometry{textheight=22cm} % 22cm for single-space, 22.5cm for double-space
+
+% helps to keep figures from being orphaned on a page by themselves
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+
+% bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,font=small]{caption}
+
+% review layout with double-spacing
+%\usepackage{setspace}
+%\doublespacing
+%\captionsetup{labelfont=bf,labelsep=period,font=doublespacing}
+
+% cite package, to clean up citations in the main text
+\usepackage{cite}
+
+% Remove brackets from numbering in list of References
+\renewcommand\refname{\large References}
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+\usepackage{authblk}
+\renewcommand\Authands{ \& }
+\renewcommand\Authfont{\normalsize \bf}
+\renewcommand\Affilfont{\small \normalfont}
+\makeatletter
+\renewcommand\AB@affilsepx{, \protect\Affilfont}
+\makeatother
+
+% notation
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\wt}{\text{wt}}
+\newcommand{\var}{\text{var}}
+\newcommand{\vac}{\text{vac}}
+
+
+\title{Transmission mechanisms determine relative fitness and frequency dynamics of viral variants}
+
+\author[1,2,*]{Marlin D.\ Figgins}
+\author[1,3]{Trevor Bedford}
+\affil[1]{Vaccine and Infectious Disease Division, Fred Hutchinson Cancer Research Center, Seattle, WA, USA}
+\affil[2]{Department of Applied Mathematics, University of Washington, Seattle, WA, USA}
+\affil[3]{Howard Hughes Medical Institute, Seattle, WA, USA}
+\affil[*]{Corresponding author: mfiggins@uw.edu}
+\date{\today}
+%Figure out author affilations...
+% https://maehler.se/blog/2013/11/01/authors-and-affiliations-in-latex
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Viral sequencing efforts have ...
+    Classifying variants into coarse fitness groups have allowed models of
+    Models for frequency dynamics are becoming important as they are useful for describing the rise and fall of viral variants at course levels.
+    However, these models are typically divorced from a direct interpretation at the level of transmission.
+    We generalize the idea of frequency dynamic models to exponentially growing populations and show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
+    We then use these models to highlight several complications of frequency dynamic analysis for infectious disease variants and attribution of particular fitness mechanisms from frequency data alone. 
+\end{abstract}
+
+\section*{Introduction}
+
+COVID-19 pandemic $\rightarrow$ Desire to quantify the rate at which novel variants are rising in frequency.
+
+It has been shown that variant transmission advantages may differ geographically and temporally though simple models assume this transmission advantage is constant in time and space.
+Further, existing models which do allow for variation in variant transmission advantages often do not have a mechanistic underpinning for why these transmission advantages exist and may persist.
+These non-mechanistic transmission advantages are useful for real-time situation analysis though more work must be done to develop theory for how various mechanisms contribute to population change.
+
+We introduce a theory of relative fitness and transmission advantages for exponentially growing populations.
+We then apply this to several ordinary differential equation models of epidemics to assess how different transmission mechanisms may contribute to variant turnover.
+
+(Point from here is just to analyze how these different mechanisms correspond to our existing models for transmission advantages and how this affects our ability to forecast).
+
+\section*{Results}
+
+\subsection*{Exponentially growing populations to frequency dynamics}%
+
+We consider a population consisting of $V$ exponentially-growing variants
+\begin{align*}
+    \frac{d I_{v}}{d t} = r_{v}(t) I_{v}(t), \quad v = 1,2, \ldots, V.
+\end{align*}
+
+This differential equation has known solution
+
+\begin{align*}
+I_{v}(t) = I_{v}(0) \exp\left( \int_{0}^{t} r_{v}(s) ds\right),
+\end{align*}
+where $I_{v}(0)$ is the initial number of infectious individuals of variant $v$. 
+Writing the frequency of variant $v$ in the population as  $f_{v}(t) = I_{v}(t) / \sum_{u=1}^{V} I_{u}(t)$, we can derive an ODE for variant frequency
+\begin{align*}
+    \frac{d f_{v}}{d t} &= f_{v} \left( \sum_{u=1}^{V} [r_{v}(t) - r_{u}(t)] f_{u} \right)\\
+                        &= f_{v} \left( r_{v}(t) - \sum_{u=1}^{V} r_{u}(t) f_{u} \right).
+\end{align*}
+
+We can see these equations have the following solution
+\begin{align}
+    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} r_{v}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} r_{u}(s) ds)}
+\end{align}
+
+
+\paragraph{Relative frequency and relative fitness}%
+
+Using the above, we can write the relative frequency of variant $v$ over $u$ as $x_{v,u}(t) = f_{v}(t) / f_{u}(t)$
+\begin{align*}
+    x_{v, u}(t) = \frac{f_{v}(t)}{f_{u}(t)} &= \frac{f_{v}(0)}{f_{u}(0)} \exp \left( \int_{0}^{t} [r_{v}(s) - r_{u}(s)] ds \right)\\
+                                            &=x_{v,u}(0)\exp \left( \int_{0}^{t} \lambda_{v,u}(s) ds \right).
+\end{align*}
+
+Notice this relative frequency change depends on the initial relative frequencies and the function $\lambda_{v,u}(t) = r_{v}(t) - r_{u}(t)$ which we'll call the relative fitness of $v$ over $u$.
+We can notice that this relative frequency is exactly
+\begin{align}
+\lambda_{v, u}(t) =  \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right]
+\end{align}
+
+What else is there to discuss here. Cumulative relative frequency as an explanation for frequency change?
+
+\paragraph{Cummulative relative-fitness and frequency change}
+
+\subsection*{Applications to epidemic models}
+
+\paragraph{Two-strain SIR}%
+
+For simplicity, we will begin by analyzing a two-strain SIR based model in which the variant viruses can differ by increased intrinsic transmissibility (via $\eta_{T}$) and immune escape against wild-type immunity (via $\eta_{E}$).
+This system of 4 ordinary differential equations is written in full below.
+
+\begin{align*}
+    \frac{d S}{d t} &= - \beta S I_{w} - \beta \eta_{T} S I_{v}\\ 
+    \frac{d I_{w}}{dt} &= \beta S I_{v} - \gamma I_{w}\\
+    \frac{d I_{v}}{dt} &= \beta \eta_{T} S I_{v} + \beta \eta_{T} \eta_{E} \phi_{w} I_{v} - \gamma I_{v}\\
+    \frac{d \phi_{w}}{dt} &= - \beta \eta_{T} \eta_{E} \phi_{w} I_{v}
+\end{align*}
+
+We can consider epidemic models which decompose to the form presented in equation (ref).
+
+%TODO: Analysis the tranmissibility-escape trade off by writing out the relative fitness directly.
+%TODO: Show that reltive fitness of an emergening immune escape variant depends on the present immunity
+%TODO: Additionally that a plane of fitness which depends on the at-risk populations
+
+\paragraph{Models of immune escape against heterogeneous backgrounds}%
+
+We'll now consider a model where all hosts are assumed to fall into one of $B$ immune background $\phi_{b}$ for $b =1, \ldots, B$.
+We assume that infection by each variant $v$ then leaves recovered hosts into the corresponding immune background $b_{v}$.
+Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
+
+We can then write the system of ODEs as 
+\begin{align*}
+    \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
+    \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}
+\end{align*}
+
+For simplicity, we'll begin with a two variant system with vaccination, so there are three immune background $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
+
+We'll consider a two-variant example with vaccination.
+
+Is there a silly model here which will conform to all our expectations.
+
+(Does this `increase' antigenic evolution? What does that even mean?)
+
+\section*{Applications}
+
+\paragraph{Interpreting common methods of relative fitness estimation}%
+
+Multinomial logistic regression assumes. This provides estimates of the relative fitness compared to some background strain.
+Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time. (Show this at length)
+
+This will discuss basic mlr and spline mlr... (What kind of ODEs do these beget?)
+When is this model good? (When at-risk pop is barely changing?)
+
+Comparing to our previous examples, the assumption of constant growth advantage is most appropriate 
+
+\paragraph{Estimating relative fitness using Gaussian Processes}%
+
+\paragraph{Transmisibility-Escape Tradeoff}%
+
+\paragraph{Are initial growth rates sufficient for predicting dominance}%
+
+What happens when there is no mutation? Practical limits given mutation dynamics?
+
+\paragraph{How does changing immune pools affect selection?}%
+- This is looking at vaccination as a driver of selection...
+
+\paragraph{Correlations are insufficient for mechanism identification}%
+
+\paragraph{Predictive capabilities of simple models on complex dynamics}%
+
+\section*{Discussion}
+
+\section*{Methods}
+
+\subsection*{Data and code accessibility}
+
+Source code used to generate figures are available at. 
+Additionally, implementations of all models discussed are included at ...
+
+\subsection*{Competing interests}%
+
+\subsection*{Author contributions}
+MF conceived the study. 
+% TB gathered sequence and case count data. 
+MF designed and implemented inference models. 
+MF performed the analysis. 
+% MF, TB interpreted the results. 
+% MF, TB wrote the paper.
+
+
+\subsection*{Acknowledgements}%
+
+\cite{Ito2021}
+
+\bibliographystyle{plos}
+\bibliography{relative-fitness-mechanisms}
+
+\newpage
+
+\appendix
+
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{page}{1}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thepage}{S\arabic{page}}
+
+\section*{Supplemental Appendix}
+
+\end{document}
