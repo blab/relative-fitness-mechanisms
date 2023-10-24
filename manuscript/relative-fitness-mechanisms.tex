@@ -1,5 +1,5 @@
 %Preamble
-\documentclass[11pt,oneside,letterpaper]{article}
+\documentclass[12pt,oneside,letterpaper]{article}
 
 % graphicx package, useful for including eps and pdf graphics
 \usepackage{graphicx}
@@ -78,35 +78,51 @@
 \maketitle
 
 \begin{abstract}
-    Viral sequencing efforts have ...
-    Classifying variants into coarse fitness groups have allowed models of
-    Models for frequency dynamics are becoming important as they are useful for describing the rise and fall of viral variants at course levels.
-    However, these models are typically divorced from a direct interpretation at the level of transmission.
-    We generalize the idea of frequency dynamic models to exponentially growing populations and show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
-    We then use these models to highlight several complications of frequency dynamic analysis for infectious disease variants and attribution of particular fitness mechanisms from frequency data alone. 
+    Over the course of the COVID-19 pandemic, several SARS-CoV-2 variants have emerged globally, leading to large variant waves in populations of mixed immune backgrounds.
+    Classifying these variant viruses into coarse fitness groups has allowed scientists to track the rise and fall of variants by modeling their frequencies over time.
+    These models of frequency dynamics enable us to infer fitness advantages in variants, however, these models are typically divorced from a direct interpretation at the level of transmission.
+    In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
+    We use these models to highlight several complications of when analyzing the frequency dynamics for infectious disease variants, namely the difficulty in discovering fitness mechanisms from frequency data alone. 
+    We then develop several models for inference of frequency dynamics using Gaussian Processes and dimensionality reduction techniques to estimate latent pseudo-immune components which explain variant dynamics.
+    Finally, we apply these models to SARS-CoV-2 sequences in the United States.
+     % To better understand the relationship between population dynamics expected from traditional compartment models of epidemics,
 \end{abstract}
 
 \section*{Introduction}
 
-COVID-19 pandemic $\rightarrow$ Desire to quantify the rate at which novel variants are rising in frequency.
+The COVID-19 was characterized through large sweeping waves of new variants. 
+This phenomenon is consistent with antigenic evolution and is observation in several other viruses such as [KATIE???]
 
-It has been shown that variant transmission advantages may differ geographically and temporally though simple models assume this transmission advantage is constant in time and space.
-Further, existing models which do allow for variation in variant transmission advantages often do not have a mechanistic underpinning for why these transmission advantages exist and may persist.
+
+To estimate and understand variant turn-over, frequency dynamic models of variant relative fitness have been developed.
+These models estimate the relative fitness of circulating variants from frequency data, typically represented by counts of variant sequences over time.
+Relative fitness in these models is often assumed to be a constant quantity for simplicity and intrinsic to the variant of interest, however this may not be reasonable due to the nature of the transmission process.
+
+Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) requires assumptions on the generation time of the transmission. [CITE]
+
+%TODO: Mention that we need to make assumptions about transmission process (generation time) to convert to population level
+
+It has been shown that variant transmission advantages differ geographically and temporally which suggests that variant transmission advantages are not necessarily fixed or determined intrinstically.
+Existing models which do allow for variation in variant transmission advantages often do not have a mechanistic underpinning for why these transmission advantages exist and may persist.
 These non-mechanistic transmission advantages are useful for real-time situation analysis though more work must be done to develop theory for how various mechanisms contribute to population change.
 
 We introduce a theory of relative fitness and transmission advantages for exponentially growing populations.
-We then apply this to several ordinary differential equation models of epidemics to assess how different transmission mechanisms may contribute to variant turnover.
+We then apply this to several ordinary differential equation models of epidemics to assess how different transmission mechanisms may contribute to variant turnover and describe relative fitness.
+Using these models, we then highlight the importance of population immunity, immune escape, and intrinsic transmissibility in determining variant turnover as well as short term forecasts of frequency growth.
 
-(Point from here is just to analyze how these different mechanisms correspond to our existing models for transmission advantages and how this affects our ability to forecast).
+With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to...
+
 
 \section*{Results}
 
 \subsection*{Exponentially growing populations to frequency dynamics}%
 
-We consider a population consisting of $V$ exponentially-growing variants
+We consider a viral population consisting of $V$ exponentially-growing variants with prevalence $I_{v}$ which follows:
 \begin{align*}
     \frac{d I_{v}}{d t} = r_{v}(t) I_{v}(t), \quad v = 1,2, \ldots, V.
 \end{align*}
+
+Here, $r_{v}(t)$ is the in-homogenous exponential growth rate for variant $v$.
 
 This differential equation has known solution
 
@@ -114,6 +130,7 @@ This differential equation has known solution
 I_{v}(t) = I_{v}(0) \exp\left( \int_{0}^{t} r_{v}(s) ds\right),
 \end{align*}
 where $I_{v}(0)$ is the initial number of infectious individuals of variant $v$. 
+
 Writing the frequency of variant $v$ in the population as  $f_{v}(t) = I_{v}(t) / \sum_{u=1}^{V} I_{u}(t)$, we can derive an ODE for variant frequency
 \begin{align*}
     \frac{d f_{v}}{d t} &= f_{v} \left( \sum_{u=1}^{V} [r_{v}(t) - r_{u}(t)] f_{u} \right)\\
@@ -134,15 +151,21 @@ Using the above, we can write the relative frequency of variant $v$ over $u$ as 
                                             &=x_{v,u}(0)\exp \left( \int_{0}^{t} \lambda_{v,u}(s) ds \right).
 \end{align*}
 
-Notice this relative frequency change depends on the initial relative frequencies and the function $\lambda_{v,u}(t) = r_{v}(t) - r_{u}(t)$ which we'll call the relative fitness of $v$ over $u$.
+Notice this relative frequency change depends on the initial relative frequencies and the relative fitness $\lambda_{v,u}(t) = r_{v}(t) - r_{u}(t)$ of $v$ over $u$.
 We can notice that this relative frequency is exactly
 \begin{align}
-\lambda_{v, u}(t) =  \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right]
+\lambda_{v, u}(t) = r_{v}(t) - r_{u}(t) = \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right] = - \lambda_{u,v}(t)
 \end{align}
 
-What else is there to discuss here. Cumulative relative frequency as an explanation for frequency change?
+This definition of relative fitness becomes essential in describing various modeling approaches for frequency dynamic data.
 
-\paragraph{Cummulative relative-fitness and frequency change}
+\paragraph{Cumulative relative-fitness and frequency change}
+
+From this, we can see that frequency change over time intervals depends only on the cumulative relative fitness over time intervals.
+Models of frequency change then can be described in terms of how they represent and estimate these relative fitnesses.
+This framework includes various existing methods for analyzing frequency data such as Huddleston et al, MLR, MLR Spline, ...
+
+In the following section, we show this framework applied to several simple compartmental models of epidemics.
 
 \subsection*{Applications to epidemic models}
 
@@ -176,33 +199,64 @@ We can then write the system of ODEs as
     \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}
 \end{align*}
 
+With this formulation, we can then write the relative fitnesses in terms of the escape rates $\vec{\eta}$ and the immune background proportions $\phi_{b}$ :
+
+\begin{align*}
+    \lambda_{v, u}(t) = \sum_{1\leq v \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
+\end{align*}
+
+This suggests that the relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
+Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting on variant frequencies.
+
+%TODO: Suggest that we might use PCA, SVD, and latent factor models to gain a better understanding of these models
+
 For simplicity, we'll begin with a two variant system with vaccination, so there are three immune background $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
-
-We'll consider a two-variant example with vaccination.
-
-Is there a silly model here which will conform to all our expectations.
 
 (Does this `increase' antigenic evolution? What does that even mean?)
 
 \section*{Applications}
 
-\paragraph{Interpreting common methods of relative fitness estimation}%
+Using the theory developed for exponentially-growing variant populations, we now re-visit existing methods for modeling viral frequency dynamics.
 
-Multinomial logistic regression assumes. This provides estimates of the relative fitness compared to some background strain.
-Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time. (Show this at length)
+\paragraph{Multinomial Logistic Regression}%
 
-This will discuss basic mlr and spline mlr... (What kind of ODEs do these beget?)
-When is this model good? (When at-risk pop is barely changing?)
+We begin with multinomial logistic regression with fixed relative fitnesses (MLR).
+This model can be written as
 
-Comparing to our previous examples, the assumption of constant growth advantage is most appropriate 
+\begin{align*}
+    f_{v}(t) = \frac{f_{v}(0) \exp(\lambda_{v} t)}{\sum_{u} f_{u}(0) \exp(\lambda_{u} t)},
+\end{align*}
+
+where $f_{v}(t)$ is the frequency of variant $v$ at time $t$ and $\lambda_{v}$ is the relative fitness of variant $v$.
+This provides estimates of the relative fitness compared to some reference strain $u^{*}$for which $\lambda_{u^*} = 0$.
+Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time (CITE FIGGINS AND BEDFORD)
+
+We can then see this model results from assuming that the at-risk populations are constant over-time.
+This assumption is useful since it requires no outside knowledge of the at-risk population and relative infection rates, though this may be less useful for longer forecasts or when there is large turnover in at-risk populations due to infection.
+
+\paragraph{Flu-forecasting}%
+
+Motivated by the observed antigenic evolution of seasonal influenza, the authors approximate the cumulative relative fitness between flu seasons on the level of individual strains as:
+
+\begin{align*}
+    \Lambda_{v,u}(t + \Delta t,t) = \beta_{1} x_{v,1} + \cdots + \beta_{p} x_{v, p} (\Delta t) = \vec{\beta} \cdot \vec{x}_{v} (\Delta t),
+\end{align*}
+
+where the relative fitness is determined by strain-specific predictors $\vec{x}_{v}$ and the regression parameter $\vec{\beta}_{v}$ are estimated.
+The authors choose predictors which describe the antigenic properties of strains though our previous work in 
 
 \paragraph{Estimating relative fitness using Gaussian Processes}%
+
+We develop a method for using Gaussian processes to model variant relative fitnesses.
+Here, the relative fitnesses are modeled using a Gaussian process with a ... kernel and shared hyper-parameters.
+This model is used in Figure ... to estimate the ... in ...
 
 \paragraph{Transmisibility-Escape Tradeoff}%
 
 \paragraph{Are initial growth rates sufficient for predicting dominance}%
 
 What happens when there is no mutation? Practical limits given mutation dynamics?
+Robustness of relative fitness under similar and varying mechanisms.
 
 \paragraph{How does changing immune pools affect selection?}%
 - This is looking at vaccination as a driver of selection...
@@ -210,6 +264,10 @@ What happens when there is no mutation? Practical limits given mutation dynamics
 \paragraph{Correlations are insufficient for mechanism identification}%
 
 \paragraph{Predictive capabilities of simple models on complex dynamics}%
+
+\paragraph{Dimensionality of immune space}%
+
+\paragraph{Latent factor models of relative fitness}
 
 \section*{Discussion}
 
