@@ -214,6 +214,20 @@ For simplicity, we'll begin with a two variant system with vaccination, so there
 
 (Does this `increase' antigenic evolution? What does that even mean?)
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{../notebooks/figures/vis_mechanisms.png}
+    \caption{\textbf{Method overview.} 
+    A. Prevalence by variant.
+    B. Exponential growth rate by variant.
+    C. Variant frequency.
+    D. Relative fitness to wildtype.
+    E. Underlying immune pools.
+    F. Effective reproduction number by variant.
+}%
+    \label{fig:vis_mechanisms}
+\end{figure}
+
 \section*{Applications}
 
 Using the theory developed for exponentially-growing variant populations, we now re-visit existing methods for modeling viral frequency dynamics.
@@ -253,6 +267,16 @@ This model is used in Figure ... to estimate the ... in ...
 
 \paragraph{Transmisibility-Escape Tradeoff}%
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{../notebooks/figures/transmission_tradeoff.png}
+    \caption{\textbf{Trade-off between immune escape and transmissibility increases.} 
+    A. Relative fitness for a transmissibility increasing variant and an immune escaping variant for $\eta_{T}=$, $\eta_{E}=$, $\beta=$. 
+    The intersection point shows the point after which the escape variant is has higher fitness. 
+    B. Modeling escape fraction versus transmissibility increase versus critical proportion exposed for immune escape dominance.}%
+    \label{fig:transmission_tradeoff}
+\end{figure}
+
 \paragraph{Are initial growth rates sufficient for predicting dominance}%
 
 What happens when there is no mutation? Practical limits given mutation dynamics?
@@ -260,6 +284,11 @@ Robustness of relative fitness under similar and varying mechanisms.
 
 \paragraph{How does changing immune pools affect selection?}%
 - This is looking at vaccination as a driver of selection...
+
+Is this not the same as the transmissibility trade off? Or are we considering two immune escaping?
+We want to think explicitly about vaccination and selection for variants?
+Could we treat this similar to SWP leaky paper where some fraction is reset or leaky vaccine to see what changes depending on vaccine efficacy
+Basically, vaccination can push you into the zone where escape is preferred :O
 
 \paragraph{Correlations are insufficient for mechanism identification}%
 
