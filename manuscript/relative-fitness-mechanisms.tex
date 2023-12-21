@@ -217,6 +217,9 @@ With this formulation, we can then write the relative fitnesses in terms of the 
 This suggests that the relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting on variant frequencies.
 
+%TODO: Compare this to the model where you explicitly count histories
+% These give the same but you are summing over immune histories!
+
 %TODO: Suggest that we might use PCA, SVD, and latent factor models to gain a better understanding of these models
 
 For simplicity, we'll begin with a two variant system with vaccination, so there are three immune background $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
@@ -227,6 +230,7 @@ For simplicity, we'll begin with a two variant system with vaccination, so there
     \centering
     \includegraphics[width=0.8\linewidth]{../notebooks/figures/vis_mechanisms.png}
     \caption{\textbf{Method overview.} 
+        WHAT IS BEING SHOWN HERE.
     A. Prevalence by variant.
     B. Exponential growth rate by variant.
     C. Variant frequency.
@@ -322,10 +326,19 @@ Robustness of relative fitness under similar and varying mechanisms.
 \paragraph{How does changing immune pools affect selection?}%
 - This is looking at vaccination as a driver of selection...
 
+Basically, we want to understand $\lambda(\phi_{1}, \ldots, \phi_{S})$. What do we want to say?
+
+Do we want to consider an expansion in $\frac{d}{d\phi_{s}}$ to assess sensitivity to immune group? What direction increases section overall? (This will come down to just the eta?)
+You can have higher selection, but how do cases change in simulation. What would vaccinating against wild-type do? What would vaccinating against variant do? Depends on escape potential against variant?
+How does vaccination uptake matter here? Do we want to plot change in relative fitnesses as a function of update? Increased selection but decreased cases
+
+Basically, we want to also monitor decrease in absolute fitness cuz increased selection pressure =/= increased cases
+
+
 Is this not the same as the transmissibility trade off? Or are we considering two immune escaping?
 We want to think explicitly about vaccination and selection for variants?
 Could we treat this similar to SWP leaky paper where some fraction is reset or leaky vaccine to see what changes depending on vaccine efficacy
-Basically, vaccination can push you into the zone where escape is preferred :O
+Basically, vaccination can push you into the zone where escape is preferred :O (SEE ABOVE)
 
 \paragraph{Correlations are insufficient for mechanism identification}%
 
@@ -335,7 +348,18 @@ Basically, vaccination can push you into the zone where escape is preferred :O
 
 \paragraph{Latent factor models of relative fitness}
 
+
 \section*{Discussion}
+
+Mention limitations of generation time assumptions for compartmental epidemic models
+
+%TODO: Discuss extensions to Laplace transform method
+% We can 1.8 from my general exam to compute roots
+% We can then compute fitness
+Limitations of deterministic fitness models 
+
+
+
 
 \section*{Methods}
 
