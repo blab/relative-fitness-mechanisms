@@ -14,6 +14,21 @@ from tinygp import kernels, GaussianProcess
 # TODO: Compare to a quick and dirty model where we
 # TODO: fit to log(x_{v,pivot}) over time and then estimate marginal likelihood over parameters
 
+def not_yet_observed(seq_counts):
+    """
+    Compute binary predictor for whether a variant has been seen by time t.
+    """
+    T, V = seq_counts.shape
+    never_seen = np.ones_like(seq_counts)
+    for v in range(V):
+        for t in range(1, T):
+            # If we haven't seen yet, check that we still havent
+            if never_seen[t-1, v]:
+                never_seen[t,v] = seq_counts[t,v] == 0
+            # If we have seen it, we know it's 0
+            else:
+                never_seen[t,v] = 0
+    return never_seen
 
 # Abstract EvofrGP class
 # class EvofrGP:
@@ -76,7 +91,7 @@ def relative_fitness_gp_numpyro(
     )
 
     with numpyro.plate("variant", N_variants - 1):
-        _init_logit = numpyro.sample("init_logit", dist.Normal(0, 5.0))
+        _init_logit = numpyro.sample("init_logit", dist.Normal(0, 6.0))
         _fitness = numpyro.sample(
             "_delta",
             dist.MultivariateNormal(gp.loc, scale_tril=gp.solver.scale_tril),
@@ -87,6 +102,11 @@ def relative_fitness_gp_numpyro(
     # Sum fitness to get dynamics over time
     init_logit = jnp.append(_init_logit, 0.0)
     logits = jnp.cumsum(fitness.at[0, :].set(0), axis=0) + init_logit
+
+    # Adjust for introductions
+    never_seen = not_yet_observed(seq_counts)
+    logits = logits - 10 * never_seen
+
 
     # Evaluate likelihood
     obs = None if pred else np.nan_to_num(seq_counts)
