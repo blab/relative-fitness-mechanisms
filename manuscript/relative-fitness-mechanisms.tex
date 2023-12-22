@@ -230,7 +230,7 @@ For simplicity, we'll begin with a two variant system with vaccination, so there
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{../notebooks/figures/vis_mechanisms.png}
+    \includegraphics[width=0.8\linewidth]{./figures/vis_mechanisms.png}
     \caption{\textbf{Method overview.} 
     Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
     Simulations of a three-variant model including a wildtype, one intrinsic transmission increased variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
@@ -278,13 +278,16 @@ The authors choose predictors which describe the antigenic properties of strains
 \paragraph{Estimating relative fitness using Gaussian Processes}%
 
 We develop a method for using Gaussian processes to model variant relative fitnesses.
+
+%TODO: Provide short explainer on Gaussian processes and use figure from lab meeting as supplemental figure
+
 Here, the relative fitnesses are modeled using a Gaussian process with a ... kernel and shared hyper-parameters.
 For efficiency, we implement a Hilbert Space Gaussian Process approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
 This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of the simulated variant dynamics in Figure \ref{fig:vis_mechanisms}.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{../notebooks/figures/gp_example.png}
+    \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
     \caption{\textbf{Estimating relative fitness with Gaussian Processes.} 
     Gaussian processes allow us a non-parametric estimate of the relative fitness for variants. 
     Below we show an example of using Gaussian processes to model the 3 variant example shown in \ref{fig:vis_mechanisms}.
@@ -299,7 +302,7 @@ This model is used in Figure \ref{fig:gp_example} to estimate the relative fitne
 \paragraph{Transmisibility-Escape Tradeoff}%
 
 %TODO: Move this section to tradeoff
-Repeating this analysis for two variants $v= \varE, \varT$ such that $\eta_{T}^{\varE} = 1$ and $\eta_{E}^{\varT} = 0$, we can write relative fitnesses an escape only variant or transmissibility increased variant as
+Extending this analysis to two variant viruses $v= \wt, \varE, \varT$ such that $\eta_{T}^{\varE} = 1$ and $\eta_{E}^{\varT} = 0$, we can write relative fitnesses an escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, w} &= \eta_{E} \beta \phi_{w}(t)\\
     \lambda_{\varT, w} &= (\eta_{T} - 1) \beta S(t).
@@ -323,7 +326,7 @@ We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{../notebooks/figures/transmission_tradeoff.png}
+    \includegraphics[width=0.8\linewidth]{./figures/transmission_tradeoff.png}
     \caption{\textbf{Trade-off between immune escape and transmissibility increases.} 
     A. Relative fitness for a transmissibility increasing variant and an immune escaping variant for $\eta_{T}=$, $\eta_{E}=$, $\beta=$. 
     The intersection point shows the point after which the escape variant is has higher fitness. 
@@ -383,13 +386,19 @@ Basically, vaccination can push you into the zone where escape is preferred :O (
 
 \paragraph{Latent factor models of relative fitness}
 
+\ref{fig:latent_immune}
 %TODO: Extend this section to use more recent data, embed pango lineages?
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{../notebooks/figures/transmission_tradeoff.png}
-    \caption{\textbf{Latent factor models of immunity recapitualate variant structure.} 
-        T
+    \includegraphics[width=0.8\linewidth]{./figures/latent_immune.png}
+    \caption{\textbf{Latent factor models of immunity describe variant structure.} 
+        We fit the latent immunity factor model to early SARS-CoV-2 frequency data.
+        A. Variant frequency. Points are the sample frequencies and the thick lines are modeled variant frequencies. Each is colored by variant of concern.
+        B. Estimated relative fitness for each variant.
+        C. Estimated pseudo-immunity over time.
+        D. Estimated pseudo-escape rates for each variant.
+        E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
     }
     \label{fig:latent_immune}
 \end{figure}
