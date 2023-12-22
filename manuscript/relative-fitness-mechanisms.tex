@@ -93,26 +93,28 @@
 \section*{Introduction}
 
 The COVID-19 was characterized through large sweeping waves of new variants. 
-This phenomenon is consistent with antigenic evolution and is observation in several other viruses such as [KATIE???]
+This phenomenon is consistent with antigenic evolution and is observation in several other viruses such as [INSERT CITATIONS].
 
 
 To estimate and understand variant turn-over, frequency dynamic models of variant relative fitness have been developed.
 These models estimate the relative fitness of circulating variants from frequency data, typically represented by counts of variant sequences over time.
 Relative fitness in these models is often assumed to be a constant quantity for simplicity and intrinsic to the variant of interest, however this may not be reasonable due to the nature of the transmission process.
 
-Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) requires assumptions on the generation time of the transmission. [CITE]
+Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) requires assumptions on the generation time of the transmission. \cite{Wallinga2006}
 
 %TODO: Mention that we need to make assumptions about transmission process (generation time) to convert to population level
 
-It has been shown that variant transmission advantages differ geographically and temporally which suggests that variant transmission advantages are not necessarily fixed or determined intrinstically.
-Existing models which do allow for variation in variant transmission advantages often do not have a mechanistic underpinning for why these transmission advantages exist and may persist.
+It has been shown that variant transmission advantages differ geographically and temporally which suggests that variant transmission advantages are not necessarily fixed or determined solely due to biology.
+Existing models which do allow for variation in variant transmission advantages often do not have a mechanistic underpinning for why these transmission advantages exist and may persist \cite{figgins2022sars, susswein2023leveraging}.
 These non-mechanistic transmission advantages are useful for real-time situation analysis though more work must be done to develop theory for how various mechanisms contribute to population change.
 
 We introduce a theory of relative fitness and transmission advantages for exponentially growing populations.
 We then apply this to several ordinary differential equation models of epidemics to assess how different transmission mechanisms may contribute to variant turnover and describe relative fitness.
 Using these models, we then highlight the importance of population immunity, immune escape, and intrinsic transmissibility in determining variant turnover as well as short term forecasts of frequency growth.
 
-With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to...
+With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to characterize trade-offs between immune escape and intrinsic transmissibility boosts for pathogens.
+
+%TODO: Throw in generation time change? Then I can discuss work of SWP and mention paper where they showed shorter generation times for Omicron (?)
 
 
 \section*{Results}
@@ -208,11 +210,11 @@ We can then write the system of ODEs as
     \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}
 \end{align*}
 
-With this formulation, we can then write the relative fitnesses in terms of the escape rates $\vec{\eta}$ and the immune background proportions $\phi_{b}$ :
+With this formulation, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ :
 
-\begin{align*}
+\begin{equation} \label{eq:escape_relative_fitness}
     \lambda_{v, u}(t) = \sum_{1\leq v \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
-\end{align*}
+\end{equation}
 
 This suggests that the relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting on variant frequencies.
@@ -230,11 +232,12 @@ For simplicity, we'll begin with a two variant system with vaccination, so there
     \centering
     \includegraphics[width=0.8\linewidth]{../notebooks/figures/vis_mechanisms.png}
     \caption{\textbf{Method overview.} 
-        WHAT IS BEING SHOWN HERE.
+    Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
+    Simulations of a three-variant model including a wildtype, one intrinsic transmission increased variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
     A. Prevalence by variant.
     B. Exponential growth rate by variant.
     C. Variant frequency.
-    D. Relative fitness to wildtype.
+    D. Relative fitness relative to wildtype.
     E. Underlying immune pools.
     F. Effective reproduction number by variant.
 }%
@@ -256,7 +259,7 @@ This model can be written as
 
 where $f_{v}(t)$ is the frequency of variant $v$ at time $t$ and $\lambda_{v}$ is the relative fitness of variant $v$.
 This provides estimates of the relative fitness compared to some reference strain $u^{*}$for which $\lambda_{u^*} = 0$.
-Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time (CITE FIGGINS AND BEDFORD)
+Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time. \cite{Wallinga2006}
 
 We can then see this model results from assuming that the at-risk populations are constant over-time.
 This assumption is useful since it requires no outside knowledge of the at-risk population and relative infection rates, though this may be less useful for longer forecasts or when there is large turnover in at-risk populations due to infection.
@@ -276,7 +279,8 @@ The authors choose predictors which describe the antigenic properties of strains
 
 We develop a method for using Gaussian processes to model variant relative fitnesses.
 Here, the relative fitnesses are modeled using a Gaussian process with a ... kernel and shared hyper-parameters.
-This model is used in Figure ... to estimate the ... in ...
+For efficiency, we implement a Hilbert Space Gaussian Process approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
+This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of the simulated variant dynamics in Figure \ref{fig:vis_mechanisms}.
 
 \begin{figure}[h]
     \centering
@@ -286,9 +290,9 @@ This model is used in Figure ... to estimate the ... in ...
     Below we show an example of using Gaussian processes to model the 3 variant example shown in \ref{fig:vis_mechanisms}.
     A. Sequence counts ...
     B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the ...\% credible interval.
-    C. Relative fitneses. Dashed line shows true relative fitnesses from mechanistic model. 
+    C. Relative fitnesses. Dashed line shows true relative fitnesses from mechanistic model. 
 }
-    \label{fig:transmission_tradeoff}
+    \label{fig:gp_example}
 \end{figure}
 
 
@@ -306,7 +310,16 @@ In the simplest case where individuals are either susceptible or have wildtype i
     \phi^{*} = \frac{\eta_{T} - 1}{\eta_{E} + \eta_{T} - 1}.
 \end{align*}
 
-This trade off ... [include description and what this means] \ref{fig:transmission_tradeoff}
+For past exposure level greater than $\phi^{*}$, escape variant have a higher relative fitness.
+This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Figure \ref{fig:transmission_tradeoff}). 
+Additionally, this shows that when intrinsic transmissibility increases are limited escape is more likely to be a dominant mechanism for variant turnover.
+
+IDEA: Plot required transmission increase to beat escape variant given initial wave with R0?
+
+IDEA: Shoud I translate this to probability escape variant wins with simple Wright-Fisher simulation?
+
+
+We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}
 
 \begin{figure}[h]
     \centering
@@ -324,15 +337,37 @@ What happens when there is no mutation? Practical limits given mutation dynamics
 Robustness of relative fitness under similar and varying mechanisms.
 
 \paragraph{How does changing immune pools affect selection?}%
-- This is looking at vaccination as a driver of selection...
+- This is looking at vaccination as a driver of selection
 
 Basically, we want to understand $\lambda(\phi_{1}, \ldots, \phi_{S})$. What do we want to say?
+
+To understand how change in immune-landscape in the host population affects the relative fitness of immune escape variants, we can consider the gradient of an immune escape model
+
+Using equation \ref{eq:escape_relative_fitness}, we can write the gradient of the relative fitness with respect to the immune backgrounds as
+
+\begin{align*}
+    \nabla_{\phi} \lambda^{\text{escape}}_{v,u}(t) = (\eta_{v,1} - \eta_{u,1}, \ldots, \eta_{v,B} - \eta_{u,B}).
+\end{align*}
+
+From this equation, it's clear that to decrease 
+
+
+% QUESTION: Can vaccination push you into the regime where escape is preferred? Yes! When is that better overall tho at the population level?
+% FIGURE IDEA: For varying vaccination rates, show when escape or transmission is preferred.
+% FIGURE IDEA: Show based on simulation with rates probability escape variant wins.
+
+% This probability exists in closed form?
+
+However, decreasing relative fitness for a variant relative to another is not the same as decreasing selection over.
+In order to decrease, 
+
+Do we have an idea for variant pressure / total selection here? Can we show whether decreasing selection is same as decreasing cases?
 
 Do we want to consider an expansion in $\frac{d}{d\phi_{s}}$ to assess sensitivity to immune group? What direction increases section overall? (This will come down to just the eta?)
 You can have higher selection, but how do cases change in simulation. What would vaccinating against wild-type do? What would vaccinating against variant do? Depends on escape potential against variant?
 How does vaccination uptake matter here? Do we want to plot change in relative fitnesses as a function of update? Increased selection but decreased cases
 
-Basically, we want to also monitor decrease in absolute fitness cuz increased selection pressure =/= increased cases
+Basically, we want to also monitor decrease in absolute fitness because increased selection pressure =/= increased cases
 
 
 Is this not the same as the transmissibility trade off? Or are we considering two immune escaping?
@@ -348,6 +383,19 @@ Basically, vaccination can push you into the zone where escape is preferred :O (
 
 \paragraph{Latent factor models of relative fitness}
 
+%TODO: Extend this section to use more recent data, embed pango lineages?
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{../notebooks/figures/transmission_tradeoff.png}
+    \caption{\textbf{Latent factor models of immunity recapitualate variant structure.} 
+        T
+    }
+    \label{fig:latent_immune}
+\end{figure}
+
+
+%TODO: Could be useful to directly compare to published antigenic cartography work as mentioned before ...
 
 \section*{Discussion}
 
@@ -359,9 +407,16 @@ Mention limitations of generation time assumptions for compartmental epidemic mo
 Limitations of deterministic fitness models 
 
 
-
-
 \section*{Methods}
+
+\paragraph{Generating sequence counts}%
+
+\cite{aksamentov2021nextclade}
+\cite{Hadfield2018}
+
+\paragraph{Gaussian process model}%
+
+\paragraph{Latent immune factor model}%
 
 \subsection*{Data and code accessibility}
 
@@ -381,8 +436,6 @@ MF performed the analysis.
 
 \subsection*{Acknowledgements}%
 
-\cite{Ito2021}
-
 \bibliographystyle{plos}
 \bibliography{relative-fitness-mechanisms}
 
@@ -398,5 +451,35 @@ MF performed the analysis.
 \renewcommand{\thepage}{S\arabic{page}}
 
 \section*{Supplemental Appendix}
+
+\subsection*{Relative fitness for full immune history models}%
+
+%TODO: Define sets then you simplified
+$\mathcal{P}(M \setminus \{i\})$
+
+We show that the simple background model is consistent with an expanded immune history model. 
+Beginning with the model from Lazebnik and Bunimovich-Mendrazitsky 2022 \cite{Lazebnik2022}, we consider the differential equation for the individuals with strain infection history $J$ and current infecting strain $i$ $R_{J}I_{i}$
+\begin{align*}
+\frac{dR_{J} I_{i}}{dt} = - \gamma_{J, i} R_{J} I_{i} + \beta_{J, i} R_{J} \sum_{K \in P(M), i\notin K} R_{K}I_{i}.
+\end{align*}
+
+Here, infection can occur from any individual infected with strain $i$ assuming their past immune history does not include $i$ and the infected are any recovered individual with immune history $J$  $R_{J}$.
+To compute the strain growth rate, we can sum over all possible immune histories for individuals infected with strain $i$, so that
+\begin{align*}
+    \frac{d I_{i}}{d t} &= \sum_{J \in P(M), i \notin J} \frac{dR_{J} I_{i}}{dt} \\
+                        &= - \gamma_{i} I_{i} + \sum_{J \in P(M), i \notin J} \beta_{i, J} R_{J} \sum_{K \in P(M), i\notin K} R_{K}I_{i}\\
+                        &= - \gamma_{i} I_{i} + \sum_{J \in P(M), i \notin J} \beta_{i, J} R_{J} I_{i}\\
+                        &= \left(-\gamma_{i} + \sum_{J \in P(M), i \notin J} \beta_{i,J} R_{J} \right) I_{i}\\
+                        &= \left(-\gamma + \beta\sum_{J \in P(M), i \notin J} \eta_{i,J} R_{J} \right) I_{i}\\
+\end{align*}
+
+Assuming that the transmission rate can be decomposed as a base transmission rate $\beta$ and a strain $i$ and immune history $J$ specific escape rate $\eta_{i, J}$ and that the recovery rate is constant, we notice this is identical to our previous immune background model.
+Therefore, our relative fitnesses can be written as
+
+\begin{align*}
+    \lambda_{i, j} = \sum_{B \in P(M)} (\eta_{i, B} - \eta_{j, B}) R_{B},
+\end{align*}
+where for simplicity we define $\eta_{v, B} = 0$ if $v \in B$.
+
 
 \end{document}
