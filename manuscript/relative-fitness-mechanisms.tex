@@ -423,6 +423,18 @@ Limitations of deterministic fitness models
 \cite{aksamentov2021nextclade}
 \cite{Hadfield2018}
 
+\paragraph{Likelihood of sequence counts given frequencies}
+
+The models discussed in this paper use counts of variant sequences to inform the underlying variant frequency in the population.
+This is accomplished using a multinomial likelihood, so that given counts of sequences $C_{t,v}$ of variant $v$ at time $t$ and total sequences $N_{t}$ collected at time $t$, we have that
+
+\begin{equation*}
+    C_{t, \cdot} \sim \text{Multinomial}(N_{t}, f_{v}(t)),
+\end{equation*}
+
+where $f_{v}(t)$ is the frequency of variant $v$ at time $t$.
+This is a simple model of sequence counts to frequencies and does not account for over-dispersion of sequence counts relative to a multinomial, however, all models can be extended to estimate and account for over-dispersion by replacing the above likelihood with a Dirichlet-Multinomial likelihood.
+
 \paragraph{Gaussian process model}%
 
 To generate smooth non-parametric estimates of variant growth rates, we develop a Gaussian process based model for relative fitnesses. 
