@@ -309,9 +309,9 @@ Extending this analysis to two variant viruses $v= \wt, \varE, \varT$ such that 
 \end{align*}
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{w}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, w}(\phi^{*}) = \lambda_{\varT, w}(\phi^{*})$ as
-\begin{align*}
+\begin{equation} \label{eq:critical_immunity}
     \phi^{*} = \frac{\eta_{T} - 1}{\eta_{E} + \eta_{T} - 1}.
-\end{align*}
+\end{equation}
 
 For past exposure level greater than $\phi^{*}$, escape variant have a higher relative fitness.
 This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Figure \ref{fig:transmission_tradeoff}). 
@@ -444,12 +444,25 @@ where $S_{\theta}$ is the spectral density of the kernel $K$, $\mu_{j}$ and $\ph
 Since the eigenvalues and eigenfunctions are shared across variants, this allows us to re-use values across variants, simplifying the computation to a matrix multiplication as
 
 %TODO: Fix this
-\begin{equation}
+\begin{equation*}
     \vec{\lambda}_{t,v} = \vec{\Phi}\vec{S}_{\theta}\vec{\beta}.
-\end{equation}
+\end{equation*}
 
 
 \paragraph{Latent immune factor model}%
+
+We show that relative fitnesses dynamics ought to be explained by low-dimensional immunity when transmission dynamics are described with compartment models.
+This motivated a model to learn this low-dimensional structure that is inspired by latent-factor models. We start by assuming that the relative fitness of variant $v$ at time $t$ and in geographic location $g$ can be described by $D$ latent factors so that
+
+\begin{equation}
+    \lambda_{v}^{g}(t) = \sum_{d=1}^{D} \eta_{v,d} \phi_{d}^{g}(t). 
+\end{equation}
+As the structure here resembles Equation \ref{eq:escape_relative_fitness}, we call the $\eta$ ``pseudo-escape'' and $\phi_{d}^{g}$ the ``pseudo-immunity''.
+To make this more consistent with our intuition here, we model $\phi_{d}^{g}$ to be in $[0,1]$ and model it as smoothly varying in time.
+In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using splines.
+Additionally, in order to prevent degeneracies in the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
+We also order the components in the first geography for identifiability.
+
 
 \subsection*{Data and code accessibility}
 
