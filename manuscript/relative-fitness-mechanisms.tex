@@ -425,6 +425,30 @@ Limitations of deterministic fitness models
 
 \paragraph{Gaussian process model}%
 
+To generate smooth non-parametric estimates of variant growth rates, we develop a Gaussian process based model for relative fitnesses. 
+That is, we model the relative fitness for each variant $v$ over time as a multivariate normal distribution
+
+\begin{align*}
+    \vec{\lambda}_{v} &\sim \text{Normal}(\vec{\mu}, \vec{\Sigma})\\
+    \vec{\Sigma}_{s, t} &= K_{\theta}(s, t),
+\end{align*}
+where $K_{\theta}$ is a potentially parameterized kernel function. 
+This induces a structure on the covariance of the relative fitness values over time.
+
+For computational efficiency, we implement a Hilbert Space Gaussian process approximation, so that the relative fitnesses can be represented linearly as
+
+\begin{equation}
+    \lambda_{v}(t) \approx \sum_{j=1}^{m} S_{\theta}(\sqrt{\mu_{j}})^{1/2} \cdot \phi_{j}(x) \cdot \beta_{j},
+\end{equation}
+where $S_{\theta}$ is the spectral density of the kernel $K$, $\mu_{j}$ and $\phi_{j}$ are the eigenvalues and eigenfunctions of the Laplacian, and $\beta_{j} \sim \text{Normal}(0,1)$ \cite{riutortmayol2022practical}.
+Since the eigenvalues and eigenfunctions are shared across variants, this allows us to re-use values across variants, simplifying the computation to a matrix multiplication as
+
+%TODO: Fix this
+\begin{equation}
+    \vec{\lambda}_{t,v} = \vec{\Phi}\vec{S}_{\theta}\vec{\beta}.
+\end{equation}
+
+
 \paragraph{Latent immune factor model}%
 
 \subsection*{Data and code accessibility}
