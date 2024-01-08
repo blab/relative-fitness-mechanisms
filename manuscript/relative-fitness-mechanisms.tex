@@ -406,6 +406,27 @@ Basically, vaccination can push you into the zone where escape is preferred :O (
 
 \paragraph{Correlations are insufficient for mechanism identification}%
 
+Main points:
+Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
+Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages (using logit-linear model) were correlated with initial vaccination fraction.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./figures/correlation_not_mechanism.png}
+    \caption{\textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.} 
+    We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
+    Darker colors represent lower vaccine uptake.
+    We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
+        A. Prevalence of variant, each line is its own simulation.
+        B. Frequency of variant.
+        C. Relative fitness for variant over time.
+        D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
+        E. Same as D. but using data from the entire period shown.
+    }
+\label{fig:mechanism_identification}
+\end{figure}
+
+
 \paragraph{Predictive capabilities of simple models on complex dynamics}%
 
 \paragraph{Dimensionality of immune space}%
@@ -474,7 +495,7 @@ This is a simple model of sequence counts to frequencies and does not account fo
 \paragraph{Gaussian process model}%
 
 To generate smooth non-parametric estimates of variant growth rates, we develop a Gaussian process based model for relative fitnesses. 
-That is, we model the relative fitness for each variant $v$ over time as a multivariate normal distribution
+That is, we model the relative fitness for each variant $v$ over time as a multivariate normal distribution:
 
 \begin{align*}
     \vec{\lambda}_{v} &\sim \text{Normal}(\vec{\mu}, \vec{\Sigma})\\
