@@ -125,9 +125,9 @@ With the knowledge gained from this analysis, we develop several new models of v
 \subsection*{Exponentially growing populations to frequency dynamics}%
 
 We consider a viral population consisting of $V$ exponentially-growing variants with prevalence $I_{v}$ which follows:
-\begin{align*}
+\begin{equation} \label{eg:inhomo_exp_growth}
     \frac{d I_{v}}{d t} = r_{v}(t) I_{v}(t), \quad v = 1,2, \ldots, V.
-\end{align*}
+\end{equation}
 
 Here, $r_{v}(t)$ is the in-homogenous exponential growth rate for variant $v$.
 
@@ -195,7 +195,7 @@ Writing that $r_{w}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \
 \end{align*}
 
 
-We can consider epidemic models which decompose to the form presented in equation (ref).
+We can consider epidemic models which decompose to the form presented in equation \ref{eq:inhomo_exp_growth}.
 
 %TODO: Analysis the tranmissibility-escape trade off by writing out the relative fitness directly.
 %TODO: Show that reltive fitness of an emergening immune escape variant depends on the present immunity
@@ -227,7 +227,7 @@ Understanding the size and complexity of this immune space may therefore be usef
 
 %TODO: Suggest that we might use PCA, SVD, and latent factor models to gain a better understanding of these models
 
-For simplicity, we'll begin with a two variant system with vaccination, so there are three immune background $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
+For simplicity, we'll begin with a two variant system with vaccination, so there are three immune backgrounds $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
 
 (Does this `increase' antigenic evolution? What does that even mean?)
 
@@ -322,7 +322,7 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
 
 IDEA: Plot required transmission increase to beat escape variant given initial wave with R0?
 
-IDEA: Shoud I translate this to probability escape variant wins with simple Wright-Fisher simulation?
+IDEA: Should I translate this to probability escape variant wins with simple Wright-Fisher simulation?
 
 
 We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}
