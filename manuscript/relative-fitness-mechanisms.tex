@@ -227,6 +227,8 @@ Due to the dependence here on the proportion of each immune background in determ
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
 However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change.
 
+Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in \ref{ssec:full_immune_history}.
+
 
 %TODO: Compare this to the model where you explicitly count histories
 % These give the same but you are summing over immune histories!
@@ -531,13 +533,14 @@ MF performed the analysis.
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thepage}{S\arabic{page}}
+\renewcommand{\thesubsection}{S\arabic{subsection}}
 
 \section*{Supplemental Appendix}
 
-\subsection*{Relative fitness for full immune history models}%
+\subsection{Relative fitness for full immune history models}\label{ssec:full_immune_history}
 
-%TODO: Define sets then you simplified
-$\mathcal{P}(M \setminus \{i\})$
+%TODO: Define powers sets + macro to simplify?
+% $\mathcal{P}(M \setminus \{i\})$
 
 We show that the simple background model is consistent with an expanded immune history model. 
 Beginning with the model from Lazebnik and Bunimovich-Mendrazitsky 2022 \cite{Lazebnik2022}, we consider the differential equation for the individuals with strain infection history $J$ and current infecting strain $i$ $R_{J}I_{i}$
