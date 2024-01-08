@@ -219,7 +219,7 @@ We can then write the system of ODEs as
 With this formulation, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ :
 
 \begin{equation} \label{eq:escape_relative_fitness}
-    \lambda_{v, u}(t) = \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
+    \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
 \end{equation}
 
 Using this model of immune escape, we cna see relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
@@ -572,7 +572,7 @@ Assuming that the transmission rate can be decomposed as a base transmission rat
 Therefore, our relative fitnesses can be written as
 
 \begin{align*}
-    \lambda_{i, j} = \sum_{B \in P(M)} (\eta_{i, B} - \eta_{j, B}) R_{B},
+    \lambda_{i, j} = \beta \sum_{B \in P(M)} (\eta_{i, B} - \eta_{j, B}) R_{B},
 \end{align*}
 where for simplicity we define $\eta_{v, B} = 0$ if $v \in B$.
 
