@@ -219,13 +219,19 @@ We can then write the system of ODEs as
 With this formulation, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ :
 
 \begin{equation} \label{eq:escape_relative_fitness}
-    \lambda_{v, u}(t) = \sum_{1\leq v \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
+    \lambda_{v, u}(t) = \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
 \end{equation}
 
 Using this model of immune escape, we cna see relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
 Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
 However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change.
+
+We can see this by considering a Taylor expansion of the relative fitness about the point of estimation $t_{0}$:
+
+\begin{align*}
+    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} (\eta_{v, b} - \eta_{u,b}) \frac{d\phi_b}{dt}(t_0).
+\end{align*}
 
 % For example, we can consider the case where the distribution of immune backgrounds is nearly unchanged in time $\frac{d\phi_{b}}{dt} \approx 0$
 
