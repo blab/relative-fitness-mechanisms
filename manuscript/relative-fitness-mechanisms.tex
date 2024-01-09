@@ -410,6 +410,9 @@ Main points:
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
 Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages (using logit-linear model) were correlated with initial vaccination fraction.
 
+We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape.
+This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/correlation_not_mechanism.png}
@@ -421,7 +424,7 @@ Simulated multiple epidemics of a pure increased transmissibility variant at var
         B. Frequency of variant.
         C. Relative fitness for variant over time.
         D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
-        E. Same as D. but using data from the entire period shown.
+        E. Same as D. but using data from the entire period shown. Notice the drop off of relative fitness above $1 / R_{v}$ at which both variants are declining.
     }
 \label{fig:mechanism_identification}
 \end{figure}
