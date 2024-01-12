@@ -82,7 +82,7 @@ class SquaredExponential(HSGaussianProcess):
             alpha
             * jnp.sqrt(2 * jnp.pi)
             * rho
-            * jnp.exp(-0.5 * jnp.square(rho) * jnp.square(w))
+            * jnp.exp(-0.5 * jnp.square(rho* w))
         )
     
     def model(self):
