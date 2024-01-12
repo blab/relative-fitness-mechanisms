@@ -126,6 +126,23 @@ class Matern(HSGaussianProcess):
         rho = assign_priors("rho", self.rho, default=dist.HalfNormal(25))
         return self.spd(alpha, rho, self.nu, jnp.sqrt(self.lams))
 
+
+def not_yet_observed(seq_counts):
+    """
+    Compute binary predictor for whether a variant has been seen by time t.
+    """
+    T, V = seq_counts.shape
+    never_seen = np.ones_like(seq_counts)
+    for v in range(V):
+        for t in range(1, T):
+            # If we haven't seen yet, check that we still havent
+            if never_seen[t-1, v]:
+                never_seen[t,v] = seq_counts[t,v] == 0
+            # If we have seen it, we know it's 0
+            else:
+                never_seen[t,v] = 0
+    return never_seen
+
 def relative_fitness_hsgp_numpyro(
     seq_counts, N, hsgp, tau=None, pred=False, var_names=None
 ):
@@ -140,14 +157,19 @@ def relative_fitness_hsgp_numpyro(
 
     with numpyro.plate("variant", N_variants - 1):
         _init_logit = numpyro.sample("init_logit", dist.Normal(0, 6.0))
+        intercept =  numpyro.sample("intercept", dist.Normal(0, 1.0))
         with numpyro.plate("num_basis", num_basis):
             beta = numpyro.sample("beta", dist.Normal(0, 1))
-    _fitness = numpyro.deterministic("delta", jnp.einsum("tj, jv -> tv", phi, spd[..., None] * beta))
+    _fitness = numpyro.deterministic("delta", jnp.einsum("tj, jv -> tv", phi, spd[..., None] * beta) + intercept[None, :])
     fitness = jnp.hstack((_fitness, jnp.zeros((N_time, 1))))
 
     # Sum fitness to get dynamics over time
     init_logit = jnp.append(_init_logit, 0.0)
     logits = jnp.cumsum(fitness.at[0, :].set(0), axis=0) + init_logit
+
+    # Adjust for introductions
+    never_seen = not_yet_observed(seq_counts)
+    logits = logits - 10 * never_seen
 
     # Evaluate likelihood
     obs = None if pred else np.nan_to_num(seq_counts)
