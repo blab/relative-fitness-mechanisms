@@ -48,6 +48,13 @@ class HSGaussianProcess:
         phi = self.phi_matrix(self.L, ms, ts)
         return phi
 
+def assign_priors(name, val, default: dist.Distribution):
+    if val is None:
+        return numpyro.sample(name, default)
+    elif isinstance(val, dist.Distribution):
+        return numpyro.sample(name, val)
+    else:
+        return val
 
 class SquaredExponential(HSGaussianProcess):
     def __init__(
@@ -79,15 +86,9 @@ class SquaredExponential(HSGaussianProcess):
         )
     
     def model(self):
-        if self.alpha is None:
-            alpha = numpyro.sample("alpha", dist.HalfNormal(0.1))
-        else:
-            alpha = self.alpha
-        if self.rho is None:
-            rho = numpyro.sample("rho", dist.Gamma(concentration=10, rate = 0.5))
-        else:
-            rho = self.rho
-        return self.spd(alpha, rho, self.lams)
+        alpha = assign_priors("alpha", self.alpha, default=dist.HalfNormal(1e-3))
+        rho = assign_priors("rho", self.rho, default=dist.HalfNormal(25))
+        return self.spd(alpha, rho, jnp.sqrt(self.lams))
 
 
 class Matern(HSGaussianProcess):
@@ -129,7 +130,7 @@ class Matern(HSGaussianProcess):
             rho = numpyro.sample("rho", dist.LogNormal(loc=3, scale=1))
         else:
             rho = self.rho
-        return self.spd(alpha, rho, self.nu, self.lams)
+        return self.spd(alpha, rho, self.nu, jnp.sqrt(self.lams))
 
 def relative_fitness_hsgp_numpyro(
     seq_counts, N, hsgp, tau=None, pred=False, var_names=None
