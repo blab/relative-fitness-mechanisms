@@ -65,8 +65,8 @@ class SquaredExponential(HSGaussianProcess):
         L: ...
 
         """
-        self.alpha = alpha if alpha else 1.0
-        self.rho = rho if rho else 1.0
+        self.alpha = alpha 
+        self.rho = rho 
         super().__init__(L= L if L else 10.0, num_basis=num_basis if num_basis else 50)
 
     @staticmethod
@@ -80,11 +80,11 @@ class SquaredExponential(HSGaussianProcess):
     
     def model(self):
         if self.alpha is None:
-            alpha = numpyro.sample("alpha", dist.HalfNormal(0.01))
+            alpha = numpyro.sample("alpha", dist.HalfNormal(0.1))
         else:
             alpha = self.alpha
         if self.rho is None:
-            rho = numpyro.sample("rho", dist.LogNormal(loc=3, scale=1))
+            rho = numpyro.sample("rho", dist.Gamma(concentration=10, rate = 0.5))
         else:
             rho = self.rho
         return self.spd(alpha, rho, self.lams)
@@ -99,8 +99,8 @@ class Matern(HSGaussianProcess):
         L: Optional[float] = None,
         num_basis: Optional[int] = None,
     ):
-        self.alpha = alpha if alpha else 1.0
-        self.rho = rho if rho else 1.0
+        self.alpha = alpha
+        self.rho = rho
         self.nu = nu if nu else 5/2
         super().__init__(L= L if L else 10.0, num_basis=num_basis if num_basis else 50)
 
@@ -122,7 +122,7 @@ class Matern(HSGaussianProcess):
 
     def model(self):
         if self.alpha is None:
-            alpha = numpyro.sample("alpha", dist.HalfNormal(0.01))
+            alpha = numpyro.sample("alpha", dist.HalfNormal(0.1))
         else:
             alpha = self.alpha
         if self.rho is None:
@@ -138,19 +138,17 @@ def relative_fitness_hsgp_numpyro(
 
     # Generate features matrix
     phi = hsgp.make_features(np.arange(N_time))
-    num_basis = phi.shape[0]
-    print(phi.shape)
+    num_basis = phi.shape[-1]
 
     # Sample HSGP parameters
-    spd = numpyro.sample("sqrt_spd", jnp.sqrt(hsgp.model()))
+    spd = numpyro.deterministic("sqrt_spd", jnp.sqrt(hsgp.model()))
 
     with numpyro.plate("variant", N_variants - 1):
         _init_logit = numpyro.sample("init_logit", dist.Normal(0, 6.0))
         with numpyro.plate("num_basis", num_basis):
             beta = numpyro.sample("beta", dist.Normal(0, 1))
-        _fitness = numpyro.sample("_delta", jnp.einsum("jt, vj -> tv", phi, spd * beta))
-    numpyro.deterministic("delta", _fitness)
-    fitness = jnp.vstack((_fitness, jnp.zeros(N_time))).T
+    _fitness = numpyro.deterministic("delta", jnp.einsum("tj, jv -> tv", phi, spd[..., None] * beta))
+    fitness = jnp.hstack((_fitness, jnp.zeros((N_time, 1))))
 
     # Sum fitness to get dynamics over time
     init_logit = jnp.append(_init_logit, 0.0)
@@ -182,7 +180,7 @@ class RelativeFitnessHSGP(ef.ModelSpec):
         self.hsgp = hsgp if hsgp is not None else SquaredExponential(L=50, num_basis=30)
         self.tau = tau
         self.model_fn = partial(
-            relative_fitness_hsgp_numpyro, gp_kernel=self.hsgp, tau=self.tau
+            relative_fitness_hsgp_numpyro, hsgp=self.hsgp, tau=self.tau
         )
 
     def augment_data(self, data: dict) -> None:
@@ -212,14 +210,14 @@ class RelativeFitnessHSGP(ef.ModelSpec):
 
         # Forecast relative fitness
         def _delta_forecast(spd, beta):
-            return jnp.einsum("jt, vj -> vt", phi_forecast, spd * beta)
-        samples["delta_forecast"] = vmap(_delta_forecast, in_axes=(0, 0))(samples["spd"], samples["beta"])
+            return jnp.einsum("tj, jv -> tv", phi_forecast, spd[..., None] * beta)
+        samples["delta_forecast"] = vmap(_delta_forecast, in_axes=(0, 0))(samples["sqrt_spd"], samples["beta"])
 
         # Forecast frequency
         def _forecast_freq(fitness, frequency):
             init_freq = jnp.log(frequency[-1, :])  # Last known frequency
             _fitness = jnp.concatenate(
-                (fitness, jnp.zeros((forecast_L, 1))), axis=-1
+                (fitness, jnp.zeros((forecast_L,1))), axis=-1
             )
             cum_fitness = jnp.cumsum(_fitness.at[0, :].set(0), axis=0)
             return softmax(cum_fitness + init_freq, axis=-1)
