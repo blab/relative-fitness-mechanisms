@@ -122,14 +122,8 @@ class Matern(HSGaussianProcess):
         return coef * jnp.power(base, expon)
 
     def model(self):
-        if self.alpha is None:
-            alpha = numpyro.sample("alpha", dist.HalfNormal(0.1))
-        else:
-            alpha = self.alpha
-        if self.rho is None:
-            rho = numpyro.sample("rho", dist.LogNormal(loc=3, scale=1))
-        else:
-            rho = self.rho
+        alpha = assign_priors("alpha", self.alpha, default=dist.HalfNormal(1e-3))
+        rho = assign_priors("rho", self.rho, default=dist.HalfNormal(25))
         return self.spd(alpha, rho, self.nu, jnp.sqrt(self.lams))
 
 def relative_fitness_hsgp_numpyro(
