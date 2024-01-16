@@ -127,6 +127,45 @@ class Matern(HSGaussianProcess):
         return self.spd(alpha, rho, self.nu, jnp.sqrt(self.lams))
 
 
+class SparseMixture(HSGaussianProcess):
+    def __init__(
+        self,
+        num_components: int,
+        mixture_weights: Optional[Array] = None,
+        mixture_means: Optional[Array] = None,
+        mixture_sigmas: Optional[Array] = None,
+        L: Optional[float] = None,
+        num_basis: Optional[int] = None,
+    ):
+        self.num_components = num_components
+        self.mixture_weights = mixture_weights
+        self.mixture_means = mixture_means
+        self.mixture_sigmas = mixture_sigmas
+        super().__init__(L= L if L else 10.0, num_basis=num_basis if num_basis else 50)
+
+    @staticmethod
+    def spd(mixture_weights: Array, mixture_means: Array, mixture_sigmas: Array, w: Array):
+        coefs = (mixture_weights * jnp.reciprocal(jnp.sqrt(2 * jnp.pi) * mixture_sigmas))[..., None]
+        args = jnp.square((w - mixture_means[..., None])/ mixture_sigmas[..., None])
+        return (coefs * jnp.exp(-0.5 * args)).sum(axis=0)
+
+    def model(self):
+        mixture_weights = assign_priors("mixture_weights", self.mixture_weights, default=dist.Dirichlet(jnp.ones(self.num_components)))
+        mixture_means = assign_priors(
+            "mixture_means", 
+            self.mixture_means, 
+            default=dist.TransformedDistribution(
+                dist.Normal(0,1.5).expand((self.num_components,)),
+                dist.transforms.OrderedTransform())
+        )
+        mixture_sigmas = assign_priors(
+            "mixture_sigmas",
+            self.mixture_sigmas,
+            default=dist.HalfNormal(1).expand((self.num_components,))
+        )
+        return self.spd(mixture_weights, mixture_means, mixture_sigmas, jnp.sqrt(self.lams))
+
+
 def not_yet_observed(seq_counts):
     """
     Compute binary predictor for whether a variant has been seen by time t.
