@@ -127,7 +127,7 @@ class Matern(HSGaussianProcess):
         return self.spd(alpha, rho, self.nu, jnp.sqrt(self.lams))
 
 
-class SparseMixture(HSGaussianProcess):
+class SpectralMixture(HSGaussianProcess):
     def __init__(
         self,
         num_components: int,
