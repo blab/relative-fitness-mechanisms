@@ -145,9 +145,9 @@ class SpectralMixture(HSGaussianProcess):
 
     @staticmethod
     def spd(mixture_weights: Array, mixture_means: Array, mixture_sigmas: Array, w: Array):
-        coefs = (mixture_weights * jnp.reciprocal(jnp.sqrt(2 * jnp.pi) * mixture_sigmas))[..., None]
-        args = jnp.square((w - mixture_means[..., None])/ mixture_sigmas[..., None])
-        return (coefs * jnp.exp(-0.5 * args)).sum(axis=0)
+        coefs = jnp.reciprocal(jnp.sqrt(2 * jnp.pi)) / mixture_sigmas
+        args = jnp.square((w[..., None] - mixture_means)/ mixture_sigmas)
+        return (coefs * mixture_weights * jnp.exp(-0.5 * args)).sum(axis=-1)
 
     def model(self):
         mixture_weights = assign_priors("mixture_weights", self.mixture_weights, default=dist.Dirichlet(jnp.ones(self.num_components)))
@@ -155,13 +155,13 @@ class SpectralMixture(HSGaussianProcess):
             "mixture_means", 
             self.mixture_means, 
             default=dist.TransformedDistribution(
-                dist.Normal(0,1.5).expand((self.num_components,)),
+                dist.Normal(0,1.0).expand((self.num_components,)),
                 dist.transforms.OrderedTransform())
         )
         mixture_sigmas = assign_priors(
             "mixture_sigmas",
             self.mixture_sigmas,
-            default=dist.HalfNormal(1).expand((self.num_components,))
+            default=dist.HalfNormal(0.5).expand((self.num_components,))
         )
         return self.spd(mixture_weights, mixture_means, mixture_sigmas, jnp.sqrt(self.lams))
 
