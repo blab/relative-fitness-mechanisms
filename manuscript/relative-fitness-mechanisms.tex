@@ -97,9 +97,9 @@
 
 %TODO: Intro sentence about SARS-CoV-2
 
-Over the course of the COVID-19 pandemic, there have been several large waves of infections globally. (DETAILS HERE) %TODO: Cite Alpha, BA.2.12.1, BA.2.75, and Omicron papers
+Over the course of the COVID-19 pandemic, there have been several large waves of infections globally. \cite{tegally2021detection} (DETAILS HERE) %TODO: Cite Alpha, BA.2.12.1, BA.2.75, and Omicron papers
 These large sweeping waves have been characterized as large sweeping waves, typically dominated by emerging variants of SARS-CoV-2.
-This phenomenon is consistent with antigenic evolution and is observed in several other viruses such as [INSERT CITATIONS].
+This phenomenon is consistent with antigenic evolution and is observed in several other viruses such as [INSERT CITATIONS]. %TODO: Who to cite here?
 
 Given the large selective sweeps of new SARS-CoV-2 variants, it is important to assess the rate of turnover as this can be an important indicator of variant advantage and could be crucial to understanding not just how quickly a particular variant is spreading but the mechanism by which it spreads.
 With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for inside into the genetic diversity of SARS-CoV-2.
@@ -123,40 +123,42 @@ Using these models, we then highlight the importance of historical population ex
 With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to characterize trade-offs between immune escape and intrinsic transmissibility boosts for pathogens.
 Motivated by the results of the theoretical framework, we develop two new non-parametric models for relative fitness estimation and frequency forecasting: one based on Gaussian processes and the other on latent factor models.
 
-
-
 \section*{Results}
 
 \subsection*{Exponentially growing populations to frequency dynamics}%
 
-We consider a viral population consisting of $V$ exponentially-growing variants with prevalence $I_{v}$ which follows:
+We consider a viral population consisting of $V$ exponentially-growing variant viruses each with prevalence $I_{v}$.
+Defining the time-varying growth rate for the prevalence of variant $v$ as $r_{v}(t)$, we can represent the prevalence using the following ordinary differential equation:
+
 \begin{equation} \label{eq:inhomo_exp_growth}
     \frac{d I_{v}}{d t} = r_{v}(t) I_{v}(t), \quad v = 1,2, \ldots, V.
 \end{equation}
 
-Here, $r_{v}(t)$ is the in-homogenous exponential growth rate for variant $v$.
-This differential equation has known solution
+The above differential equation has a known solution in terms of the integral of the time-varying growth rate and initial prevalence as follows:
 
 \begin{align*}
 I_{v}(t) = I_{v}(0) \exp\left( \int_{0}^{t} r_{v}(s) ds\right),
 \end{align*}
-where $I_{v}(0)$ is the initial number of infectious individuals of variant $v$. 
+where $I_{v}(0)$ is the initial prevalence of variant $v$. 
 
-Writing the frequency of variant $v$ in the population as  $f_{v}(t) = I_{v}(t) / \sum_{u=1}^{V} I_{u}(t)$, we can derive an ODE for variant frequency
+Now turning to the frequency dynamics of the population, we write the frequency of variant $v$ in the population as  $f_{v}(t) = I_{v}(t) / \sum_{u=1}^{V} I_{u}(t)$.
+This allows us to derive an ODE for variant frequency in terms of the variant growth rates using the quotient rule for differentiation:
 \begin{align*}
     \frac{d f_{v}}{d t} &= f_{v} \left( \sum_{u=1}^{V} [r_{v}(t) - r_{u}(t)] f_{u} \right)\\
                         &= f_{v} \left( r_{v}(t) - \sum_{u=1}^{V} r_{u}(t) f_{u} \right).
 \end{align*}
 
-This system of differential equations can be shown to have the following solution:
+This system of differential equations resembles a logistic growth equation and can be shown to have the following solution in terms of the initial frequencies $f_{v}(0)$ and the variant growth rates:
 \begin{align}
     f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} r_{v}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} r_{u}(s) ds)}.
 \end{align}
 
+This form for the frequency of a given variant will serve as a centerpiece for much of the arguments to follow.
+We see that by tracking the rate at which variant viruses are spreading, we can construct the corresponding frequency dynamics without knowing the absolute prevalence of any variant.
 
 \paragraph{Relative frequency and relative fitness}%
 
-Using the above equation for the variant frequencies, we can write the relative frequency of variant $v$ over $u$ as $x_{v,u}(t) = f_{v}(t) / f_{u}(t)$
+Using the above equation for the variant frequencies, we can write the relative frequency of variant $v$ over $u$ as $x_{v,u}(t) = f_{v}(t) / f_{u}(t)$ to see:
 \begin{align*}
     x_{v, u}(t) = \frac{f_{v}(t)}{f_{u}(t)} &= \frac{f_{v}(0)}{f_{u}(0)} \exp \left( \int_{0}^{t} [r_{v}(s) - r_{u}(s)] ds \right)\\
                                             &=x_{v,u}(0)\exp \left( \int_{0}^{t} \lambda_{v,u}(s) ds \right).
@@ -168,21 +170,28 @@ We can notice that this relative fitness is exactly
 \lambda_{v, u}(t) = r_{v}(t) - r_{u}(t) = \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right] = - \lambda_{u,v}(t)
 \end{align}
 
-This definition of relative fitness becomes essential in describing various modeling approaches for frequency dynamic data.
+We can see that there is a symmetry is the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
+This suggests that absolute fitness (in terms of the growth of infections) may not be inferrable from frequencies alone.
+This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions.
 
 %TODO: Enumerate assumptions of this?
-
 \paragraph{Cumulative relative-fitness and frequency change}
 
-From this, we can see that frequency change over time intervals depends only on the cumulative relative fitness over time intervals.
-Models of frequency change then can be described in terms of how they represent and estimate these relative fitnesses.
-This framework includes various existing methods for analyzing frequency data such as Huddleston et al, MLR, MLR Spline, ...
+Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals.
+We can then characterize approaches for modeling frequency change then in terms of how they represent, estimate, and forecast these relative fitnesses.
+This framework includes various existing methods for analyzing frequency data such as Huddleston et al, Obermyer et al, multinomial logistic regression, ...  %TODO: Cite John, Obermyer..., ...
+%Question: How would I nest Piantham in this framework? Can I?
 
-In the following section, we show this framework applied to several simple compartmental models of epidemics.
+
+Though this framework can be used to describe existing statistical methods for frequency modeling, it is also applicable to traditional compartmental models of epidemics.
+In fact, applying this ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
 
 \subsection*{Applications to epidemic models}
 
-In order to better understand how frequency dynamics of infectious diseases with multiple co-circulating variants, we can apply the above framework to compartment models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
+%TODO: Add a sentence or two about multi strain models of epidemics
+Multi-strain models of epidemics have ...
+
+In order to better understand how frequency dynamics of infectious diseases with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
 These models will provide us with an intuition of how selection on the level of strain occurs depending on the assumed transmission mechanism of the underlying epidemic model.
 
 \paragraph{Two-strain SIR}%
