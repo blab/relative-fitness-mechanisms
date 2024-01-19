@@ -95,17 +95,22 @@
 %TODO: Flesh out, focusing on the emergence of looking at empirical variant advantage with frequency based model due to increased sequencing globally + tools like Nextclade.
 %TODO: Include notes of desire to relate these frequency / selection estimates to transmission processes to understand risk posed by emerging variants
 
-The COVID-19 pandemic was characterized through large sweeping waves of new variants. 
-This phenomenon is consistent with antigenic evolution and is observation in several other viruses such as [INSERT CITATIONS].
+%TODO: Intro sentence about SARS-CoV-2
 
+Over the course of the COVID-19 pandemic, there have been several large waves of infections globally. (DETAILS HERE) %TODO: Cite Alpha, BA.2.12.1, BA.2.75, and Omicron papers
+These large sweeping waves have been characterized as large sweeping waves, typically dominated by emerging variants of SARS-CoV-2.
+This phenomenon is consistent with antigenic evolution and is observed in several other viruses such as [INSERT CITATIONS].
+
+Given the large selective sweeps of new SARS-CoV-2 variants, it is important to assess the rate of turnover as this can be an important indicator of variant advantage and could be crucial to understanding not just how quickly a particular variant is spreading but the mechanism by which it spreads.
+With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for inside into the genetic diversity of SARS-CoV-2.
+
+%TODO: Flesh out the increase in genetic sequencing and wanting to assess variant fitness crudely and quickly
+This has motivated the development of statistical methods that can take advantage of this large pool of genetic data including ... and frequency dynamic methods.
 
 To estimate and understand variant turn-over, frequency dynamic models of variant relative fitness have been developed.
-These models estimate the relative fitness of circulating variants from frequency data, typically represented by counts of variant sequences over time.
+These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
 Relative fitness in these models is often assumed to be a constant quantity for simplicity and intrinsic to the variant of interest, however this may not be reasonable due to the nature of the transmission process.
-
-Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) requires assumptions on the generation time of the transmission. \cite{Wallinga2006}
-
-%TODO: Mention that we need to make assumptions about transmission process (generation time) to convert to population level
+Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) typically requires assumptions on the generation time of the transmission though this can also be approached by jointly modeling the transmission process and alongside frequencies.  \cite{figgins2022sars, Wallinga2006}
 
 It has been shown that variant transmission advantages differ geographically and temporally which suggests that variant transmission advantages are not necessarily fixed or determined solely due to biology.
 Existing models which do allow for variation in variant transmission advantages often do not have a mechanistic underpinning for why these transmission advantages exist and may persist \cite{figgins2022sars, susswein2023leveraging}.
@@ -113,11 +118,11 @@ These non-mechanistic transmission advantages are useful for real-time situation
 
 We introduce a theory of relative fitness and transmission advantages for exponentially growing populations.
 We then apply this to several ordinary differential equation models of epidemics to assess how different transmission mechanisms may contribute to variant turnover and describe relative fitness.
-Using these models, we then highlight the importance of population immunity, immune escape, and intrinsic transmissibility in determining variant turnover as well as short term forecasts of frequency growth.
-
-With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to characterize trade-offs between immune escape and intrinsic transmissibility boosts for pathogens.
-
+Using these models, we then highlight the importance of historical population exposure, immune escape, and intrinsic transmissibility in determining variant turnover as well as short term forecasts of frequency growth.
 %TODO: Throw in generation time change? Then I can discuss work of SWP and mention paper where they showed shorter generation times for Omicron (?)
+With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to characterize trade-offs between immune escape and intrinsic transmissibility boosts for pathogens.
+Motivated by the results of the theoretical framework, we develop two new non-parametric models for relative fitness estimation and frequency forecasting: one based on Gaussian processes and the other on latent factor models.
+
 
 
 \section*{Results}
