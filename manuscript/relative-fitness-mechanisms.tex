@@ -451,7 +451,7 @@ We apply dimensionality reduction techniques to relative fitness estimates gener
 
 \paragraph{Latent factor models of relative fitness}
 
-The represention of relative fitness using discrete immune backgrounds suggests that there may be low dimensional structure to variant relative fitness.
+The representation of relative fitness using discrete immune backgrounds suggests that there may be low dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 
 We apply this method to data from 37 US states over the period of January 2021 to March 2022. Results focusing on Washington state are shown in Figure~\ref{fig:latent_immune}
@@ -476,14 +476,33 @@ We apply this method to data from 37 US states over the period of January 2021 t
 
 \section*{Discussion}
 
+%: Developed a simple framework for thinking about relative fitness estimation
+%: We showed the utility of mechanistic models in informing variant turnover
+%: Suggests that we may improve forecasts model by incorporating information about assumed transmission mechanism
+%: Suggests that there are limits to our ability to attribute dynamics to particular mechanisms even if assumed mechanisms are predictive
 
-Mention limitations of generation time assumptions for compartmental epidemic models
+% We developed methods for forecasting and predicting relative fitnesses in the short term
+% Extensions include adapting the Hilbert Space Gaussian Process models to non-stationary kernels for scalable inference
 
-%TODO: Discuss extensions to Laplace transform method
-% We can 1.8 from my general exam to compute roots
-% We can then compute fitness
-Limitations of deterministic fitness models 
 
+%Limitations:
+
+%% Latent variable methods might not work in high variant low time regime and are not strictly real
+%% Though the structure is from immune escape models this does not mean that it is only capturing escape
+
+%% Generation time assumptions for compartmental epidemic models
+%%TODO: Discuss extensions to Laplace transform method
+    % We can 1.8 from my general exam to compute roots
+    % We can then compute fitness
+
+%%TODO: Deterministic models
+    % Not all variants succeed, these models do not account for the appearance of genetic variants
+    % Probabilistically speaking, we do not know the rate at which escape variants are generated versus transmissibility increases
+
+%%TODO: Further research:
+    % Should take into account these mechanisms for individual tasks such as prediction .etc
+    % Should extend to more complicated models of transmission including stochastic models .etc
+    % Simulation methods exist like this and explicit modeling of antigenic space (Cobey, Lassig)
 
 \section*{Methods}
 
