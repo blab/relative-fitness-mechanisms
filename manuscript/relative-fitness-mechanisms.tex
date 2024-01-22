@@ -349,10 +349,10 @@ We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/transmission_tradeoff.png}
     \caption{\textbf{Trade-off between immune escape and transmissibility increases.} 
-    A. Relative fitness for a transmissibility increasing variant and an immune escaping variant for $\eta_{T}=$, $\eta_{E}=$, $\beta=$. 
+    A. Relative fitness for a transmissibility increasing variant and an immune escaping variant for $\eta_{T}=0.3$, $\eta_{E}=1.2$, $\beta=0.875$. 
     The intersection point shows the point after which the escape variant is has higher fitness. 
-    B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.}%
-    C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
+    B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
+    C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.}
     \label{fig:transmission_tradeoff}
 \end{figure}
 
@@ -476,6 +476,7 @@ We apply this method to data from 37 US states over the period of January 2021 t
 
 \section*{Discussion}
 
+
 Mention limitations of generation time assumptions for compartmental epidemic models
 
 %TODO: Discuss extensions to Laplace transform method
@@ -549,8 +550,7 @@ We also order the components in the first geography for identifiability.
 
 \subsection*{Data and code accessibility}
 
-Source code used to generate figures are available at. 
-Additionally, implementations of all models discussed are included at ...
+Source code used to generate figures as well as model implementations are available at https://github.com/blab/relative-fitness-mechanisms. 
 
 \subsection*{Competing interests}%
 
