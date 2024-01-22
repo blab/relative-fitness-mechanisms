@@ -376,20 +376,20 @@ We can see this by considering a Taylor expansion of the relative fitness about 
 
 % For example, we can consider the case where the distribution of immune backgrounds is nearly unchanged in time $\frac{d\phi_{b}}{dt} \approx 0$
 
-\paragraph{How does changing immune pools affect selection?}%
-- This is looking at vaccination as a driver of selection
+% \paragraph{How does changing immune pools affect selection?}%
+% - This is looking at vaccination as a driver of selection
 
-Basically, we want to understand $\lambda(\phi_{1}, \ldots, \phi_{S})$. What do we want to say?
+% Basically, we want to understand $\lambda(\phi_{1}, \ldots, \phi_{S})$. What do we want to say?
 
-To understand how change in immune-landscape in the host population affects the relative fitness of immune escape variants, we can consider the gradient of an immune escape model
+% To understand how change in immune-landscape in the host population affects the relative fitness of immune escape variants, we can consider the gradient of an immune escape model
 
-Using equation \ref{eq:escape_relative_fitness}, we can write the gradient of the relative fitness with respect to the immune backgrounds as
+% Using equation \ref{eq:escape_relative_fitness}, we can write the gradient of the relative fitness with respect to the immune backgrounds as
 
-\begin{align*}
-    \nabla_{\phi} \lambda^{\text{escape}}_{v,u}(t) = (\eta_{v,1} - \eta_{u,1}, \ldots, \eta_{v,B} - \eta_{u,B}).
-\end{align*}
+% \begin{align*}
+%     \nabla_{\phi} \lambda^{\text{escape}}_{v,u}(t) = (\eta_{v,1} - \eta_{u,1}, \ldots, \eta_{v,B} - \eta_{u,B}).
+% \end{align*}
 
-From this equation, it's clear that to decrease 
+% From this equation, it's clear that to decrease 
 
 
 % QUESTION: Can vaccination push you into the regime where escape is preferred? Yes! When is that better overall tho at the population level?
@@ -398,22 +398,22 @@ From this equation, it's clear that to decrease
 
 % This probability exists in closed form?
 
-However, decreasing relative fitness for a variant relative to another is not the same as decreasing selection over.
-In order to decrease, 
+% However, decreasing relative fitness for a variant relative to another is not the same as decreasing selection over.
+% In order to decrease, 
 
-Do we have an idea for variant pressure / total selection here? Can we show whether decreasing selection is same as decreasing cases?
+% Do we have an idea for variant pressure / total selection here? Can we show whether decreasing selection is same as decreasing cases?
 
-Do we want to consider an expansion in $\frac{d}{d\phi_{s}}$ to assess sensitivity to immune group? What direction increases section overall? (This will come down to just the eta?)
-You can have higher selection, but how do cases change in simulation. What would vaccinating against wild-type do? What would vaccinating against variant do? Depends on escape potential against variant?
-How does vaccination uptake matter here? Do we want to plot change in relative fitnesses as a function of update? Increased selection but decreased cases
+% Do we want to consider an expansion in $\frac{d}{d\phi_{s}}$ to assess sensitivity to immune group? What direction increases section overall? (This will come down to just the eta?)
+% You can have higher selection, but how do cases change in simulation. What would vaccinating against wild-type do? What would vaccinating against variant do? Depends on escape potential against variant?
+% How does vaccination uptake matter here? Do we want to plot change in relative fitnesses as a function of update? Increased selection but decreased cases
 
-Basically, we want to also monitor decrease in absolute fitness because increased selection pressure =/= increased cases
+% Basically, we want to also monitor decrease in absolute fitness because increased selection pressure =/= increased cases
 
 
-Is this not the same as the transmissibility trade off? Or are we considering two immune escaping?
-We want to think explicitly about vaccination and selection for variants?
-Could we treat this similar to SWP leaky paper where some fraction is reset or leaky vaccine to see what changes depending on vaccine efficacy
-Basically, vaccination can push you into the zone where escape is preferred :O (SEE ABOVE)
+% Is this not the same as the transmissibility trade off? Or are we considering two immune escaping?
+% We want to think explicitly about vaccination and selection for variants?
+% Could we treat this similar to SWP leaky paper where some fraction is reset or leaky vaccine to see what changes depending on vaccine efficacy
+% Basically, vaccination can push you into the zone where escape is preferred :O (SEE ABOVE)
 
 \paragraph{Correlations are insufficient for mechanism identification}%
 
@@ -441,11 +441,13 @@ This appears to hold up until both variants' initial effective reproduction numb
 \end{figure}
 
 
-\paragraph{Predictive capabilities of simple models on complex dynamics}%
+% \paragraph{Predictive capabilities of simple models on complex dynamics}%
 
-\paragraph{Dimensionality of immune space}%
+% \paragraph{Dimensionality of immune space}%
 
-We apply dimensionality reduction techniques to relative fitness estimates generated by using the Gaussian process model to estimate the number of latent dimensions needed to explain the estimated relative fitness dynamics.
+% We apply dimensionality reduction techniques to relative fitness estimates generated by using the Gaussian process model to estimate the number of latent dimensions needed to explain the estimated relative fitness dynamics.
+
+%MF: Happy to cut this section, but wanted to look at how many latent factors are needed to explain relative fitnesses estimated by the Gaussian process for certain pandemic periods
 
 %TODO: Show PCA, SVD, or regularized SVD results>
 
@@ -476,33 +478,35 @@ We apply this method to data from 37 US states over the period of January 2021 t
 
 \section*{Discussion}
 
-%: Developed a simple framework for thinking about relative fitness estimation
-%: We showed the utility of mechanistic models in informing variant turnover
-%: Suggests that we may improve forecasts model by incorporating information about assumed transmission mechanism
-%: Suggests that there are limits to our ability to attribute dynamics to particular mechanisms even if assumed mechanisms are predictive
+We find that multistrain mechanistic models of epidemics can be used to inform variant turnover at the level of frequency.
+This enabled us to illustrate the trade-off between transmissibility increase and immune escape in environments with past exposure.
+These mechanistic models also suggest a structure in which relative fitnesses are determined by common causes such as time-varying immunity classes.
+Though there appears to be limits to our ability to attribute dynamics to particular mechanisms, the structure of these models suggests that we may improve forecasting by incorporating information about assumed transmission mechanisms.
+These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. (CITE John, LL,  ...)
+Future work should seek to identify and incorporate informative data sources for relative fitness estimation and forecasting for particular pathogens alongside the development of the models themselves.
 
-% We developed methods for forecasting and predicting relative fitnesses in the short term
-% Extensions include adapting the Hilbert Space Gaussian Process models to non-stationary kernels for scalable inference
+In the absence of data that can inform relative fitness, there is still hope however. 
+Relative fitnesses can still be estimated and forecasted in the short-term using frequency data alone.
+Existing models such as the multinomial logistic regression and the models used here such as the Hilbert Space Gaussian Process and Latent Factor relative fitness models can be used to learn trends present in data to project frequencies to the future, but this may not be reliable for longer terms forecasts due to the emergence of new variants.
+These models can still be better extended for short-term forecasts or adapted for longer time horizons.
+For example, to account for more complicated patterns in relative fitness, the Hilbert Space Gaussian Process models to non-stationary kernels for scalable inference.
+Additionally, though motivated by models of immune escape, latent variable methods may not estimate latent factors that are truly indicative of immune escape directly.
 
-
-%Limitations:
-
-%% Latent variable methods might not work in high variant low time regime and are not strictly real
-%% Though the structure is from immune escape models this does not mean that it is only capturing escape
-
-%% Generation time assumptions for compartmental epidemic models
-%%TODO: Discuss extensions to Laplace transform method
+Generally, the structure of the models discussed here are described by simple mechanisms and more work is needed to adapt this framework to complicated epidemic models such as those with non-exponential generation times could be useful.
+% Generation time assumptions for compartmental epidemic models
+%TODO: Discuss extensions to Laplace transform method
     % We can 1.8 from my general exam to compute roots
     % We can then compute fitness
 
-%%TODO: Deterministic models
-    % Not all variants succeed, these models do not account for the appearance of genetic variants
-    % Probabilistically speaking, we do not know the rate at which escape variants are generated versus transmissibility increases
 
-%%TODO: Further research:
-    % Should take into account these mechanisms for individual tasks such as prediction .etc
-    % Should extend to more complicated models of transmission including stochastic models .etc
-    % Simulation methods exist like this and explicit modeling of antigenic space (Cobey, Lassig)
+Futhermore, the models considered here are primarily deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
+In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the changes for stochastic extinction remains.
+That being said, models which account for the appearance of genetic variants through mutation exist, often assuming a latent antigenic space with which fitness is determined. (Cobey, Lassig)
+
+Despite the limitations discussed above, the framework presented here illustrates the importance of transmission mechanism in the evolution of pathogens, highlighting the importance of both variant characteristics and population susceptibility in selection.
+We suggest that future models of pathogen transmission and evolution attempt to incorporate current knowledge of the transmission process into their forecasts.
+
+In particular, for antigenically evolving viruses such as influenza and SARS-CoV-2, we suggest that incorporating knowledge on both the diversity in human immune response as well as the escape potential of emerging variants could prove useful in improving long-term forecasts of the viral population.
 
 \section*{Methods}
 
@@ -526,7 +530,7 @@ This is accomplished using a multinomial likelihood, so that given counts of seq
 where $f_{v}(t)$ is the frequency of variant $v$ at time $t$.
 This is a simple model of sequence counts to frequencies and does not account for over-dispersion of sequence counts relative to a multinomial, however, all models can be extended to estimate and account for over-dispersion by replacing the above likelihood with a Dirichlet-Multinomial likelihood.
 
-\paragraph{Gaussian process model}%
+\paragraph{Approximate Gaussian processes for relative fitness estimation}%
 
 To generate smooth non-parametric estimates of variant growth rates, we develop a Gaussian process based model for relative fitnesses. 
 That is, we model the relative fitness for each variant $v$ over time as a multivariate normal distribution:
