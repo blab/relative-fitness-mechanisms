@@ -215,7 +215,8 @@ Writing that $r_{w}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \
 
 From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\eta_{T} > 1$) or immune escape ($\eta_{E} > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
 
-This model can also be extended to an $n$-strain SIR model where each strain $i$ with $1\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\eta_{T}^{(i)},\eta_{E}^{(i)})$  relative to the wildtype.
+This model can also be extended to an $n$-strain SIR model where each variant strain $i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\eta_{T}^{(i)},\eta_{E}^{(i)})$  relative to the wildtype ($\theta_{1} = (0, 0)$).
+In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant $\theta_{3} = (\eta_{T}, 0)$.
 Further extensions also include allowing for differences in generation time through an additional parameter $\eta_{G}$ which multiples the recovery rate $\gamma$, however it is important to note that this still assumes the generation time is an exponential distribution.
 
 
@@ -252,7 +253,7 @@ Though the derivation above uses a simplified model of using most recent infecti
 
 For simplicity, we'll begin with a two variant system with vaccination, so there are three immune backgrounds $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
 
-(Does this `increase' antigenic evolution? What does that even mean?)
+% (Does this `increase' antigenic evolution? What does that even mean?)
 
 \begin{figure}[h]
     \centering
@@ -299,7 +300,7 @@ Motivated by the observed antigenic evolution of seasonal influenza, the authors
 \end{align*}
 
 where the relative fitness is determined by strain-specific predictors $\vec{x}_{v}$ and the regression parameter $\vec{\beta}_{v}$ are estimated.
-The authors choose predictors which describe the antigenic properties of strains though our previous work in 
+% The authors choose predictors which describe the antigenic properties of strains
 
 \paragraph{Estimating relative fitness using Gaussian Processes}%
 
@@ -307,16 +308,16 @@ We develop a method for using Gaussian processes to model variant relative fitne
 
 %TODO: Provide short explainer on Gaussian processes and use figure from lab meeting as supplemental figure
 
-Here, the relative fitnesses are modeled using a Gaussian process with a ... kernel and shared hyper-parameters.
-For efficiency, we implement a Hilbert Space Gaussian Process approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
-This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of the simulated variant dynamics in Figure \ref{fig:vis_mechanisms}.
+Here, the relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyper-parameters across variants.
+For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
+This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of the simulated variant dynamics shown in Figure \ref{fig:vis_mechanisms}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
     \caption{\textbf{Estimating relative fitness with Gaussian Processes.} 
     Gaussian processes allow us a non-parametric estimate of the relative fitness for variants. 
-    Below we show an example of using Gaussian processes to model the 3 variant example shown in \ref{fig:vis_mechanisms}.
+    Below we show an example of using Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
     A. Sequence counts ...
     B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the ...\% credible interval.
     C. Relative fitnesses. Dashed line shows true relative fitnesses from mechanistic model. 
