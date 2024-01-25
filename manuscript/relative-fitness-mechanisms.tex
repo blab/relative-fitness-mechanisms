@@ -172,7 +172,11 @@ We can notice that this relative fitness is exactly
 
 We can see that there is a symmetry is the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
 This suggests that absolute fitness (in terms of the growth of infections) may not be inferrable from frequencies alone.
-This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions.
+This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent this models as having the form:
+\begin{align}
+    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)}
+\end{align} 
+for the relative of $v$ relative to some pivot variant $\text{pivot}$.
 
 %TODO: Enumerate assumptions of this?
 \paragraph{Cumulative relative-fitness and frequency change}
