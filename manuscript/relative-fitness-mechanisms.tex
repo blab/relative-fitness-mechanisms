@@ -72,7 +72,6 @@
 \affil[3]{Howard Hughes Medical Institute, Seattle, WA, USA}
 \affil[*]{Corresponding author: mfiggins@uw.edu}
 \date{\today}
-%Figure out author affilations...
 % https://maehler.se/blog/2013/11/01/authors-and-affiliations-in-latex
 
 \begin{document}
@@ -86,9 +85,15 @@
     In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
     We use these models to highlight several complications of when analyzing the frequency dynamics for infectious disease variants, namely the difficulty in discovering fitness mechanisms from frequency data alone. 
     We then develop several models for inference of frequency dynamics using Gaussian Processes and dimensionality reduction techniques to estimate latent pseudo-immune components which explain variant dynamics.
-    Finally, we apply these models to SARS-CoV-2 sequences in the United States.
+    Finally, we apply these models to publicly available SARS-CoV-2 sequences in the United States.
      % To better understand the relationship between population dynamics expected from traditional compartment models of epidemics,
 \end{abstract}
+
+%TODO: References
+% Huddleston et al, Antigenic waves, Cecile's paper, Usher, Obermyer, the one Jesse sent (?), Recent one ought of Sarah's lab, another talking about backboosting and original antigenic sin, immune dynamics cell paper
+% Tegally, Tulio's lab, BA.2.12.1 paper
+% Champredon paper on SE^nI^mR models so that we can extend to models with non-exponential generation times including latent periods .etc
+
 
 \section*{Introduction}
 
@@ -105,7 +110,7 @@ Given the large selective sweeps of new SARS-CoV-2 variants, it is important to 
 With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for inside into the genetic diversity of SARS-CoV-2.
 
 %TODO: Flesh out the increase in genetic sequencing and wanting to assess variant fitness crudely and quickly
-This has motivated the development of statistical methods that can take advantage of this large pool of genetic data including ... and frequency dynamic methods.
+This has motivated the development of statistical methods that can take advantage of this large pool of genetic data including large scale approximate phylogenetic algorithms, identical sequence based methods, and variants frequency dynamic methods.
 
 To estimate and understand variant turn-over, frequency dynamic models of variant relative fitness have been developed.
 These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
@@ -322,8 +327,8 @@ This model is used in Figure \ref{fig:gp_example} to estimate the relative fitne
     \caption{\textbf{Estimating relative fitness with Gaussian Processes.} 
     Gaussian processes allow us a non-parametric estimate of the relative fitness for variants. 
     Below we show an example of using Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
-    A. Sequence counts ...
-    B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the ...\% credible interval.
+    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Figure \ref{fig.vis_mechanisms}C.
+    B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
     C. Relative fitnesses. Dashed line shows true relative fitnesses from mechanistic model. 
 }
     \label{fig:gp_example}
@@ -478,7 +483,6 @@ We apply this method to data from 37 US states over the period of January 2021 t
 \label{fig:latent_immune}
 \end{figure}
 
-
 %TODO: Could be useful to directly compare to published antigenic cartography work as mentioned before ...
 
 \section*{Discussion}
@@ -571,10 +575,10 @@ This motivated a model to learn this low-dimensional structure that is inspired 
 \end{equation}
 As the structure here resembles Equation~\ref{eq:escape_relative_fitness}, we call the $\eta$ ``pseudo-escape'' and $\phi_{d}^{g}$ the ``pseudo-immunity''.
 To make this more consistent with our intuition here, we model $\phi_{d}^{g}$ to be in $[0,1]$ and model it as smoothly varying in time.
-In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using splines.
-Additionally, in order to prevent degeneracies in the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
-We also order the components in the first geography for identifiability.
-
+In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using 4th order splines with [INSERT KNOTS HERE] knots placed uniformly over the time period modeled.
+Though we choose to model tesee latent factors with splines, other models would work here. For example, a good alternative would be the approximate Gaussian processes described above.
+Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
+For the same reason, we order the components in the first geography.
 
 \subsection*{Data and code accessibility}
 
