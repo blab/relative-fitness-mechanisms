@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from functools import partial
 from typing import Optional
 import evofr as ef
@@ -10,6 +9,8 @@ import numpyro
 import numpyro.distributions as dist
 from numpyro.distributions.distribution import TransformedDistribution
 from numpyro.distributions.transforms import OrderedTransform
+
+from relative_fitness_mechanisms.relative_fitness_hsgp import HSGaussianProcess
 
 
 class LatentRW:
@@ -131,6 +132,57 @@ class LatentSplineRW:
         )
         return phi
 
+class LatentHGSP:
+    def __init__(self, hsgp: HSGaussianProcess):
+        self.hsgp = hsgp
+    
+    def build_model(self, data):
+        N_time = data["seq_counts"].shape[0]
+        self.features = self.hsgp.make_features(np.arange(N_time))
+
+    def model_group(self, dim, N_groups):
+        features, hsgp = self.features, self.hsgp
+        N_time, num_basis = features.shape
+
+        # Compute initial coefficients for latent immune in each dimension
+        # Note: We fix first component to be ordered for identifiablity
+        beta_base = numpyro.sample(
+            "beta_base",
+            TransformedDistribution(
+                dist.Normal(1.0).expand([dim - 1]), OrderedTransform()
+            ),
+        )  # (dim-1, )
+        beta_base = jnp.flip(beta_base)  # First component is highest
+        beta_base_rest = numpyro.sample(
+            "beta_rest", dist.Normal().expand([dim - 1, N_groups - 1])
+        )
+    
+        with numpyro.plate("group", N_groups, dim=-1):
+            # Reshaping initial beta values
+            intercept = jnp.hstack((beta_base[:, None], beta_base_rest)) # (dim-1, N_groups)
+
+            # Generating coefficients for GP basis functions
+            with numpyro.plate("N_dim_m1_phi", dim - 1, dim=-2):
+                with numpyro.plate("N_bases", num_basis, dim=-3):
+                    beta = numpyro.sample("beta", dist.Normal()) # (num_basis, dim-1, N_group)
+       
+        # Get spectral density 
+        spd = numpyro.deterministic("sqrt_spd", jnp.sqrt(hsgp.model()))
+       
+        # Compute phi and transform to probabilities
+        _phi = numpyro.deterministic(
+            "_phi",
+            jnp.einsum("tj, jsg  -> tsg", features, spd[..., None, None] * beta) + intercept[None, :])
+            # (N_time, num_basis) * (num_basis, dim-1, N_group) -> (N_time, dim-1, N_group)
+
+        phi = jnp.stack(
+            (_phi, jnp.zeros((N_time, 1, N_groups))), 
+            axis=1)
+
+        phi = numpyro.deterministic(
+            "phi", softmax(phi, axis=1)
+        )
+        return phi
 
 def relative_fitness_dr_hier_numpyro(
     seq_counts, N, dim, phi_model, tau=None, pred=False, var_names=None
