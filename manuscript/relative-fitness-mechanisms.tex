@@ -102,9 +102,9 @@
 
 %TODO: Intro sentence about SARS-CoV-2
 
-Over the course of the COVID-19 pandemic, there have been several large waves of infections globally. \cite{tegally2021detection} (DETAILS HERE) %TODO: Cite Alpha, BA.2.12.1, BA.2.75, and Omicron papers
+Over the course of the COVID-19 pandemic, there have been several large waves of infections globally.  \cite{tegally2021detection, Volz2021} 
 These large sweeping waves have been characterized as large sweeping waves, typically dominated by emerging variants of SARS-CoV-2.
-This phenomenon is consistent with antigenic evolution and is observed in several other viruses such as [INSERT CITATIONS]. %TODO: Who to cite here?
+This phenomenon is consistent with antigenic evolution and is observed in several other viruses such as influenza A/H3N2 and influenza B/Yamagata \cite{Koel2013, Bedford2014}.
 
 Given the large selective sweeps of new SARS-CoV-2 variants, it is important to assess the rate of turnover as this can be an important indicator of variant advantage and could be crucial to understanding not just how quickly a particular variant is spreading but the mechanism by which it spreads.
 With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for inside into the genetic diversity of SARS-CoV-2.
@@ -188,7 +188,7 @@ for the relative of $v$ relative to some pivot variant $\text{pivot}$.
 
 Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals.
 We can then characterize approaches for modeling frequency change then in terms of how they represent, estimate, and forecast these relative fitnesses.
-This framework includes various existing methods for analyzing frequency data such as Huddleston et al, Obermyer et al, multinomial logistic regression, ...  %TODO: Cite John, Obermyer..., ...
+This framework includes various existing methods for analyzing frequency data such as the forecast model of Huddleston et al, mutational fitness model of Obermeyer et al, and multinomial logistic regression for frequency estimation. \cite{Huddleston2020, Obermeyer2022, Annavajhala2021}
 %Question: How would I nest Piantham in this framework? Can I?
 
 
@@ -198,8 +198,8 @@ In fact, applying this ideas to compartmental models enables to see how mechanis
 \subsection*{Transmission mechanisms determine relative fitness of variants}
 
 %TODO: Add a sentence or two about multi strain models of epidemics
-Multi-strain models of epidemics have ... %TODO: CIte Gog and Grenfell, maybe Frank Wen's work, Antigen?
-These models have typically been used to explain selective sweeps or seasonality in viruses such as influenza or seasonal coronaviruses.
+Multi-strain models of epidemics have been developed to understand the competition between difference strains of a virus for hosts to infect.
+These models have typically been used to explain selective sweeps or seasonality in viruses such as influenza or seasonal coronaviruses \cite{Gog2002, Wen2022}
 
 In order to better understand how frequency dynamics of infectious diseases with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
 These models will provide us with an intuition of how selection on the level of strain occurs depending on the assumed transmission mechanism of the underlying epidemic model.
@@ -337,7 +337,6 @@ This model is used in Figure \ref{fig:gp_example} to estimate the relative fitne
 
 \paragraph{Transmisibility-Escape Tradeoff}%
 
-%TODO: Move this section to tradeoff
 Extending this analysis to two variant viruses $v= \wt, \varE, \varT$ such that $\eta_{T}^{\varE} = 1$ and $\eta_{E}^{\varT} = 0$, we can write relative fitnesses an escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \eta_{E} \beta \phi_{\wt}(t)\\
