@@ -184,47 +184,50 @@ We can notice that this relative fitness is exactly
 \lambda_{v, u}(t) = r_{v}(t) - r_{u}(t) = \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right] = - \lambda_{u,v}(t)
 \end{align}
 
-We can see that there is a symmetry is the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
+We can see that there is a symmetry in the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
 This suggests that absolute fitness (in terms of the growth of infections) may not be inferrable from frequencies alone.
-This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent this models as having the form:
+This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent these models as having the form:
 \begin{align}
-    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)}
+    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)},
 \end{align}
-for the relative of $v$ relative to some pivot variant $\text{pivot}$.
+where the growth rate of $v$ is expressed as relative to an arbitrary pivot variant.
 
 %TODO: Enumerate assumptions of this?
 \paragraph{Cumulative relative-fitness and frequency change}
 
 Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals.
-We can then characterize approaches for modeling frequency change then in terms of how they represent, estimate, and forecast these relative fitnesses.
-This framework includes various existing methods for analyzing frequency data such as the forecast model of Huddleston et al, mutational fitness model of Obermeyer et al, and multinomial logistic regression for frequency estimation. \cite{Huddleston2020, Obermeyer2022, Annavajhala2021}
+We can then characterize approaches for modeling frequency change in terms of how they represent, estimate, and forecast these relative fitnesses.
+This framework includes various existing methods for analyzing frequency data such as the seasonal influenza forecasting models of L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020}, multinomial logistic regression for frequency estimation \cite{Annavajhala2021} and the SARS-CoV-2 mutational fitness model of Obermeyer et al \cite{Obermeyer2022}.
 %Question: How would I nest Piantham in this framework? Can I?
 
-
 Though this framework can be used to describe existing statistical methods for frequency modeling, it is also applicable to traditional compartmental models of epidemics.
-In fact, applying this ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
+In fact, applying these ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
 
 \subsection*{Transmission mechanisms determine relative fitness of variants}
 
 %TODO: Add a sentence or two about multi strain models of epidemics
-Multi-strain models of epidemics have been developed to understand the competition between difference strains of a virus for hosts to infect.
-These models have typically been used to explain selective sweeps or seasonality in viruses such as influenza or seasonal coronaviruses \cite{Gog2002, Wen2022}
+Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity.
+These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza \sout{and seasonal coronavirus} \tbc{neither paper includes seasonal coronavirus} \cite{Gog2002, Wen2022}.
 
-In order to better understand how frequency dynamics of infectious diseases with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
-These models will provide us with an intuition of how selection on the level of strain occurs depending on the assumed transmission mechanism of the underlying epidemic model.
+In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
+These models will provide us with an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
 
 \paragraph{Two-strain SIR}%
 
-For simplicity, we will begin by analyzing a two-strain SIR based model in which the variant viruses can differ by increased intrinsic transmissibility (via $\eta_{T}$) and immune escape against wild-type immunity (via $\eta_{E}$).
-This system of 4 ordinary differential equations is written in full below.
+For simplicity, we will begin by analyzing a two-strain SIR model in which the variant viruses can differ by increased intrinsic transmissibility (via $\eta_{T}$) and immune escape against wild-type immunity (via $\eta_{E}$).
+This system of 4 ordinary differential equations follows
 
 %TODO: Add 3.x
 \begin{align*}
     \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \eta_{T} S I_{v}\\
     \frac{d I_{\wt}}{dt} &= \beta S I_{v} - \gamma I_{w}\\
     \frac{d I_{v}}{dt} &= \beta \eta_{T} S I_{v} + \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v} - \gamma I_{v}\\
-    \frac{d \phi_{\wt}}{dt} &= - \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}
+    \frac{d \phi_{\wt}}{dt} &= - \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v},
 \end{align*}
+where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes \tbc{...}.
+\tbc{$\phi_{\wt}$ is non-obvious and deserves some explanation.}
+\tbc{Shouldn't there be recovered compartments that $\gamma I_{w}$ and $\gamma I_{v}$ feed into? I don't like having unbalanced compartmental models. I always like making sure there are matching inputs and outputs.}
+\tbc{I don't understand the term $\beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}$. It's not drawing from the susceptible compartment and so seems like it's creating $I_{v}$ out of thin air.}
 
 Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \beta \eta_{T} \eta_{E} \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
 \begin{align*}
@@ -234,48 +237,13 @@ Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S +
 From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\eta_{T} > 1$) or immune escape ($\eta_{E} > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
 
 This model can also be extended to an $n$-strain SIR model where each variant strain $i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\eta_{T}^{(i)},\eta_{E}^{(i)})$  relative to the wildtype ($\theta_{1} = (0, 0)$).
-In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant $\theta_{3} = (\eta_{T}, 0)$.
+In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant T with $\theta_{3} = (\eta_{T}, 0)$.
 Further extensions also include allowing for differences in generation time through an additional parameter $\eta_{G}$ which multiples the recovery rate $\gamma$, however it is important to note that this still assumes the generation time is an exponential distribution.
-
-
-\paragraph{Models of immune escape against heterogeneous backgrounds}%
-
-We'll now consider a model where all hosts are assumed to fall into one of $B$ immune background $\phi_{b}$ for $b =1, \ldots, B$.
-We assume that infection by each variant $v$ then leaves recovered hosts into the corresponding immune background $b_{v}$.
-Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
-
-We can then write the system of ODEs as
-\begin{align*}
-    \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
-    \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}
-\end{align*}
-
-With this formulation, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ :
-
-\begin{equation} \label{eq:escape_relative_fitness}
-    \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
-\end{equation}
-
-Using this model of immune escape, we cna see relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
-Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
-Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
-However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change.
-
-Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in \ref{ssec:full_immune_history}.
-
-
-%TODO: Compare this to the model where you explicitly count histories
-% These give the same but you are summing over immune histories!
-
-%TODO: Suggest that we might use PCA, SVD, and latent factor models to gain a better understanding of these models
-
-For simplicity, we'll begin with a two variant system with vaccination, so there are three immune backgrounds $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
-
-% (Does this `increase' antigenic evolution? What does that even mean?)
+\tbc{I don't like just throwing out the $\eta_{G}$ idea without spelling out how it works. Either point to Appendix or spell out here or move to Discussion as future directions.}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/vis_mechanisms.png}
+    \includegraphics[width=1.0\linewidth]{./figures/vis_mechanisms.png}
     \caption{\textbf{Method overview.}
     Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
     Simulations of a three-variant model including a wildtype, one intrinsic transmission increased variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
@@ -288,6 +256,45 @@ For simplicity, we'll begin with a two variant system with vaccination, so there
 }%
     \label{fig:vis_mechanisms}
 \end{figure}
+
+\paragraph{Models of immune escape against heterogeneous backgrounds}%
+
+We'll now consider a model where all hosts are assumed to fall into one of $B$ immune backgrounds $\phi_{b}$ for $b =1, \ldots, B$.
+We assume that infection by each variant $v$ then leaves recovered hosts into the corresponding immune background $b_{v}$.
+\tbc{Is this mutually exlusive? Ie can hosts only be in a single immune background? Or do they end up in multiple immune backgrounds after repeat infection with different variants?}
+Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
+
+We can then write the system of ODEs as
+\begin{align*}
+    \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
+    \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}.
+\end{align*}
+\tbc{I'd appreciate spelling out $S$ and $R$ compartments. Or do they not exist?}
+
+With this formulation, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ as
+
+\begin{equation} \label{eq:escape_relative_fitness}
+    \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
+\end{equation}
+
+Using this model of immune escape, we can see relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
+Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
+Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
+However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change.
+
+\tbc{This section on immune backgrounds got very dense. I can't tell how much logic I can be bringing forward from the previous two-strain SIR. How does this fit with Figure 1 where panel E lists immune pools? Confusing because this seems like two separate models, but maybe it's just one model?}
+
+Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in \ref{ssec:full_immune_history}.
+
+
+%TODO: Compare this to the model where you explicitly count histories
+% These give the same but you are summing over immune histories!
+
+%TODO: Suggest that we might use PCA, SVD, and latent factor models to gain a better understanding of these models
+
+For simplicity, we'll begin with a two variant system with vaccination, so there are three immune backgrounds $\phi_{\wt}, \phi_{\var},$ and $\phi_{\vac}$.
+
+% (Does this `increase' antigenic evolution? What does that even mean?)
 
 \section*{Applications}
 
