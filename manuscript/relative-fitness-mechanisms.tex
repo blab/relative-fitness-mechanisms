@@ -87,8 +87,8 @@
     Classifying these variant viruses into genetically similar clades and lineages has allowed scientists to track the rise and fall of variants by modeling their frequencies over time.
     These models of frequency dynamics enable inference of variant fitness advantages, however, these models are typically divorced from a direct interpretation at the level of transmission.
     In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
-    We use these models to highlight several complications when analyzing the frequency dynamics of infectious disease variants, namely the difficulty in discovering fitness mechanisms from frequency data alone.
-    \tbc{Reading just the abstract I can't interpret what you mean by `fitness mechanisms'. I'd spell out that you're concerned with inherent transmission advantage vs immune escape.}
+    We use these models to highlight several complications when analyzing the frequency dynamics of infectious disease variants, namely the difficulty in discovering fitness mechanisms such as immune escape or increased transmissibility from frequency data alone.
+    % \tbc{Reading just the abstract I can't interpret what you mean by `fitness mechanisms'. I'd spell out that you're concerned with inherent transmission advantage vs immune escape.}
     We then develop several models for inference of frequency dynamics using Gaussian Processes and dimensionality reduction techniques to estimate latent pseudo-immune components which explain variant dynamics.
     Finally, we apply these models to publicly available SARS-CoV-2 sequences in the United States \tbc{finding...}.
      % To better understand the relationship between population dynamics expected from traditional compartment models of epidemics,
@@ -108,33 +108,45 @@
 %TODO: Intro sentence about SARS-CoV-2
 
 Over the course of the COVID-19 pandemic, there have been repeated large waves of infections globally  \cite{tegally2021detection, Volz2021}.
-\tbc{Changed in the abstract as well. Internet tells me `several' means 3--5. At this point I think there have been at least 11 major variant waves and many more minor waves.}
-These large epidemic \tbc{Most waves do not `sweep' in a pop gen sense} waves have been typically driven by emerging variants of SARS-CoV-2.
-\tbc{Include two sentences here. First sentence says that spread of initial variant viruses (Alpha, Beta, Gamma, Delta) was largely driven by increased intrinsic transmissibility. Second sentence that says that subsequently, post-Omicron variant viruses such as XBB, EG.5.1, JN.1, etc... have largely spread due to immune escape. There won't be a good general citation but can cite 2-3 papers for each sentence discussing specific variants. This early on establishes the key distinction between intrinsic transmissibility and immune escape.}
-The phenomenon of rapid viral population turnover is consistent with antigenic evolution and is observed in several other viruses such as seasonal influenza, although SARS-CoV-2 is currently remains an outlier in terms of pace of evolution \cite{Koel2013, Bedford2014, kistler2023atlas}.
+% \tbc{Changed in the abstract as well. Internet tells me `several' means 3--5. At this point I think there have been at least 11 major variant waves and many more minor waves.}
+These large epidemic waves have been typically driven by emerging variants of SARS-CoV-2.
 
-Given the rapid emergence and spread of SARS-CoV-2 variants \tbc{again removing `selective sweeps'}, it is important to assess the rate of turnover as this can be an important indicator of variant advantage and in addition to understanding how quickly a particular variant is spreading, it may signal the mechanism by which it spreads.
+%TODO: First waves driven by intrinsic transmissibility
+%TODO: Now similar to influenza likely hypothesis is antigenic evolution and immune escape
+%TODO: This will be useful for discriminating between two major hypotheses.
+
+Though large waves have occurred repeatedly since the emergence of SARS-CoV-2, the underlying mechanism driving these waves appears to have changed in time.
+Early mutations and viral variants such as D614G, Alpha, Beta, Gamma, Delta and their associated infection waves were largely driven by increases in intrinsic transmissibility which may be expected when there is lower population immunity.
+%TODO: Citations: Muller/Wagner, Bloom lab
+However, after the emergence of the Omicron variant, later variants such as XBB, EG.5.1, JN.1 and their associated waves appear to be driven by immune escape as evidenced through ...
+%TODO: Citations: Bloom lab, Cao, ...
+
+% \tbc{Include two sentences here. First sentence says that spread of initial variant viruses (Alpha, Beta, Gamma, Delta) was largely driven by increased intrinsic transmissibility. Second sentence that says that subsequently, post-Omicron variant viruses such as XBB, EG.5.1, JN.1, etc... have largely spread due to immune escape. There won't be a good general citation but can cite 2-3 papers for each sentence discussing specific variants. This early on establishes the key distinction between intrinsic transmissibility and immune escape.}
+This later phenomenon of rapid viral population turnover is consistent with antigenic evolution and is observed in several other viruses such as seasonal influenza, although SARS-CoV-2 is currently remains an outlier in terms of pace of evolution \cite{Koel2013, Bedford2014, kistler2023atlas}.
+
+Given the rapid emergence and spread of SARS-CoV-2 variants, it is important to assess the rate of turnover as this can be an important indicator of variant advantage and in addition to understanding how quickly a particular variant is spreading, it may signal the mechanism by which it spreads.
 With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for insight into the evolution of SARS-CoV-2.
 
-%TODO: Flesh out the increase in genetic sequencing and wanting to assess variant fitness crudely and quickly
-\sout{This has motivated the development of statistical methods that can take advantage of this large pool of genetic data including large scale approximate phylogenetic algorithms, identical sequence based methods, and variants frequency dynamic methods.}
-\tbc{I think this preceeding sentance can just be dropped.}
-
 To estimate and understand variant turnover, frequency dynamic models of variant relative fitness, such as multinomial logistic regression \tbc{Helpful to provide concrete examples rather than just broad concept}, have been developed.
+%TODO: Specific examples: Figgins, Piantham, Susserwain, , no lineage assigment model, Noemie
 These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
 Relative fitness in these models is often assumed to be a constant quantity for simplicity and intrinsic to the variant of interest, however this may not be reasonable due to the nature of the transmission process.
 Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) typically requires assumptions on the generation time of the transmission though this can also be approached by jointly modeling the transmission process alongside frequencies \cite{Wallinga2006, figgins2022sars}.
 
-It has been shown that variant transmission advantages differ geographically and temporally which suggests that variant transmission advantages are not necessarily fixed or determined solely due to biology \tbc{This is a strong statement and requires a citation}.
+It has been shown that population-level variant transmission advantages differ geographically and temporally which suggests that variant transmission advantages are not necessarily fixed or determined solely biologically and may be informed by within-region population differences.  \cite{figgins2022sars, vanDorp2022}
 Existing models which allow for variation in variant transmission advantages generally do not have a mechanistic underpinning for why transmission advantages exist and vary geographically and temporally \cite{figgins2022sars, susswein2023leveraging}.
 These non-mechanistic transmission advantages are useful for real-time situation analysis though more work is required to develop theory for how various mechanisms determine viral fitness.
-\tbc{Similar statement to the Abstract. There's a lot of talk here about `different transmission mechanisms', but then it boils down to intrinsic transmissibility vs immune escape. I think clearer to be upfront that this is the important distinction. Concreteness aids clarity.}
+In particular, distinguishing between mechanisms of immune escape and transmissibility may improve our ability to make informed short-term forecasts or include other forms of data to explain patterns of relative fitness. 
+% \tbc{Similar statement to the Abstract. There's a lot of talk here about `different transmission mechanisms', but then it boils down to intrinsic transmissibility vs immune escape. I think clearer to be upfront that this is the important distinction. Concreteness aids clarity.}
+
+%TODO: Be more concrete in differentiating betwen escape, transmissibility
 
 We introduce a theory of relative fitness and transmission advantages for exponentially growing populations.
 We then apply this to several ordinary differential equation models of epidemics to assess how different transmission mechanisms may contribute to variant turnover and describe relative fitness.
 Using these models, we then highlight the importance of historical population exposure, immune escape, and intrinsic transmissibility in determining variant turnover as well as short term forecasts of frequency growth.
 %TODO: Throw in generation time change? Then I can discuss work of SWP and mention paper where they showed shorter generation times for Omicron (?)
-With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to characterize trade-offs between intrinsic transmissibility and immune escape \tbc{I always think of the ordering here as intrinsic transmissibility then immune escape just based on what we empirically observed for SARS-CoV-2 and generally expect for emerging pathogens --- first host adaptation, then antigenic pressure} for pathogens.
+With the knowledge gained from this analysis, we develop several new models of variant frequency dynamics which we use to characterize trade-offs between intrinsic transmissibility and immune escape for pathogens showing that typically intrinsic transmissibility increases are preferred to immune escape due to low population exposure.
+%\tbc{I always think of the ordering here as intrinsic transmissibility then immune escape just based on what we empirically observed for SARS-CoV-2 and generally expect for emerging pathogens --- first host adaptation, then antigenic pressure}
 Motivated by the results of the theoretical framework, we develop two new non-parametric models for relative fitness estimation and frequency forecasting, one based on Gaussian processes and the other on latent factor models, and apply these models to publicly available SARS-CoV-2 sequence data.
 
 \section*{Results}
@@ -205,9 +217,8 @@ In fact, applying these ideas to compartmental models enables to see how mechani
 
 \subsection*{Transmission mechanisms determine relative fitness of variants}
 
-%TODO: Add a sentence or two about multi strain models of epidemics
-Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity.
-These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza \sout{and seasonal coronavirus} \tbc{neither paper includes seasonal coronavirus} \cite{Gog2002, Wen2022}.
+Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity \cite{Gog2002, Wen2022}.
+These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza and human coronaviruses OC42 and 229E \cite{Kistler2021, Eguia2021}.
 
 In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
 These models will provide us with an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
@@ -215,19 +226,23 @@ These models will provide us with an intuition of how strain-level selection dep
 \paragraph{Two-strain SIR}%
 
 For simplicity, we will begin by analyzing a two-strain SIR model in which the variant viruses can differ by increased intrinsic transmissibility (via $\eta_{T}$) and immune escape against wild-type immunity (via $\eta_{E}$).
-This system of 4 ordinary differential equations follows
+This system of 5 ordinary differential equations follows
 
 %TODO: Add 3.x
 \begin{align*}
     \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \eta_{T} S I_{v}\\
-    \frac{d I_{\wt}}{dt} &= \beta S I_{v} - \gamma I_{w}\\
+    \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
     \frac{d I_{v}}{dt} &= \beta \eta_{T} S I_{v} + \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v} - \gamma I_{v}\\
-    \frac{d \phi_{\wt}}{dt} &= - \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v},
+    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}\\
+    \frac{d \phi_{v}}{dt} &= \gamma I_{v}.
 \end{align*}
-where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes \tbc{...}.
-\tbc{$\phi_{\wt}$ is non-obvious and deserves some explanation.}
-\tbc{Shouldn't there be recovered compartments that $\gamma I_{w}$ and $\gamma I_{v}$ feed into? I don't like having unbalanced compartmental models. I always like making sure there are matching inputs and outputs.}
-\tbc{I don't understand the term $\beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}$. It's not drawing from the susceptible compartment and so seems like it's creating $I_{v}$ out of thin air.}
+where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes wild-type immunity which can be derived from wild-type infection.
+In this model, the variant virus can infect both susceptible individuals $S$ and individuals previous infected with the wild-type virus ($\phi_{\wt}$).
+Here, the increased intrinsic transmissibility increases the baseline transmission rate for the variant virus from $\beta$ in wild-type to $\beta \eta_{T}$ in variant and immune escape decreases the transmission rate against those with wildtype immunity, so that the at-risk population is $\eta_{E} \phi_{\wt}$.
+% \tbc{$\phi_{\wt}$ is non-obvious and deserves some explanation.}
+
+% \tbc{Shouldn't there be recovered compartments that $\gamma I_{w}$ and $\gamma I_{v}$ feed into? I don't like having unbalanced compartmental models. I always like making sure there are matching inputs and outputs.}
+% \tbc{I don't understand the term $\beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}$. It's not drawing from the susceptible compartment and so seems like it's creating $I_{v}$ out of thin air.}
 
 Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \beta \eta_{T} \eta_{E} \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
 \begin{align*}
@@ -238,8 +253,9 @@ From this representation of relative fitness, we can see that given fixed increa
 
 This model can also be extended to an $n$-strain SIR model where each variant strain $i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\eta_{T}^{(i)},\eta_{E}^{(i)})$  relative to the wildtype ($\theta_{1} = (0, 0)$).
 In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant T with $\theta_{3} = (\eta_{T}, 0)$.
-Further extensions also include allowing for differences in generation time through an additional parameter $\eta_{G}$ which multiples the recovery rate $\gamma$, however it is important to note that this still assumes the generation time is an exponential distribution.
-\tbc{I don't like just throwing out the $\eta_{G}$ idea without spelling out how it works. Either point to Appendix or spell out here or move to Discussion as future directions.}
+% Further extensions also include allowing for differences in generation time through an additional parameter $\eta_{G}$ which multiples the recovery rate $\gamma$, however it is important to note that this still assumes the generation time is an exponential distribution.
+% \tbc{I don't like just throwing out the $\eta_{G}$ idea without spelling out how it works. Either point to Appendix or spell out here or move to Discussion as future directions.}
+%TODO: Happy to remove this for now, this was primarily anticipating comparisons to SWP's work which looks at how these relative fitnesses might be affected by differences in timing between infections.
 
 \begin{figure}[h]
     \centering
@@ -261,7 +277,7 @@ Further extensions also include allowing for differences in generation time thro
 
 We'll now consider a model where all hosts are assumed to fall into one of $B$ immune backgrounds $\phi_{b}$ for $b =1, \ldots, B$.
 We assume that infection by each variant $v$ then leaves recovered hosts into the corresponding immune background $b_{v}$.
-\tbc{Is this mutually exlusive? Ie can hosts only be in a single immune background? Or do they end up in multiple immune backgrounds after repeat infection with different variants?}
+% \tbc{Is this mutually exlusive? Ie can hosts only be in a single immune background? Or do they end up in multiple immune backgrounds after repeat infection with different variants?}
 Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
 
 We can then write the system of ODEs as
@@ -269,9 +285,13 @@ We can then write the system of ODEs as
     \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
     \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}.
 \end{align*}
-\tbc{I'd appreciate spelling out $S$ and $R$ compartments. Or do they not exist?}
 
-With this formulation, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ as
+With this model, susceptible and recovered compartments in the standard SIR model can be thought of as immune backgrounds.
+This allows us to represent the standard SIR model as $S = \phi_{S}$, $I = I_{\wt}$, $R = \phi_{\wt}$ and $\eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0$ and $b_{\wt} = \wt$.
+We can also think of the two-strain SIR with $\eta_{T} = 1$ as a special case in for this model where we set $S = \phi_{S}, \eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0, \eta_{v, S} = 1, \eta_{v, \wt} = \eta_{E}$ and keep all other parameters the same.
+% \tbc{I'd appreciate spelling out $S$ and $R$ compartments. Or do they not exist?}
+
+With this formulation of immune escape, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ as
 
 \begin{equation} \label{eq:escape_relative_fitness}
     \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
@@ -280,9 +300,10 @@ With this formulation, we can then write the relative fitnesses in terms of the 
 Using this model of immune escape, we can see relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
 Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
-However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change.
+However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change i.e. $\frac{d\phi_{b}}{dt}$.
 
-\tbc{This section on immune backgrounds got very dense. I can't tell how much logic I can be bringing forward from the previous two-strain SIR. How does this fit with Figure 1 where panel E lists immune pools? Confusing because this seems like two separate models, but maybe it's just one model?}
+% \tbc{This section on immune backgrounds got very dense. I can't tell how much logic I can be bringing forward from the previous two-strain SIR. How does this fit with Figure 1 where panel E lists immune pools? Confusing because this seems like two separate models, but maybe it's just one model?}
+% MF: I've added a section that shows how they relate directly.
 
 Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in \ref{ssec:full_immune_history}.
 
