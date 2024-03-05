@@ -20,6 +20,9 @@ environment*
 *.cb2
 .*.lb
 
+# Compiled manuscript
+relative-fitness-mechanisms.pdf
+
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
 *.bcf
