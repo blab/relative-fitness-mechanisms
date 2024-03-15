@@ -56,6 +56,8 @@
 
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
 \newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Expect}{\mathbb{E}}
+\newcommand{\Var}{\mathbb{V}}
 \newcommand{\wt}{\text{wt}}
 \newcommand{\var}{\text{var}}
 \newcommand{\varE}{\text{escape}}
@@ -237,7 +239,7 @@ This system of 5 ordinary differential equations follows
     \frac{d \phi_{v}}{dt} &= \gamma I_{v}.
 \end{align*}
 where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes wild-type immunity which can be derived from wild-type infection.
-In this model, the variant virus can infect both susceptible individuals $S$ and individuals previous infected with the wild-type virus ($\phi_{\wt}$).
+In this model, the variant virus can infect both susceptible individuals $S$ and individuals previously infected with the wild-type virus $\phi_{\wt}$.
 Here, the increased intrinsic transmissibility increases the baseline transmission rate for the variant virus from $\beta$ in wild-type to $\beta \eta_{T}$ in variant and immune escape decreases the transmission rate against those with wildtype immunity, so that the at-risk population is $\eta_{E} \phi_{\wt}$.
 % \tbc{$\phi_{\wt}$ is non-obvious and deserves some explanation.}
 
@@ -288,7 +290,7 @@ We can then write the system of ODEs as
 
 With this model, susceptible and recovered compartments in the standard SIR model can be thought of as immune backgrounds.
 This allows us to represent the standard SIR model as $S = \phi_{S}$, $I = I_{\wt}$, $R = \phi_{\wt}$ and $\eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0$ and $b_{\wt} = \wt$.
-We can also think of the two-strain SIR with $\eta_{T} = 1$ as a special case in for this model where we set $S = \phi_{S}, \eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0, \eta_{v, S} = 1, \eta_{v, \wt} = \eta_{E}$ and keep all other parameters the same.
+We can also think of the two-strain SIR with $\eta_{T} = 1$ as a special case of this model where we set $S = \phi_{S}, \eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0, \eta_{v, S} = 1, \eta_{v, \wt} = \eta_{E}$ and keep all other parameters the same.
 % \tbc{I'd appreciate spelling out $S$ and $R$ compartments. Or do they not exist?}
 
 With this formulation of immune escape, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ as
@@ -461,9 +463,51 @@ We can see this by considering a Taylor expansion of the relative fitness about 
 % Could we treat this similar to SWP leaky paper where some fraction is reset or leaky vaccine to see what changes depending on vaccine efficacy
 % Basically, vaccination can push you into the zone where escape is preferred :O (SEE ABOVE)
 
+\paragraph{Selective Pressure}
+
+Though it is useful to quantify the individual relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
+This will occur not just on the level of frequencies and frequency growth, but additionally on the level of population-level growth rates.
+
+Beginning again from our assumption of inhomogeneous exponential growth, we can write a differential equation for the total prevalence as
+
+\begin{align*}
+    \frac{d I}{d t} &= \sum_{v} r_{v}(t) I_{v}(t)\\ 
+                    &= \left( \sum_{v} r_{v}(t) f_{v}(t) \right) I(t).
+\end{align*}
+
+This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
+Re-writing the average in terms of some base exponential growth rate and the relative fitnesses, so that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r(t)$.
+We can now look at the rate of change in the derivative.
+
+\begin{align*}
+    \frac{d \overline{r}}{d t} &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
+                               &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v} + \lambda_{v} f_{v} (\lambda_{v} - \overline{\lambda})  \right]\\
+                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v} (\lambda_{v} - \overline{\lambda}) f_{v}\\
+                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v}^{2} f_{v} - \overline{\lambda}\sum_{v} \lambda_{v} f_{v}\\
+                               &= \frac{d r_{0}}{d t} + \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
+\end{align*}
+
+Here, we've written the last line in terms of expectations relative to sampling according to the frequency distribution. 
+This shows us that the change in the average growth rate of the epidemic can be written in terms of the growth rate of the pivot category, the mean rate of change in the relative fitness, and the variance of the relative fitnesses.
+We will call terms which can be computed in terms of quantities derived from frequencies alone the selective pressure and denote it as
+
+\begin{equation}
+\psi(t) =  \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
+\end{equation}
+
+We can use this idea to directly write the prevalence in terms of the selective pressure and the base growth rate.
+First, we define a cumulative selective pressure as 
+\begin{align*}
+\Psi(t) = \int_{0}^{t} \psi(s) ds.
+\end{align*}
+
+\begin{align*}
+    I(t) &= I(0) \exp\left(\int_{0}^{t} \overline{r}(s) ds\right)\\
+         &= I(0) \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
+\end{align*}
+
 \paragraph{Correlations are insufficient for mechanism identification}%
 
-Main points:
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
 Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages (using logit-linear model) were correlated with initial vaccination fraction.
 
@@ -612,7 +656,7 @@ This motivated a model to learn this low-dimensional structure that is inspired 
 As the structure here resembles Equation~\ref{eq:escape_relative_fitness}, we call the $\eta$ ``pseudo-escape'' and $\phi_{d}^{g}$ the ``pseudo-immunity''.
 To make this more consistent with our intuition here, we model $\phi_{d}^{g}$ to be in $[0,1]$ and model it as smoothly varying in time.
 In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using 4th order splines with [INSERT KNOTS HERE] knots placed uniformly over the time period modeled.
-Though we choose to model tesee latent factors with splines, other models would work here. For example, a good alternative would be the approximate Gaussian processes described above.
+Though we choose to model these latent factors with splines, other models would work here. For example, a good alternative would be the approximate Gaussian processes described above.
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
 For the same reason, we order the components in the first geography.
 
