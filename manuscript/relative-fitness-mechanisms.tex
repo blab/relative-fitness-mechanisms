@@ -468,16 +468,17 @@ We can see this by considering a Taylor expansion of the relative fitness about 
 Though it is useful to quantify the individual relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
 This will occur not just on the level of frequencies and frequency growth, but additionally on the level of population-level growth rates.
 
-Beginning again from our assumption of inhomogeneous exponential growth, we can write a differential equation for the total prevalence as
+Beginning again from our assumption of inhomogeneous exponential growth, we can write a differential equation for the total prevalence $I(t)= \sum_{v} I_{v}(t)$ as
 
 \begin{align*}
-    \frac{d I}{d t} &= \sum_{v} r_{v}(t) I_{v}(t)\\ 
-                    &= \left( \sum_{v} r_{v}(t) f_{v}(t) \right) I(t).
+    \frac{d I}{d t} &= \sum_{v} \frac{d I_{v}}{d t} =  \sum_{v} r_{v}(t) I_{v}(t)\\ 
+                    &= \left( \sum_{v} r_{v}(t) f_{v}(t) \right) I(t),
 \end{align*}
 
+where we've used that $I_{v}(t) = f_{v}(t) I(t)$. 
 This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
-Re-writing the average in terms of some base exponential growth rate and the relative fitnesses, so that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r(t)$.
-We can now look at the rate of change in the derivative.
+Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_0(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_0(t)$.
+We can now look at the rate of change in the average growth rate by taking its derivative.
 
 \begin{align*}
     \frac{d \overline{r}}{d t} &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
