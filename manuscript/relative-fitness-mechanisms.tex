@@ -456,63 +456,47 @@ We investigate whether relative fitnesses vary predictably in the short-term reg
 
 To address this, we apply the two-variant model developed in previous sections for two different mechanisms (immune escape and increased transmissibility).
 We fix the relative fitness of the novel variant at a prediction time $t_{0}$ using equation \ref{eq:critical_immunity} and assess the change in the relative fitness in the short-term.
-We find that though relative fitness trajectories will share the same decreasing shape, they may decline at diffrent rates depending on the mechanism.
+We find that though relative fitness trajectories will share the same decreasing shape, they may decline at different rates depending on the mechanism (Fig.~\ref{fig:short_term_divergence}).
 
 This can lead to large changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
 
-% Main points: though our equations show that things depend on distribution of immune backgrounds, a simple linear model should be able to replicate relative fitness given escape estimates if the distribution of immune backgrounds is unchanged in time.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./figures/short_term_divergence.png}
+    \caption{\textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
+    Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T.
+    We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
+    (A) The prevalence for the variants.
+    (B) The relative fitness from the variants.
+    (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
+    (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
+    }%
+    \label{fig:short_term_divergence}
+\end{figure}
 
-What happens when there is no mutation? Practical limits given mutation dynamics?
-Robustness of relative fitness under similar and varying mechanisms.
+\paragraph{Correlations are insufficient for mechanism identification}%
 
+Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
+Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages (using logit-linear model) were correlated with initial vaccination fraction.
 
-%TODO: We'll replace this with section that compares initial growth rates for different mechanisms assuming same starting relative fitness
-%TODO: This is a direct application of the two-variant system. We can compute the relationship btw relative fitness for different mechanisms.
+We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape.
+This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
 
-%TODO: Can we use to this to evaluate time horizon on turnover?
-%TODO: We could compare assuming constant to real fitness value and see how that affects estimates over time?
-%TODO: Can then represent this as a time to x% error in frequency assuming no new emergence. Would be interesting to try this for SARS-2 and flu like parameters
-
-% For example, we can consider the case where the distribution of immune backgrounds is nearly unchanged in time $\frac{d\phi_{b}}{dt} \approx 0$
-
-% \paragraph{How does changing immune pools affect selection?}%
-% - This is looking at vaccination as a driver of selection
-
-% Basically, we want to understand $\lambda(\phi_{1}, \ldots, \phi_{S})$. What do we want to say?
-
-% To understand how change in immune-landscape in the host population affects the relative fitness of immune escape variants, we can consider the gradient of an immune escape model
-
-% Using equation \ref{eq:escape_relative_fitness}, we can write the gradient of the relative fitness with respect to the immune backgrounds as
-
-% \begin{align*}
-%     \nabla_{\phi} \lambda^{\text{escape}}_{v,u}(t) = (\eta_{v,1} - \eta_{u,1}, \ldots, \eta_{v,B} - \eta_{u,B}).
-% \end{align*}
-
-% From this equation, it's clear that to decrease
-
-
-% QUESTION: Can vaccination push you into the regime where escape is preferred? Yes! When is that better overall tho at the population level?
-% FIGURE IDEA: For varying vaccination rates, show when escape or transmission is preferred.
-% FIGURE IDEA: Show based on simulation with rates probability escape variant wins.
-
-% This probability exists in closed form?
-
-% However, decreasing relative fitness for a variant relative to another is not the same as decreasing selection over.
-% In order to decrease,
-
-% Do we have an idea for variant pressure / total selection here? Can we show whether decreasing selection is same as decreasing cases?
-
-% Do we want to consider an expansion in $\frac{d}{d\phi_{s}}$ to assess sensitivity to immune group? What direction increases section overall? (This will come down to just the eta?)
-% You can have higher selection, but how do cases change in simulation. What would vaccinating against wild-type do? What would vaccinating against variant do? Depends on escape potential against variant?
-% How does vaccination uptake matter here? Do we want to plot change in relative fitnesses as a function of update? Increased selection but decreased cases
-
-% Basically, we want to also monitor decrease in absolute fitness because increased selection pressure =/= increased cases
-
-
-% Is this not the same as the transmissibility trade off? Or are we considering two immune escaping?
-% We want to think explicitly about vaccination and selection for variants?
-% Could we treat this similar to SWP leaky paper where some fraction is reset or leaky vaccine to see what changes depending on vaccine efficacy
-% Basically, vaccination can push you into the zone where escape is preferred :O (SEE ABOVE)
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./figures/correlation_not_mechanism.png}
+    \caption{\textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
+    We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
+    Darker colors represent lower vaccine uptake.
+    We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
+        A. Prevalence of variant, each line is its own simulation.
+        B. Frequency of variant.
+        C. Relative fitness for variant over time.
+        D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
+        E. Same as D. but using data from the entire period shown. Notice the drop off of relative fitness above $1 / R_{v}$ at which both variants are declining.
+    }
+\label{fig:mechanism_identification}
+\end{figure}
 
 \paragraph{Selective Pressure}
 
@@ -558,59 +542,47 @@ First, we define a cumulative selective pressure as
          &= I(0) \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
 \end{align*}
 
-\paragraph{Correlations are insufficient for mechanism identification}%
+\paragraph{Predicting epidemic growth rates using selective pressure}%
 
-Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
-Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages (using logit-linear model) were correlated with initial vaccination fraction.
-
-We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape.
-This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
+Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we developed a predictive model of the epidemic growth rate using estimates of selective pressure.
+Using estimated selective pressure from the approximate Gaussian process model (reference section), we predict the epidemic growth rate using the selective pressure for the previous (window size) days.
+We fit a (model type) model to data from (insert number) states in the United States between (start date) and (end date).
+Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/correlation_not_mechanism.png}
-    \caption{\textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
-    We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
-    Darker colors represent lower vaccine uptake.
-    We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
-        A. Prevalence of variant, each line is its own simulation.
-        B. Frequency of variant.
-        C. Relative fitness for variant over time.
-        D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
-        E. Same as D. but using data from the entire period shown. Notice the drop off of relative fitness above $1 / R_{v}$ at which both variants are declining.
-    }
-\label{fig:mechanism_identification}
+    \includegraphics[width=0.8\linewidth]{./figures/selective_pressure_prediction.png}
+    \caption{\textbf{Predicting epidemic growth rate using estimated selective pressure.}
+    A-F. Predictions for empirical growth rate from selective pressure for selected US states. 
+    The light gray period is the training period and the darker gray is the testing period.
+    G. Estimated selective pressure in England.
+    H. Prevalence estimates for England.
+    I. Empirical growth rates computed from prevalence estimates in (H) and predictions from our model.
+}
+    \label{fig:selective_pressure_prediction}
 \end{figure}
 
-
-% \paragraph{Predictive capabilities of simple models on complex dynamics}%
-
-% \paragraph{Dimensionality of immune space}%
-
-% We apply dimensionality reduction techniques to relative fitness estimates generated by using the Gaussian process model to estimate the number of latent dimensions needed to explain the estimated relative fitness dynamics.
-
-%MF: Happy to cut this section, but wanted to look at how many latent factors are needed to explain relative fitnesses estimated by the Gaussian process for certain pandemic periods
-
-%TODO: Show PCA, SVD, or regularized SVD results>
 
 \paragraph{Latent factor models of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 
-We apply this method to data from 37 US states over the period of January 2021 to March 2022. Results focusing on Washington state are shown in Figure~\ref{fig:latent_immune}
-%TODO: Extend this section to use more recent data, embed pango lineages?
+We apply this method to sequence count data at the level of Pango lineage for X countries over the period of March 2023 to March 2024. 
+
+% We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants (R^2 = 0.6)
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/latent_immune.png}
     \caption{\textbf{Latent factor models of immunity describe variant structure.}
-        We fit the latent immunity factor model to early SARS-CoV-2 frequency data.
-        A. Variant frequency. Points are the sample frequencies and the thick lines are modeled variant frequencies. Each is colored by variant of concern.
-        B. Estimated relative fitness for each variant.
-        C. Estimated pseudo-immunity over time.
-        D. Estimated pseudo-escape rates for each variant.
-        E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
+        We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
+        A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
+        B. Estimated relative fitness for selected variants and countries.
+        C. Estimated pseudo-immunity over time for multiple countries.
+        D,E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
+        F. Estimated pseudo-escape rates for each variant.
+        H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
 \label{fig:latent_immune}
 \end{figure}
@@ -640,7 +612,7 @@ Generally, the structure of the models discussed here are described by simple me
     % We can then compute fitness
 
 
-Futhermore, the models considered here are primarily deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
+Furthermore, the models considered here are primarily deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
 In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the changes for stochastic extinction remains.
 That being said, models which account for the appearance of genetic variants through mutation exist, often assuming a latent antigenic space with which fitness is determined. (Cobey, Lassig)
 
@@ -696,11 +668,17 @@ Since the eigenvalues and eigenfunctions are shared across variants, this allows
     \vec{\lambda}_{t,v} = \vec{\Phi}\vec{S}_{\theta}\vec{\beta}.
 \end{equation*}
 
+\paragraph{Predicting selective pressure from growth rate}%
+
+% Mention data source for training and evaluation data
+
+% Mention model specification, cross-validation, and ...
 
 \paragraph{Latent immune factor model}%
 
-We show that relative fitnesses dynamics ought to be explained by low-dimensional immunity when transmission dynamics are described with compartment models.
-This motivated a model to learn this low-dimensional structure that is inspired by latent-factor models. We start by assuming that the relative fitness of variant $v$ at time $t$ and in geographic location $g$ can be described by $D$ latent factors so that
+We show that relative fitness dynamics ought to be explained by low-dimensional immunity when transmission dynamics are described with compartment models.
+This motivated a model to learn this low-dimensional structure that is inspired by latent-factor models. 
+We start by assuming that the relative fitness of variant $v$ at time $t$ and in geographic location $g$ can be described by $D$ latent factors so that
 
 \begin{equation}
     \lambda_{v}^{g}(t) = \sum_{d=1}^{D} \eta_{v,d} \phi_{d}^{g}(t).
@@ -711,6 +689,10 @@ In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using 4th orde
 Though we choose to model these latent factors with splines, other models would work here. For example, a good alternative would be the approximate Gaussian processes described above.
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
 For the same reason, we order the components in the first geography.
+
+DETAILS ON DATA WE APPLIED IT TO
+
+DETAILS ON TITER DATA
 
 \subsection*{Data and code accessibility}
 
@@ -775,5 +757,12 @@ Therefore, our relative fitnesses can be written as
 \end{align*}
 where for simplicity we define $\eta_{v, B} = 0$ if $v \in B$.
 
-
+    \begin{figure}[t!]
+        \centering
+        \includegraphics[width=0.9\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
+        \caption{
+            \textbf{Predictions for empirical growth rate using selective pressure for all countries.}
+        }
+        \label{fig:empirical-growth-rate-predictions-all}
+    \end{figure}
 \end{document}
