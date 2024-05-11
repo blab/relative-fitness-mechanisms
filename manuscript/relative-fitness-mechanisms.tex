@@ -88,11 +88,17 @@
     Over the course of the COVID-19 pandemic, SARS-CoV-2 variants have repeated emerged, leading to large variant waves in populations of mixed immune backgrounds.
     Classifying these variant viruses into genetically similar clades and lineages has allowed scientists to track the rise and fall of variants by modeling their frequencies over time.
     These models of frequency dynamics enable inference of variant fitness advantages, however, these models are typically divorced from a direct interpretation at the level of transmission.
+
     In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
     We use these models to highlight several complications when analyzing the frequency dynamics of infectious disease variants, namely the difficulty in discovering fitness mechanisms such as immune escape or increased transmissibility from frequency data alone.
     % \tbc{Reading just the abstract I can't interpret what you mean by `fitness mechanisms'. I'd spell out that you're concerned with inherent transmission advantage vs immune escape.}
-    We then develop several models for inference of frequency dynamics using Gaussian Processes and dimensionality reduction techniques to estimate latent pseudo-immune components which explain variant dynamics.
-    Finally, we apply these models to publicly available SARS-CoV-2 sequences in the United States \tbc{finding...}.
+
+    Motivated by this work, we develop an approximate Gaussian process method for estimating time-varying fitness of SARS-CoV-2 variants.
+    We, then, derive a selective pressure metric that estimates the contribution of frequency dynamics to population-level epidemic growth rates.
+    Using this selective pressure metric, we are then able to develop a predictive model of epidemic growth rate from selective pressure.
+    
+    Finally, we develop a latent immunity space model for relative fitness which estimates pseudo-escape rates for variants and pseudo-immunity proportions for populations.
+    Applying this model to publicly available SARS-CoV-2 sequences in the United States, we estimate a pseudo-immunity landscape for SARS-CoV-2 variants and show our embedding are correlated with recent titer data.
      % To better understand the relationship between population dynamics expected from traditional compartment models of epidemics,
 \end{abstract}
 
