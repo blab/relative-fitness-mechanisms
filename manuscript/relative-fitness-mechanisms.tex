@@ -87,19 +87,19 @@
 \begin{abstract}
     Over the course of the COVID-19 pandemic, SARS-CoV-2 variants have repeated emerged, leading to large variant waves in populations of mixed immune backgrounds.
     Classifying these variant viruses into genetically similar clades and lineages has allowed scientists to track the rise and fall of variants by modeling their frequencies over time.
-    These models of frequency dynamics enable inference of variant fitness advantages, however, these models are typically divorced from a direct interpretation at the level of transmission.
+    These models of frequency dynamics enable inference of variant fitness advantages, however, these models are typically divorced from a direct interpretation at the level of transmission, limiting their utility.
 
-    In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted using compartment models of infectious diseases.
-    We use these models to highlight several complications when analyzing the frequency dynamics of infectious disease variants, namely the difficulty in discovering fitness mechanisms such as immune escape or increased transmissibility from frequency data alone.
+    In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted in terms of compartment models of infectious diseases.
+    We use these models to highlight several complications when analyzing the frequency dynamics of infectious disease variants, namely the difficulty in discovering transmission mechanisms such as immune escape or increased transmissibility from frequency data alone.
     % \tbc{Reading just the abstract I can't interpret what you mean by `fitness mechanisms'. I'd spell out that you're concerned with inherent transmission advantage vs immune escape.}
 
     Motivated by this work, we develop an approximate Gaussian process method for estimating time-varying fitness of SARS-CoV-2 variants.
     We, then, derive a selective pressure metric that estimates the contribution of frequency dynamics to population-level epidemic growth rates.
     Using this selective pressure metric, we are then able to develop a predictive model of epidemic growth rate from selective pressure.
-    
-    Finally, we develop a latent immunity space model for relative fitness which estimates pseudo-escape rates for variants and pseudo-immunity proportions for populations.
+
+    We also propose a latent immunity space model for relative fitness which estimates pseudo-escape rates for variants and pseudo-immunity proportions for populations.
     Applying this model to publicly available SARS-CoV-2 sequences in the United States, we estimate a pseudo-immunity landscape for SARS-CoV-2 variants and show our embedding are correlated with recent titer data.
-     % To better understand the relationship between population dynamics expected from traditional compartment models of epidemics,
+    These models offer novel insights into the mechanisms driving variant spread and have broad applicability to other rapidly evolution pathogens, enhancing our ability to understand viral populations from genetic sequences.
 \end{abstract}
 
 %TODO: References
@@ -131,7 +131,7 @@ However, after the emergence of the Omicron variant, later variants such as XBB,
 %TODO: Citations: Bloom lab, Cao, ...
 
 % \tbc{Include two sentences here. First sentence says that spread of initial variant viruses (Alpha, Beta, Gamma, Delta) was largely driven by increased intrinsic transmissibility. Second sentence that says that subsequently, post-Omicron variant viruses such as XBB, EG.5.1, JN.1, etc... have largely spread due to immune escape. There won't be a good general citation but can cite 2-3 papers for each sentence discussing specific variants. This early on establishes the key distinction between intrinsic transmissibility and immune escape.}
-This later phenomenon of rapid viral population turnover is consistent with antigenic evolution and is observed in several other viruses such as seasonal influenza, although SARS-CoV-2 is currently remains an outlier in terms of pace of evolution \cite{Koel2013, Bedford2014, kistler2023atlas}.
+This later phenomenon of rapid viral population turnover is consistent with antigenic evolution and is observed in several other viruses such as seasonal influenza, although SARS-CoV-2 currently remains an outlier in terms of pace of evolution \cite{Koel2013, Bedford2014, kistler2023atlas}.
 
 Given the rapid emergence and spread of SARS-CoV-2 variants, it is important to assess the rate of turnover as this can be an important indicator of variant advantage and in addition to understanding how quickly a particular variant is spreading, it may signal the mechanism by which it spreads.
 With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for insight into the evolution of SARS-CoV-2.
@@ -304,7 +304,7 @@ We assume that infection by each variant $v$ then leaves recovered hosts into th
 % \tbc{Is this mutually exlusive? Ie can hosts only be in a single immune background? Or do they end up in multiple immune backgrounds after repeat infection with different variants?}
 Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
 
-We can then write the system of ODEs as
+We can then write the system of ordinary differential equations as
 \begin{align*}
     \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
     \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}.
@@ -658,17 +658,16 @@ This induces a structure on the covariance of the relative fitness values over t
 For computational efficiency, we implement a Hilbert Space Gaussian process approximation, so that the relative fitnesses can be represented linearly as
 
 \begin{equation}
-    \lambda_{v}(t) \approx \sum_{j=1}^{m} S_{\theta}(\sqrt{\mu_{j}})^{1/2} \cdot \phi_{j}(x) \cdot \beta_{j},
+    \lambda_{v}(t) \approx \sum_{j=1}^{m} S_{\theta}(\sqrt{\mu_{j}})^{1/2} \cdot \phi_{j}(t) \cdot \beta_{j},
 \end{equation}
 where $S_{\theta}$ is the spectral density of the kernel $K$, $\mu_{j}$ and $\phi_{j}$ are the eigenvalues and eigenfunctions of the Laplacian, and $\beta_{j} \sim \text{Normal}(0,1)$ \cite{riutortmayol2022practical}.
 Since the eigenvalues and eigenfunctions are shared across variants, this allows us to re-use values across variants, simplifying the computation to a matrix multiplication as
 
-%TODO: Fix this
 \begin{equation*}
-    \vec{\lambda}_{t,v} = \vec{\Phi}\vec{S}_{\theta}\vec{\beta}.
+    \vec{\lambda}_{t} = \vec{\Phi}_{t} \sqrt{\vec{S}_{\theta}}\vec{\beta}.
 \end{equation*}
 
-\paragraph{Predicting selective pressure from growth rate}%
+\paragraph{Predicting epidemic growth rate from selective pressure}%
 
 % Mention data source for training and evaluation data
 
