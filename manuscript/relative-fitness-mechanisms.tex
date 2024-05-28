@@ -84,23 +84,38 @@
 
 \maketitle
 
+% Longer abstract: \approx 250 words
+% \begin{abstract}
+%     Over the course of the COVID-19 pandemic, SARS-CoV-2 variants have repeated emerged, leading to large variant waves in populations of mixed immune backgrounds.
+%     Classifying these variant viruses into genetically similar clades and lineages has allowed scientists to track the rise and fall of variants by modeling their frequencies over time.
+%     These models of frequency dynamics allow us to estimate variant fitness advantages, however, these models typically cannot be interpreted at the level of transmission directly.
+%     In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be derived from compartment models of infectious diseases.
+%     We use these models to illustrate how transmission mechanisms such as increased intrinsic transmissibility and immune escape can affect frequency dynamics, including trade-off between preferred mechanisms and complications identifying mechanism.
+%
+%     Motivated by this work, we develop a scalable approximate Gaussian process method for estimating relative fitness over time.
+%     We, then, derive a selective pressure metric that estimates the contribution of frequency dynamics to population-level epidemic growth rates.
+%     Using this metric, we are then able to develop a predictive model of epidemic growth rate from selective pressure.
+%
+%     We also propose a latent immunity space model for relative fitness which estimates pseudo-escape rates for variants and pseudo-immunity proportions for populations.
+%     Applying this model to publicly available SARS-CoV-2 sequences globally, we estimate a pseudo-immunity landscape for SARS-CoV-2 variants.
+%     These models offer novel insights into the mechanisms driving variant spread and have broad applicability to other rapidly evolution pathogens, enhancing our ability to understand viral populations from genetic sequences.
+% \end{abstract}
+
+% Short abstract: ~ 170 words
 \begin{abstract}
-    Over the course of the COVID-19 pandemic, SARS-CoV-2 variants have repeated emerged, leading to large variant waves in populations of mixed immune backgrounds.
-    Classifying these variant viruses into genetically similar clades and lineages has allowed scientists to track the rise and fall of variants by modeling their frequencies over time.
-    These models of frequency dynamics enable inference of variant fitness advantages, however, these models are typically divorced from a direct interpretation at the level of transmission, limiting their utility.
+    Since the emergence of COVID-19, emerging SARS-CoV-2 variants have caused repeated outbreaks.
+    Scientists have tracked these viral variants through phylogenetic approaches, classifying them into clades and modeling their frequencies over time to estimate their fitness advantages.
+    However, these models typically cannot be interpreted at the level of transmission directly.
 
-    In this paper, we derive existing frequency dynamic models from exponentially growing populations and extend them to show that relative fitness of variants can be interpreted in terms of compartment models of infectious diseases.
-    We use these models to highlight several complications when analyzing the frequency dynamics of infectious disease variants, namely the difficulty in discovering transmission mechanisms such as immune escape or increased transmissibility from frequency data alone.
-    % \tbc{Reading just the abstract I can't interpret what you mean by `fitness mechanisms'. I'd spell out that you're concerned with inherent transmission advantage vs immune escape.}
+    We develop a general theory for existing frequency models and interpret fitness through compartment models of infectious disease, addressing trade-offs between immune escape and increased transmissibility using frequency data.
 
-    Motivated by this work, we develop an approximate Gaussian process method for estimating time-varying fitness of SARS-CoV-2 variants.
-    We, then, derive a selective pressure metric that estimates the contribution of frequency dynamics to population-level epidemic growth rates.
-    Using this selective pressure metric, we are then able to develop a predictive model of epidemic growth rate from selective pressure.
+    We introduce a scalable Gaussian process method for estimating relative fitness over time and develop a selective pressure metric which we use to predict epidemic growth rates from variant frequencies alone with a transformer-based prediction model.
 
-    We also propose a latent immunity space model for relative fitness which estimates pseudo-escape rates for variants and pseudo-immunity proportions for populations.
-    Applying this model to publicly available SARS-CoV-2 sequences in the United States, we estimate a pseudo-immunity landscape for SARS-CoV-2 variants and show our embedding are correlated with recent titer data.
-    These models offer novel insights into the mechanisms driving variant spread and have broad applicability to other rapidly evolution pathogens, enhancing our ability to understand viral populations from genetic sequences.
+    Additionally, we propose a latent immunity space model that estimates pseudo-escape rates for variants and pseudo-immunity proportions for populations, applying this model to publicly available SARS-CoV-2 sequences to map recent pseudo-immunity landscapes. 
+
+    These approaches offer novel insights into the mechanisms driving evolution in SARS-CoV-2 and can be applied to other rapidly evolving pathogens.
 \end{abstract}
+
 
 %TODO: References
 % Huddleston et al, Antigenic waves, Cecile's paper, Usher, Obermyer, the one Jesse sent (?), Recent one ought of Sarah's lab, another talking about backboosting and original antigenic sin, immune dynamics cell paper
