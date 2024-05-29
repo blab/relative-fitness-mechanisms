@@ -17,6 +17,8 @@ jaxlib = "^0.4.1"
 tinygp = "^0.2.4"
 scikit-learn = "^1.3.2"
 pango-aliasor = "^0.3.0"
+flax = "^0.8.4"
+optax = "^0.2.2"
 
 [tool.poetry.group.dev.dependencies]
 notebook = "^6.5.4"
