@@ -1,12 +1,12 @@
 from functools import partial
 from typing import Optional
-import evofr as ef
-import numpy as np
-import jax.numpy as jnp
-from jax.nn import softmax
 
+import evofr as ef
+import jax.numpy as jnp
+import numpy as np
 import numpyro
 import numpyro.distributions as dist
+from jax.nn import softmax
 from numpyro.distributions.distribution import TransformedDistribution
 from numpyro.distributions.transforms import OrderedTransform
 
@@ -45,7 +45,7 @@ class LatentRW:
             # Reshaping initial phi values
             _phi_0 = jnp.hstack((_phi_0_base[:, None], _phi_0_rest))
             phi_0 = numpyro.deterministic(
-                "phi_0", jnp.row_stack((_phi_0, jnp.zeros((1, N_groups))))
+                "phi_0", jnp.vstack((_phi_0, jnp.zeros((1, N_groups))))
             )
 
             with numpyro.plate("N_dim_m1_phi", dim - 1, dim=-2):
@@ -60,7 +60,7 @@ class LatentRW:
                     phi_rw = jnp.cumsum(phi_rw_step, axis=1)
 
         # Combine latent factor increments and starting position
-        phi_rw = jnp.row_stack((jnp.zeros((1, dim - 1, N_groups)), phi_rw))
+        phi_rw = jnp.vstack((jnp.zeros((1, dim - 1, N_groups)), phi_rw))
         phi_rw = jnp.concatenate(
             (phi_rw, jnp.zeros((N_time, 1, N_groups))), axis=1
         )
@@ -106,7 +106,7 @@ class LatentSplineRW:
             # Reshaping initial phi values
             _phi_0 = jnp.hstack((_phi_0_base[:, None], _phi_0_rest))
             phi_0 = numpyro.deterministic(
-                "phi_0", jnp.row_stack((_phi_0, jnp.zeros((1, N_groups))))
+                "phi_0", jnp.vstack((_phi_0, jnp.zeros((1, N_groups))))
             )
 
             # Generating splines for latent factors
@@ -122,7 +122,7 @@ class LatentSplineRW:
                     phi_rw = jnp.cumsum(phi_rw_step, axis=1)
 
         # Combine latent factor increments and starting position
-        phi_rw = jnp.row_stack((jnp.zeros((1, dim - 1, N_groups)), phi_rw))
+        phi_rw = jnp.vstack((jnp.zeros((1, dim - 1, N_groups)), phi_rw))
         phi_rw = jnp.concatenate(
             (phi_rw, jnp.zeros((num_knots, 1, N_groups))), axis=1
         )
@@ -195,7 +195,7 @@ def relative_fitness_dr_hier_numpyro(
         with numpyro.plate("N_variant_weight", N_variants - 1, dim=-2):
             _eta = numpyro.sample("_eta", dist.Uniform(-1.0, 1.0))
             eta = numpyro.deterministic(
-                "eta", jnp.row_stack((_eta, jnp.zeros((1, dim))))
+                "eta", jnp.vstack((_eta, jnp.zeros((1, dim))))
             )
 
     # Latent factors can vary by group
@@ -217,7 +217,7 @@ def relative_fitness_dr_hier_numpyro(
             )
 
     # Sum fitness to get dynamics over time
-    init_logit = jnp.row_stack((_init_logit, jnp.zeros((1, N_groups))))
+    init_logit = jnp.vstack((_init_logit, jnp.zeros((1, N_groups))))
     logits = jnp.cumsum(fitness.at[0, :, :].set(0), axis=0) + init_logit
 
     # Evaluate likelihood
@@ -261,13 +261,13 @@ def relative_fitness_dr_numpyro(
     with numpyro.plate("N_dim_m1", dim):
         with numpyro.plate("N_variant_weight", N_variants - 1):
             _eta = numpyro.sample("eta", dist.Normal(0.0, 1.0))
-            eta = jnp.row_stack((_eta, jnp.zeros((1, dim))))
+            eta = jnp.vstack((_eta, jnp.zeros((1, dim))))
         with numpyro.plate("N_steps_base", N_time - 1):
             phi_rw_step = numpyro.sample("phi_rw_step", dist.Normal(0.0, 0.05))
             phi_rw = jnp.cumsum(phi_rw_step, axis=-1)
 
         # Combine increments and starting position
-        phi_rw = jnp.row_stack((jnp.zeros((1, dim)), phi_rw))
+        phi_rw = jnp.vstack((jnp.zeros((1, dim)), phi_rw))
         phi = numpyro.deterministic("phi", softmax(phi_0 + phi_rw))
 
     # Compute fitness from weights and latent factors
