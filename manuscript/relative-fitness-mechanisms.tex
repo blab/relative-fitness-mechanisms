@@ -491,7 +491,7 @@ This can lead to large changes in the predicted incidence depending on the assum
 \paragraph{Correlations are insufficient for mechanism identification}%
 
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
-Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages (using logit-linear model) were correlated with initial vaccination fraction.
+Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
 
 We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape.
 This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
@@ -507,7 +507,7 @@ This appears to hold up until both variants' initial effective reproduction numb
         B. Frequency of variant.
         C. Relative fitness for variant over time.
         D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
-        E. Same as D. but using data from the entire period shown. Notice the drop off of relative fitness above $1 / R_{v}$ at which both variants are declining.
+        E. Same as D. but using data from the entire period shown. Notice the drop-off of relative fitness above $1 / R_{v}$ at which both variants are declining.
     }
 \label{fig:mechanism_identification}
 \end{figure}
@@ -560,7 +560,7 @@ First, we define a cumulative selective pressure as
 
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we developed a predictive model of the epidemic growth rate using estimates of selective pressure.
 Using estimated selective pressure from the approximate Gaussian process model (reference section), we predict the epidemic growth rate using the selective pressure for the previous (window size) days.
-We fit a (model type) model to data from (insert number) states in the United States between (start date) and (end date).
+We fit a transformer-based model to data from (insert number) states in the United States between (start date) and (end date).
 Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data.
 
 \begin{figure}[h]
@@ -594,46 +594,71 @@ We apply this method to sequence count data at the level of Pango lineage for X 
         A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
         B. Estimated relative fitness for selected variants and countries.
         C. Estimated pseudo-immunity over time for multiple countries.
-        D,E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
+        D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
         F. Estimated pseudo-escape rates for each variant.
         H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
 \label{fig:latent_immune}
 \end{figure}
 
-%TODO: Could be useful to directly compare to published antigenic cartography work as mentioned before ...
-
 \section*{Discussion}
 
-We find that multi-strain mechanistic models of epidemics can be used to inform variant turnover at the level of frequency.
-This enabled us to illustrate the trade-off between transmissibility increase and immune escape in environments with past exposure.
+% As is, this is a bit undirected though all valid
+
+% Need to mention models and the way to intrepret results
+
+% Need to mention selective pressure metric, utility of it
+
+% Need to mention benefits of transformer model
+
+% Then neeeed to talk about the limitations, public implementaitons, and donclussion
+
+% Overview of methods
+
+% Mechanistic models 
+We find that multi-strain mechanistic models of epidemics can be used to inform changes in variant frequency over time.
+This enabled us to illustrate the trade-off between intrinsic transmissibility increase and immune escape in environments with heterogeneous past exposure.
 These mechanistic models also suggest a structure in which relative fitnesses are determined by common causes such as time-varying immunity classes.
-Though there appears to be limits to our ability to attribute dynamics to particular mechanisms, the structure of these models suggests that we may improve forecasting by incorporating information about assumed transmission mechanisms.
-These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. (CITE John, LL,  ...)
+Though there appears to be limits to our ability to attribute dynamics to particular mechanisms, the structure of these models suggests that we may improve forecasting by incorporating information about assumed transmission mechanisms or empirically supported mechanisms.
+These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. \cite{Huddleston2020, luksza2014predictive}
 Future work should seek to identify and incorporate informative data sources for relative fitness estimation and forecasting for particular pathogens alongside the development of the models themselves.
 
-In the absence of data that can inform relative fitness, there is still hope however.
-Relative fitnesses can still be estimated and forecasted in the short-term using frequency data alone.
-Existing models such as the multinomial logistic regression and the models used here such as the Hilbert Space Gaussian Process and Latent Factor relative fitness models can be used to learn trends present in data to project frequencies to the future, but this may not be reliable for longer terms forecasts due to the emergence of new variants.
-These models can still be better extended for short-term forecasts or adapted for longer time horizons.
-For example, to account for more complicated patterns in relative fitness, the Hilbert Space Gaussian Process models to non-stationary kernels for scalable inference.
-Additionally, though motivated by models of immune escape, latent variable methods may not estimate latent factors that are truly indicative of immune escape directly.
+% Selective pressure
+% TODO:: ...enables prediction of growh rate from sequence counts
+% TODO:: ... compatiable with all models which estimate frequency and relative fitness 
 
-Generally, the structure of the models discussed here are described by simple mechanisms and more work is needed to adapt this framework to complicated epidemic models such as those with non-exponential generation times could be useful.
-% Generation time assumptions for compartmental epidemic models
-%TODO: Discuss extensions to Laplace transform method
-    % We can 1.8 from my general exam to compute roots
-    % We can then compute fitness
+% Models we developed
+In the absence of data that can inform relative fitness, there is still hope.
+We find that relative fitness can still be estimated and forecasted in the short-term using frequency data alone.
+
+We develop a scalable approximate Gaussian process model for fitness estimation as well as a latent factor model which decomposes variant advantage into variant pseudo-escape rates and pseudo-immunity proportions.
+
+% TODO: ...
+
+However, it is important to note that these models may not be reliable for longer terms forecasts due to the emergence of new variants or improper specification of mechanism.
 
 
+%% Latent factor model
+% Add parts that highlight the sucess
+% These models can still be better extended for short-term forecasts or adapted for longer time horizons.
+% For example, to account for more complicated patterns in relative fitness, we can extend the Hilbert Space Gaussian Process models to non-stationary kernels.
+% Additionally, though motivated by models of immune escape, latent variable methods may not estimate latent factors that are truly indicative of immune escape directly.
+%
+
+
+% Limitations of existing simple mechanism models 
+The compartment models discussed here are described by simple mechanisms and more work is needed to adapt this framework to complicated epidemic models such as those with non-exponential generation times could be useful.
 Furthermore, the models considered here are primarily deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
-In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the changes for stochastic extinction remains.
-That being said, models which account for the appearance of genetic variants through mutation exist, often assuming a latent antigenic space with which fitness is determined. (Cobey, Lassig)
+
+In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the chance for stochastic extinction of beneficial variants remains.
+That being said, models which account for the appearance of genetic variants through mutation exist, often assuming a latent antigenic space with which fitness is determined.
 
 Despite the limitations discussed above, the framework presented here illustrates the importance of transmission mechanism in the evolution of pathogens, highlighting the importance of both variant characteristics and population susceptibility in selection.
 We suggest that future models of pathogen transmission and evolution attempt to incorporate current knowledge of the transmission process into their forecasts.
 
-In particular, for antigenically evolving viruses such as influenza and SARS-CoV-2, we suggest that incorporating knowledge on both the diversity in human immune response as well as the escape potential of emerging variants could prove useful in improving long-term forecasts of the viral population.
+In particular, for viruses such as influenza and SARS-CoV-2 which undergo antigenic evolution, our work suggests that incorporating knowledge on both the diversity in human immune response and the escape potential of emerging variants could prove useful in improving long-term forecasts of the viral population.
+
+%TODO: Borader implications, detailed landscapes, robust framework
 
 \section*{Methods}
 
