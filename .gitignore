@@ -5,6 +5,7 @@ Desktop.ini
 
 # Protect environment variables
 environment*
+data/antigenic_map_data*
 
 # LaTeX Files
 *.aux
