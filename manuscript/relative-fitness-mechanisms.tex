@@ -578,15 +578,15 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
     \label{fig:selective_pressure_prediction}
 \end{figure}
 
-
 \paragraph{Latent factor models of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 
-We apply this method to sequence count data at the level of Pango lineage for X countries over the period of March 2023 to March 2024. 
+We generate sequence counts for INSERT NUMBER COUNTRIES countries and INSERT NUMBER VARIANTS variants in this period, estimating the relative fitness of each variant over time in each country, the pseudo-escape rates for each variant, and the pseudo-immunity for each country.
+The results of these models are visualized in Figure \ref{fig:latent_immune} for several selected variants and countries of interest.
 
-% We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants (R^2 = 0.6)
+We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants ($R^2$ = 0.6).
 
 \begin{figure}[h]
     \centering
@@ -620,7 +620,7 @@ We apply this method to sequence count data at the level of Pango lineage for X 
 % Mechanistic models 
 We find that multi-strain mechanistic models of epidemics can be used to inform changes in variant frequency over time.
 This enabled us to illustrate the trade-off between intrinsic transmissibility increase and immune escape in environments with heterogeneous past exposure.
-These mechanistic models also suggest a structure in which relative fitnesses are determined by common causes such as time-varying immunity classes.
+These mechanistic models also suggest a structure in which relative fitness is determined by common source between variants and locations such as time-varying immunity classes.
 Though there appears to be limits to our ability to attribute dynamics to particular mechanisms, the structure of these models suggests that we may improve forecasting by incorporating information about assumed transmission mechanisms or empirically supported mechanisms.
 These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. \cite{Huddleston2020, luksza2014predictive}
 Future work should seek to identify and incorporate informative data sources for relative fitness estimation and forecasting for particular pathogens alongside the development of the models themselves.
@@ -667,8 +667,7 @@ In particular, for viruses such as influenza and SARS-CoV-2 which undergo antige
 \paragraph{Generating sequence counts}%
 
 We prepared sequence count data sets using the Nextstrain-curated SARS-CoV-2 sequence metadata \cite{Hadfield2018} which is created using the GISAID EpiCoV database \cite{khare2021gisaid}.
-These sequences were tallied according to either their annotated Nextstrain clade or Pango lineage depending on the data set to produce sequence count for each variant and for each day over the period of interest.
-%TODO: Flesh out data prep for individual anaylses
+These sequences were tallied according to either their annotated Nextstrain clade or Pango lineage depending on the data set to produce sequence count for each variant, for each day over the period of interest, and in each location analysed.
 
 \cite{aksamentov2021nextclade}
 
@@ -749,13 +748,13 @@ Though we choose to model these latent factors with splines, other models would 
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
 For the same reason, we order the components in the first geography.
 
-DETAILS ON DATA WE APPLIED IT TO
+We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024.
 
-DETAILS ON TITER DATA
+We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
 
 \subsection*{Data and code accessibility}
 
-Source code used to generate figures as well as model implementations are available at https://github.com/blab/relative-fitness-mechanisms.
+Source code used to generate figures, model implementations, and sequence count data are available at https://github.com/blab/relative-fitness-mechanisms.
 
 \subsection*{Competing interests}%
 
