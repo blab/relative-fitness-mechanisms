@@ -72,6 +72,7 @@ def compute_selective_pressure_hier(
     return delta_bar, selective_pressure
 
 
+# TODO: Can we just replace -2 if hierarchical ... with 2?
 def compute_selective_pressure_general(
     posterior: PosteriorHandler,
     fitness_site: str = "delta",
@@ -129,17 +130,19 @@ def compute_selective_pressure_general(
                 (fitness, jnp.zeros((num_samples, T, 1))), axis=-1
             )
 
+    variant_axis = -2 if hierarchical else -1
+
     # Calculate mean fitness
-    delta_bar = jnp.mean(fitness * freq, axis=-2 if hierarchical else -1, keepdims=True)
+    delta_bar = jnp.mean(fitness * freq, axis=variant_axis, keepdims=True)
 
     # Calculate mean square deviation
     delta_sse = jnp.square(fitness - delta_bar)
-    selective_pressure_var = (delta_sse * freq).sum(axis=-2 if hierarchical else -1)
+    selective_pressure_var = (delta_sse * freq).sum(axis=variant_axis)
 
     # Calculate change in relative fitness
     fitness_change = jnp.diff(fitness, axis=1, prepend=jnp.nan)
-    selective_pressure_expect = (fitness_change * freq).sum(axis=-1)
+    selective_pressure_expect = (fitness_change * freq).sum(variant_axis)
     selective_pressure = selective_pressure_var + selective_pressure_expect
 
-    delta_bar = jnp.squeeze(delta_bar, axis=-2 if hierarchical else -1)
+    delta_bar = jnp.squeeze(delta_bar, axis=variant_axis)
     return delta_bar, selective_pressure
