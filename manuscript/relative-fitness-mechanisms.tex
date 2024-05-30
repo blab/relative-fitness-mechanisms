@@ -560,8 +560,10 @@ First, we define a cumulative selective pressure as
 
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we developed a predictive model of the epidemic growth rate using estimates of selective pressure.
 Using estimated selective pressure from the approximate Gaussian process model (reference section), we predict the epidemic growth rate using the selective pressure for the previous (window size) days.
-We fit a transformer-based model to data from (insert number) states in the United States between (start date) and (end date).
-Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data.
+We fit a transformer-based model to data from (insert number) states in the United States between March 2021 and March 2022, reserving data between March 2022 and September 2022 for testing.
+Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022.
+
+%TODO: Estimate correlation between the predictions and the values.
 
 \begin{figure}[h]
     \centering
@@ -707,6 +709,25 @@ Since the eigenvalues and eigenfunctions are shared across variants, this allows
 \end{equation*}
 
 \paragraph{Predicting epidemic growth rate from selective pressure}%
+
+The derivation of the selective pressure metric shows that the selective pressure can be a useful tool in predicting the epidemic growth rate.
+To develop a predictive model of epidemic growth rate using selective pressure, we begin by generating estimates of selective pressure and epidemic growth rate from a period with high sequencing and case surveillance.
+
+We take sequence count and case count data from the United States between March 2021 and March 2022.
+Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model. 
+
+From the case data, we derive the empirical growth rate using a 7-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t})$.
+
+We then use the past 14 days of selective pressure to predict the empirical growth rate using a transformer-based model.
+Our model uses a loss function which weights the mean absolute error and a smoothness loss on predicted trajectories.
+\begin{equation*}
+    \text{loss} = \text{MAE}(\hat{y}, y) + \alpha \text{Smoothness}(\hat{y}),
+\end{equation*}
+where $\alpha = 1\times 10^{-6}$ and $\text{Smoothness}(y) = \frac{1}{T}\sum_{t=1}^{T} (y_{t+1} - 2 y_{t} + y_{t+1})^{2}$.
+We fit this model using an AdamW optimizer with learning rate LEARNING RATE for NUM EPOCHS epochs.
+
+We validate our model by comparing our predicted epidemic growth rates to estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022.
+As a baseline, we compare the results of this model to linear regression, lasso, ridge regression, and gradient boosted trees.
 
 % Mention data source for training and evaluation data
 
