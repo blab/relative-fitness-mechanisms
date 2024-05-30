@@ -335,7 +335,7 @@ With this formulation of immune escape, we can then write the relative fitnesses
     \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
 \end{equation}
 
-Using this model of immune escape, we can see relative fitnesses among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
+Under this model of immune escape, we can see relative fitness among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
 Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
 However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change i.e. $\frac{d\phi_{b}}{dt}$.
@@ -361,7 +361,7 @@ Using the theory developed for exponentially-growing variant populations, we now
 
 \paragraph{Multinomial Logistic Regression}%
 
-We begin with multinomial logistic regression with fixed relative fitnesses (MLR).
+We begin with multinomial logistic regression with fixed relative fitness (MLR).
 This model can be written as
 
 \begin{align*}
@@ -579,7 +579,7 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
 
 \paragraph{Latent factor models of relative fitness}
 
-The representation of relative fitness using discrete immune backgrounds suggests that there may be low dimensional structure to variant relative fitness.
+The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 
 We apply this method to sequence count data at the level of Pango lineage for X countries over the period of March 2023 to March 2024. 
