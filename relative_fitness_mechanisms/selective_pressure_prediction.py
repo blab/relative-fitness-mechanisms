@@ -122,7 +122,8 @@ def create_training_batches(X, y, locations_vec, batch_size):
                         _y[i * batch_size : (i + 1) * batch_size],
                     )
                 )
-            batches.append(
-                (_X[num_batches * batch_size :], _y[num_batches * batch_size :])
-            )
+            if num_batches * batch_size < _y.shape[0]:
+                batches.append(
+                    (_X[num_batches * batch_size :], _y[num_batches * batch_size :])
+                )
     return batches
