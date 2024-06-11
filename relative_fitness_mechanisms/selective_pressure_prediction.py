@@ -52,6 +52,7 @@ def withhold_test_locations_and_split(
     y: pd.DataFrame,
     locations: pd.Series,
     withheld_locations: list[str],
+    test_size = 0.2
 ):
 
     # Withold certain locations for testing
@@ -64,7 +65,7 @@ def withhold_test_locations_and_split(
 
     # Split to hold final section for testing best model after CV
     X_train, X_test, y_train, y_test = train_test_split(
-        _X, _y, test_size=0.2, shuffle=False
+        _X, _y, test_size=test_size, shuffle=False
     )
 
     X_test = pd.concat([X_withheld, X_test])
