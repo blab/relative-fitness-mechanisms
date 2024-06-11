@@ -72,30 +72,6 @@ def withhold_test_locations_and_split(
     y_test = pd.concat([y_withheld, y_test])
     return X_train, y_train, X_test, y_test
 
-
-class SimpleTransformer(nn.Module):
-    num_heads: int
-    d_model: int  # Size of the attention representations
-    output_dim: int  # Dimensionality of the regression output
-
-    @nn.compact
-    def __call__(self, x):
-        x = nn.Dense(features=32)(x)
-        x = nn.relu(x)
-
-        attn = nn.MultiHeadDotProductAttention(
-            num_heads=4, qkv_features=16, use_bias=True
-        )(x)
-        x = nn.LayerNorm()(x + attn)
-
-        x = nn.Dense(features=16)(x)
-        x = nn.relu(x)
-
-        x = nn.Dense(features=self.output_dim)(x)
-
-        return jnp.squeeze(x, axis=-1)
-
-
 def smoothness_loss(params, model, x):
     # Predict the model output
     predictions = model(params, x)
