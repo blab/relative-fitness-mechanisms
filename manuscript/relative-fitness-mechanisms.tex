@@ -464,7 +464,7 @@ By considering a Taylor expansion of the relative fitness about the point of est
 \end{align*}
 
 The idea here being that large differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses.
-%TODO: However knowledge of the underlying mechanism can inform the evolution of relative fitness 
+%TODO: However knowledge of the underlying mechanism can inform the evolution of relative fitness
 
 We investigate whether relative fitnesses vary predictably in the short-term regardless of mechanism, so that short-term forecasts are unaffected by mechanistic differences in the assumed transmission process.
 
@@ -520,11 +520,11 @@ This will occur not just on the level of frequencies and frequency growth, but a
 Beginning again from our assumption of inhomogeneous exponential growth, we can write a differential equation for the total prevalence $I(t)= \sum_{v} I_{v}(t)$ as
 
 \begin{align*}
-    \frac{d I}{d t} &= \sum_{v} \frac{d I_{v}}{d t} =  \sum_{v} r_{v}(t) I_{v}(t)\\ 
+    \frac{d I}{d t} &= \sum_{v} \frac{d I_{v}}{d t} =  \sum_{v} r_{v}(t) I_{v}(t)\\
                     &= \left( \sum_{v} r_{v}(t) f_{v}(t) \right) I(t),
 \end{align*}
 
-where we've used that $I_{v}(t) = f_{v}(t) I(t)$. 
+where we've used that $I_{v}(t) = f_{v}(t) I(t)$.
 This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
 Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_0(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_0(t)$.
 We can now look at the rate of change in the average growth rate by taking its derivative.
@@ -537,7 +537,7 @@ We can now look at the rate of change in the average growth rate by taking its d
                                &= \frac{d r_{0}}{d t} + \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
 \end{align*}
 
-Here, we've written the last line in terms of expectations relative to sampling according to the frequency distribution. 
+Here, we've written the last line in terms of expectations relative to sampling according to the frequency distribution.
 This shows us that the change in the average growth rate of the epidemic can be written in terms of the growth rate of the pivot category, the mean rate of change in the relative fitness, and the variance of the relative fitnesses.
 We will call terms which can be computed in terms of quantities derived from frequencies alone the selective pressure and denote it as
 
@@ -546,7 +546,7 @@ We will call terms which can be computed in terms of quantities derived from fre
 \end{equation}
 
 We can use this idea to directly write the prevalence in terms of the selective pressure and the base growth rate.
-First, we define a cumulative selective pressure as 
+First, we define a cumulative selective pressure as
 \begin{align*}
 \Psi(t) = \int_{0}^{t} \psi(s) ds.
 \end{align*}
@@ -569,7 +569,7 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/selective_pressure_prediction.png}
     \caption{\textbf{Predicting epidemic growth rate using estimated selective pressure.}
-    A-F. Predictions for empirical growth rate from selective pressure for selected US states. 
+    A-F. Predictions for empirical growth rate from selective pressure for selected US states.
     The light gray period is the training period and the darker gray is the testing period.
     G. Estimated selective pressure in England.
     H. Prevalence estimates for England.
@@ -617,7 +617,7 @@ We find that the distances in the pseudo-immunity embedding space are correlated
 
 % Overview of methods
 
-% Mechanistic models 
+% Mechanistic models
 We find that multi-strain mechanistic models of epidemics can be used to inform changes in variant frequency over time.
 This enabled us to illustrate the trade-off between intrinsic transmissibility increase and immune escape in environments with heterogeneous past exposure.
 These mechanistic models also suggest a structure in which relative fitness is determined by environmental constraints such as the human landscape which we model as several time-varying immunity classes.
@@ -646,11 +646,11 @@ This provides a simple measure of epidemic growth in the absence of high quality
 % Add parts that highlight the sucess
 % These models can still be better extended for short-term forecasts or adapted for longer time horizons.
 % For example, to account for more complicated patterns in relative fitness, we can extend the Hilbert Space Gaussian Process models to non-stationary kernels.
-% 
+%
 %
 
 
-% Limitations of existing simple mechanism models 
+% Limitations of existing simple mechanism models
 The compartment models discussed here are described by simple mechanisms and more work is needed to adapt this framework to complicated epidemic models such as those with non-exponential generation times could be useful.
 Furthermore, the models considered here are primarily deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
 
@@ -715,7 +715,7 @@ The derivation of the selective pressure metric shows that the selective pressur
 To develop a predictive model of epidemic growth rate using selective pressure, we begin by generating estimates of selective pressure and epidemic growth rate from a period with high sequencing and case surveillance.
 
 We take sequence count and case count data from the United States between March 2021 and March 2022.
-Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model. 
+Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 
 From the case data, we derive the empirical growth rate using a 7-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t})$.
 
@@ -737,7 +737,7 @@ As a baseline, we compare the results of this model to linear regression, lasso,
 \paragraph{Latent immune factor model}%
 
 We show that relative fitness dynamics ought to be explained by low-dimensional immunity when transmission dynamics are described with compartment models.
-This motivated a model to learn this low-dimensional structure that is inspired by latent-factor models. 
+This motivated a model to learn this low-dimensional structure that is inspired by latent-factor models.
 We start by assuming that the relative fitness of variant $v$ at time $t$ and in geographic location $g$ can be described by $D$ latent factors so that
 
 \begin{equation}
