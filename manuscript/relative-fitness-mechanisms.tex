@@ -209,7 +209,7 @@ We can notice that this relative fitness is exactly
 \end{align}
 
 We can see that there is a symmetry in the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
-This suggests that absolute fitness (in terms of the growth of infections) may not be inferrable from frequencies alone.
+This suggests that absolute fitness (in terms of the growth of infections) may not be inferable from frequencies alone.
 This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent these models as having the form:
 \begin{align}
     f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)},
@@ -276,6 +276,7 @@ This formulation can be generalized to allow for competition between all variant
 In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant T with $\theta_{3} = (\eta_{T}, 0)$.
 % Further extensions also include allowing for differences in generation time through an additional parameter $\eta_{G}$ which multiples the recovery rate $\gamma$, however it is important to note that this still assumes the generation time is an exponential distribution.
 % \tbc{Leaving generation time out for now still seems like the right strategy to me}
+\tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
 
 \begin{figure}[h]
     \centering
@@ -292,6 +293,8 @@ In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model w
     \tbc{It's a little confusing having the left-hand panels be so much wider than the right-hand panels when they share exactly the same x-axis. I'd suggest to make left and right panels equal widths.}
     \tbc{I'm confused on why variant E has growth rate $r$ and relative fitness $\lambda$ only measured starting at time = $\sim$70, while reproductive number $R$ is measured from time = 0. Ie if you can measure $R$, can't you also measure $r$?}
     \tbc{Include in legend the initial frequencies / prevalences of the three variants as well as the values of $\eta_{E}$ and $\eta_{T}$.}
+    \tbc{It would be nice to have y-axis for proportions in panels C and E be labeled 0\%, 20\%, etc\ldots, instead of 0.0, 0.20, etc\ldots.}
+    \tbc{It would be nice to connect your notation here, where panel B would read `Epidemic growth rate $r$' and panel D would read `Relative fitness to wildtype $\lambda$'}
 }%
     \label{fig:vis_mechanisms}
 \end{figure}
@@ -370,23 +373,21 @@ where the relative fitness is determined by strain-specific predictors $\vec{x}_
 
 \paragraph{Estimating relative fitness using Gaussian Processes}%
 
-We develop a method for using Gaussian processes to model variant relative fitnesses.
-
+We develop a method for using Gaussian processes \tbc{CITE, and give a one-sentence explainer on what a Gaussian process is} to model variant relative fitnesses.
 %TODO: Provide short explainer on Gaussian processes and use figure from lab meeting as supplemental figure
-
 Here, the relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyper-parameters across variants.
 For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
-This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of the simulated variant dynamics shown in Figure \ref{fig:vis_mechanisms}.
+This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time $\lambda_v(t)$ based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
     \caption{\textbf{Estimating relative fitness with Gaussian Processes.}
-    Gaussian processes allow us a non-parametric estimate of the relative fitness for variants.
-    Below we show an example of using Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
+    Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
+    This figure uses Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
     A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Figure \ref{fig:vis_mechanisms}C.
     B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
-    C. Relative fitnesses. Dashed line shows true relative fitnesses from mechanistic model.
+    C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
 }
     \label{fig:gp_example}
 \end{figure}
