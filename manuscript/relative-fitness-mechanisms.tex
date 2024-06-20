@@ -253,9 +253,9 @@ In this model, the variant virus can infect both susceptible individuals $S$ and
 Increased intrinsic transmissibility increases the baseline transmission rate from $\beta$ in wild-type to $\beta \eta_{T}$ in the variant virus and immune escape increases the transmission rate against those with wildtype immunity, so that the at-risk population is $\eta_{E} \phi_{\wt}$.
 
 Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \beta \eta_{T} \eta_{E} \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
-\begin{align*}
+\begin{equation} \label{eq:two_strain_relative_fitness}
 \lambda_{v,\wt}(t) = (\eta_{T} - 1)\beta S(t) + \eta_{T} \eta_{E} \beta \phi_{\wt}(t).
-\end{align*}
+\end{equation}
 
 From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\eta_{T} > 1$) or immune escape ($\eta_{E} > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
 
@@ -291,6 +291,7 @@ In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model w
     F. Effective reproduction number by variant.
     \tbc{It's a little confusing having the left-hand panels be so much wider than the right-hand panels when they share exactly the same x-axis. I'd suggest to make left and right panels equal widths.}
     \tbc{I'm confused on why variant E has growth rate $r$ and relative fitness $\lambda$ only measured starting at time = $\sim$70, while reproductive number $R$ is measured from time = 0. Ie if you can measure $R$, can't you also measure $r$?}
+    \tbc{Include in legend the initial frequencies / prevalences of the three variants as well as the values of $\eta_{E}$ and $\eta_{T}$.}
 }%
     \label{fig:vis_mechanisms}
 \end{figure}
@@ -340,7 +341,7 @@ Using the theory developed for exponentially-growing variant populations, we now
 
 \paragraph{Multinomial Logistic Regression}%
 
-We begin with multinomial logistic regression with fixed relative fitness (MLR).
+We begin with multinomial logistic regression (MLR) with fixed relative fitness.
 This model can be written as
 
 \begin{align*}
@@ -348,21 +349,23 @@ This model can be written as
 \end{align*}
 
 where $f_{v}(t)$ is the frequency of variant $v$ at time $t$ and $\lambda_{v}$ is the relative fitness of variant $v$.
-This provides estimates of the relative fitness compared to some reference strain $u^{*}$for which $\lambda_{u^*} = 0$.
-Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time. \cite{Wallinga2006}
+This provides estimates of the relative fitness compared to some reference strain $u^{*}$ for which $\lambda_{u^*} = 0$.
+In this model, initial frequencies $f_{v}(0)$ and relative fitness $\lambda_{v}$ are estimated from frequency dynamics.
+Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time \cite{Wallinga2006}.
 
-We can then see this model results from assuming that the at-risk populations are constant over-time.
+By comparison to equation \ref{eq:two_strain_relative_fitness}, we can see this model of fixed relative fitness results from assuming that the at-risk populations are constant over-time.
 This assumption is useful since it requires no outside knowledge of the at-risk population and relative infection rates, though this may be less useful for longer forecasts or when there is large turnover in at-risk populations due to infection.
 
-\paragraph{Flu-forecasting}%
+\paragraph{Fitness models of seasonal influenza}%
 
-Motivated by the observed antigenic evolution of seasonal influenza, the authors approximate the cumulative relative fitness between flu seasons on the level of individual strains as:
+Motivated by the observed antigenic evolution of seasonal influenza, L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020} approximate the cumulative relative fitness between influenza seasons on the level of individual strains as
 
 \begin{align*}
     \Lambda_{v,u}(t + \Delta t,t) = (\beta_{1} x_{v,1} + \cdots + \beta_{p} x_{v, p})\Delta t = (\vec{\beta} \cdot \vec{x}_{v} \Delta t),
 \end{align*}
 
 where the relative fitness is determined by strain-specific predictors $\vec{x}_{v}$ and the regression parameter $\vec{\beta}_{v}$ are estimated.
+\tbc{There needs to be more of a point here. Spell out how $\lambda$ in this model relates to your $\lambda$. I think of this like MLR, but where relative fitnesses are fixed from coefficients rather than learned from frequencies.}
 % The authors choose predictors which describe the antigenic properties of strains
 
 \paragraph{Estimating relative fitness using Gaussian Processes}%
