@@ -372,10 +372,8 @@ Therefore, these models can be thought as regression-based predictors of relativ
 \paragraph{Estimating relative fitness using Gaussian Processes}%
 
 We develop a method for using Gaussian processes to model variant relative fitness.
-%TODO: CITE
-% \tbc{CITE, and give a one-sentence explainer on what a Gaussian process is} 
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
-These models are flexible and allow us to encode smoothness constraints, periodicity, and other strutures.
+These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Görtler2019a}.
 Here, the relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyperparameters across variants.
 For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
 This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time $\lambda_v(t)$ based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
