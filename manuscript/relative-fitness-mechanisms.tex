@@ -203,7 +203,8 @@ Using the above equation for the variant frequencies, we can write the relative 
 \end{align*}
 
 Notice this relative frequency change depends on the initial relative frequencies and the \emph{relative fitness} $\lambda_{v,u}(t) = r_{v}(t) - r_{u}(t)$ of $v$ over $u$.
-We can notice that this relative fitness is exactly
+This relative fitness has the same units as the exponential growth rate (e.g. per day). 
+Using the definition of relative fitness, we can notice that
 \begin{align}
 \lambda_{v, u}(t) = r_{v}(t) - r_{u}(t) = \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right] = - \lambda_{u,v}(t)
 \end{align}
@@ -274,7 +275,7 @@ This model can also be extended to an $n$-strain SIR model where each variant st
 In this formulation, the variant viruses compete only for susceptible population and those with previous wild-type infection.
 This formulation can be generalized to allow for competition between all variants for any exposure history and will be discussed in the following sections.
 In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant T with $\theta_{3} = (\eta_{T}, 0)$.
-\tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
+% \tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
 
 \begin{figure}[h]
     \centering
