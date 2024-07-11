@@ -3,6 +3,7 @@ from functools import partial
 import jax
 import jax.numpy as jnp
 import pandas as pd
+import torch.utils.data as data
 from flax import linen as nn
 from sklearn.model_selection import train_test_split
 
@@ -52,7 +53,7 @@ def withhold_test_locations_and_split(
     y: pd.DataFrame,
     locations: pd.Series,
     withheld_locations: list[str],
-    test_size = 0.2
+    test_size=0.2,
 ):
 
     # Withold certain locations for testing
@@ -71,6 +72,20 @@ def withhold_test_locations_and_split(
     X_test = pd.concat([X_withheld, X_test])
     y_test = pd.concat([y_withheld, y_test])
     return X_train, y_train, X_test, y_test
+
+
+class SelectivePressureData(data.Dataset):
+    def __init__(self, X, y):
+        super().__init__()
+        self.x = X
+        self.y = y
+
+    def __len__(self):
+        return self.x.shape[0]
+
+    def __getitem__(self, idx):
+        return self.x[idx], self.y[idx]
+
 
 def smoothness_loss(params, model, x):
     # Predict the model output
