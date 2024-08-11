@@ -58,7 +58,7 @@ def compute_selective_pressure_hier(
         )
 
     # Mean fitness
-    delta_bar = jnp.mean(fitness * freq, axis=-2, keepdims=True)
+    delta_bar = jnp.sum(fitness * freq, axis=-2, keepdims=True)
 
     # Mean square deviation
     delta_sse = jnp.square(fitness - delta_bar)
@@ -133,7 +133,7 @@ def compute_selective_pressure_general(
     variant_axis = -2 if hierarchical else -1
 
     # Calculate mean fitness
-    delta_bar = jnp.mean(fitness * freq, axis=variant_axis, keepdims=True)
+    delta_bar = jnp.sum(fitness * freq, axis=variant_axis, keepdims=True)
 
     # Calculate mean square deviation
     delta_sse = jnp.square(fitness - delta_bar)
