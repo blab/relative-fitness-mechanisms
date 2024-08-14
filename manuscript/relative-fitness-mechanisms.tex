@@ -567,7 +567,7 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 
-We generate sequence counts for INSERT NUMBER COUNTRIES countries and INSERT NUMBER VARIANTS variants in this period, estimating the relative fitness of each variant over time in each country, the pseudo-escape rates for each variant, and the pseudo-immunity for each country.
+We generate sequence counts for 14 countries and 41 variants in this period, estimating the relative fitness of each variant over time in each country, the pseudo-escape rates for each variant, and the pseudo-immunity for each country.
 The results of these models are visualized in Figure \ref{fig:latent_immune} for several selected variants and countries of interest.
 
 We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants ($R^2$ = 0.6).
@@ -729,8 +729,9 @@ We start by assuming that the relative fitness of variant $v$ at time $t$ and in
 \end{equation}
 As the structure here resembles Equation~\ref{eq:escape_relative_fitness}, we call the $\eta$ ``pseudo-escape'' and $\phi_{d}^{g}$ the ``pseudo-immunity''.
 To make this more consistent with our intuition here, we model $\phi_{d}^{g}$ to be in $[0,1]$ and model it as smoothly varying in time.
-In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using 4th order splines with [INSERT KNOTS HERE] knots placed uniformly over the time period modeled.
-Though we choose to model these latent factors with splines, other models would work here. For example, a good alternative would be the approximate Gaussian processes described above.
+In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using 4th order splines with 6 knots placed uniformly over the time period modeled.
+Though we choose to model these latent factors with splines, other models would work here. 
+For example, one alternative would be the approximate Gaussian processes described above.
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\eta_{v^*, d} = 0$ for all $1\leq d\leq D$.
 For the same reason, we order the components in the first geography.
 
