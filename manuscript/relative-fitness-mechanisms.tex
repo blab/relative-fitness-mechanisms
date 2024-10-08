@@ -188,119 +188,23 @@ We also develop a latent immunity space model to estimate pseudo-escape rates an
 
 \section*{Results}
 
-\subsection*{Exponentially growing populations to frequency dynamics}%
-
-We consider a viral population consisting of $V$ exponentially-growing variant viruses each with prevalence $I_{v}$.
-Defining the time-varying growth rate for the prevalence of variant $v$ as $r_{v}(t)$, we can represent the prevalence using the following ordinary differential equation:
-
-\begin{equation} \label{eq:inhomo_exp_growth}
-    \frac{d I_{v}}{d t} = r_{v}(t) I_{v}(t), \quad v = 1,2, \ldots, V.
-\end{equation}
-
-The above differential equation has a known solution in terms of the integral of the time-varying growth rate and initial prevalence as follows:
-
-\begin{align*}
-I_{v}(t) = I_{v}(0) \exp\left( \int_{0}^{t} r_{v}(s) ds\right),
-\end{align*}
-where $I_{v}(0)$ is the initial prevalence of variant $v$.
-
-Now turning to the frequency dynamics of the population, we write the frequency of variant $v$ in the population as  $f_{v}(t) = I_{v}(t) / \sum_{u=1}^{V} I_{u}(t)$.
-This allows us to derive an ODE for variant frequency in terms of the variant growth rates using the quotient rule for differentiation:
-\begin{align*}
-    \frac{d f_{v}}{d t} &= f_{v} \left( \sum_{u=1}^{V} [r_{v}(t) - r_{u}(t)] f_{u} \right)\\
-                        &= f_{v} \left( r_{v}(t) - \sum_{u=1}^{V} r_{u}(t) f_{u} \right).
-\end{align*}
-
-This system of differential equations resembles a logistic growth equation and can be shown to have the following solution in terms of the initial frequencies $f_{v}(0)$ and the variant growth rates:
-\begin{align}
-    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} r_{v}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} r_{u}(s) ds)}.
-\end{align}
-
-The above representation of the variant frequency will serve as a centerpiece for many of the arguments to follow.
-We see that by tracking the rate at which variant viruses are spreading, we can construct the corresponding frequency dynamics without knowing the absolute prevalence of any variant.
-
-\paragraph{Relative frequency and relative fitness}%
-
-Using the above equation for the variant frequencies, we can write the relative frequency of variant $v$ over $u$ as $x_{v,u}(t) = f_{v}(t) / f_{u}(t)$ to see:
-\begin{align*}
-    x_{v, u}(t) = \frac{f_{v}(t)}{f_{u}(t)} &= \frac{f_{v}(0)}{f_{u}(0)} \exp \left( \int_{0}^{t} [r_{v}(s) - r_{u}(s)] ds \right)\\
-                                            &=x_{v,u}(0)\exp \left( \int_{0}^{t} \lambda_{v,u}(s) ds \right).
-\end{align*}
-
-Notice this relative frequency change depends on the initial relative frequencies and the \emph{relative fitness} $\lambda_{v,u}(t) = r_{v}(t) - r_{u}(t)$ of $v$ over $u$.
-This relative fitness has the same units as the exponential growth rate (e.g. per day). 
-Using the definition of relative fitness, we can notice that
-\begin{align}
-\lambda_{v, u}(t) = r_{v}(t) - r_{u}(t) = \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right] = - \lambda_{u,v}(t)
-\end{align}
-
-We can see that there is a symmetry in the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
-This suggests that absolute fitness (in terms of the growth of infections) may not be inferable from frequencies alone.
-This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent these models as having the form:
-\begin{align}
-    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)},
-\end{align}
-where the growth rate of $v$ is expressed as relative to an arbitrary pivot variant.
-
-\paragraph{Cumulative relative-fitness and frequency change}
-
-Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals $\Lambda_{v,u}(0, t) = \int_{0}^{t} \lambda_{v, u}(s)ds$.
-We can then characterize approaches for modeling frequency change in terms of how they represent, estimate, and forecast these relative fitnesses.
-This framework includes various existing methods for analyzing frequency data such as the seasonal influenza forecasting models of L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020}, multinomial logistic regression for frequency estimation \cite{Annavajhala2021} and the SARS-CoV-2 mutational fitness model of Obermeyer et al \cite{Obermeyer2022}.
-%Question: How would I nest Piantham in this framework? Can I?
-
-Though this framework can be used to describe existing statistical methods for frequency modeling, it is also applicable to traditional compartmental models of epidemics.
-In fact, applying these ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
-
 \subsection*{Transmission mechanisms determine relative fitness of variants}
 
 Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity \cite{Gog2002, Wen2022}.
 These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza \cite{Bedford2014} and seasonal coronaviruses OC43 and 229E \cite{Kistler2021, Eguia2021}.
 
-In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written in the form of Equation~\ref{eq:inhomo_exp_growth}.
-These models will provide us with an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
+We begin by modeling a population of $V$ exponentially growing variant viruses each with prevalence $I_v(t)$ and time-varying growth rate $r_v(t)$.
+By considering the difference in these growth rates, we can define the relative fitness as $\lambda_{v, u}(t) = r_v(t) - r_u(t)$.
+This relative fitness determines the change in the frequencies of the variants in the population 
 
-\paragraph{Two-strain SIR}%
-
-For simplicity, we will begin by analyzing a two-strain SIR model in which the a variant virus $v$ can differ from wildtype virus wt by increased intrinsic transmissibility (via $\eta_{T}$) and immune escape against wild-type immunity (via $\eta_{E}$).
-This system of 5 ordinary differential equations follows
-
-%TODO: Add 3.x
-\begin{align*}
-    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \eta_{T} S I_{v}\\
-    \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
-    \frac{d I_{v}}{dt} &= \beta \eta_{T} S I_{v} + \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v} - \gamma I_{v}\\
-    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}\\
-    \frac{d \phi_{v}}{dt} &= \gamma I_{v}.
-\end{align*}
-where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes immunity derived from wild-type infection.
-In this model, the variant virus can infect both susceptible individuals $S$ and individuals with immunity to wild-type virus $\phi_{\wt}$.
-Increased intrinsic transmissibility increases the baseline transmission rate from $\beta$ in wild-type to $\beta \eta_{T}$ in the variant virus and immune escape increases the transmission rate against those with wildtype immunity, so that the at-risk population is $\eta_{E} \phi_{\wt}$.
-
-Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \beta \eta_{T} \eta_{E} \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
-\begin{equation} \label{eq:two_strain_relative_fitness}
-\lambda_{v,\wt}(t) = (\eta_{T} - 1)\beta S(t) + \eta_{T} \eta_{E} \beta \phi_{\wt}(t).
+\begin{equation}
+    f_v(t) = \frac{f_v(0) \exp \left( \int_0^t \lambda_{v, \text{pivot}}(s)ds \right)}{ \sum_{u=1}^{V} f_u(0) \exp \left( \int_0^t \lambda_{u, \text{pivot}}(s)ds \right)},
 \end{equation}
 
-From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\eta_{T} > 1$) or immune escape ($\eta_{E} > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
+where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative to.
 
-\paragraph{$n$-strain SIR}%
-
-This model can also be extended to an $n$-strain SIR model where each variant strain $v_i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\eta_{T}^{(i)},\eta_{E}^{(i)})$  relative to the wildtype ($\theta_{\text{wt}} = \theta_{1} = (0, 0)$).
-
-\begin{align*}
-    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \eta_{T} S I_{v_{i}}\\
-    \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
-    \frac{d I_{v_{i}}}{dt} &= \beta \eta_{T, i} S I_{v_{i}} + \beta \eta_{T, i} \eta_{E, i} \phi_{\wt} I_{v_{i}} - \gamma I_{v_{i}}\\
-    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \eta_{T, i} \eta_{E, i} \phi_{\wt} I_{v_{i}}\\
-    \frac{d \phi_{v_{i}}}{dt} &= \gamma I_{v_{i}}, \quad i \in \{2, \ldots, n\}.
-\end{align*}
-
-In this formulation, the variant viruses compete only for susceptible population and those with previous wild-type infection.
-This formulation can be generalized to allow for competition between all variants for any exposure history and will be discussed in the following sections.
-In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant T with $\theta_{3} = (\eta_{T}, 0)$.
-% \tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
-% I've added a discussion about units when I define relative fitness. I can also do this when we define the exponential growth rate as well
+In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written as time-varying exponential growth (Equation~\ref{eq:inhomo_exp_growth}).
+These models will provide us with an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
 
 \begin{figure}[h]
     \centering
@@ -325,82 +229,12 @@ In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model w
     \label{fig:vis_mechanisms}
 \end{figure}
 
-\paragraph{Models of immune escape against heterogeneous backgrounds}%
-
-We'll now consider a model where all hosts are assumed to fall into one of $B$ immune backgrounds $\phi_{b}$ for $b =1, \ldots, B$.
-We assume that infection by each variant $v$ then leaves recovered hosts in the corresponding immune background of the most recent infection $b_{v}$.
-Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
-
-We can then write the system of ordinary differential equations as
-\begin{align*}
-    \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
-    \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}.
-\end{align*}
-
-With this model, susceptible and recovered compartments in the standard SIR model can be thought of as immune backgrounds.
-This allows us to represent the standard SIR model as $S = \phi_{S}$, $I = I_{\wt}$, $R = \phi_{\wt}$ and $\eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0$ and $b_{\wt} = \wt$.
-We can also think of the two-strain SIR with $\eta_{T} = 1$ as a special case of this model where we set $S = \phi_{S}, \eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0, \eta_{v, S} = 1, \eta_{v, \wt} = \eta_{E}$ and keep all other parameters the same.
-
-With this formulation of immune escape, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ as
-
-\begin{equation} \label{eq:escape_relative_fitness}
-    \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
-\end{equation}
-
-Under this model of immune escape, we can see relative fitness among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
-Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
-Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
-However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change i.e. $\frac{d\phi_{b}}{dt}$.
-
-Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in Supplemental Appendix \ref{ssec:full_immune_history}.
-
-\section*{Applications}
-
-Using the theory developed for exponentially-growing variant populations, we now re-visit existing methods for modeling viral frequency dynamics.
-
-\paragraph{Multinomial Logistic Regression}%
-
-We begin with multinomial logistic regression (MLR) with fixed relative fitness.
-This model can be written as
-
-\begin{align*}
-    f_{v}(t) = \frac{f_{v}(0) \exp(\lambda_{v} t)}{\sum_{u} f_{u}(0) \exp(\lambda_{u} t)},
-\end{align*}
-
-where $f_{v}(t)$ is the frequency of variant $v$ at time $t$ and $\lambda_{v}$ is the relative fitness of variant $v$.
-This provides estimates of the relative fitness compared to some reference strain $u^{*}$ for which $\lambda_{u^*} = 0$.
-In this model, initial frequencies $f_{v}(0)$ and relative fitness $\lambda_{v}$ are estimated from frequency dynamics.
-Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time \cite{Wallinga2006}.
-
-By comparison to equation \ref{eq:two_strain_relative_fitness}, we can see this model of fixed relative fitness results from assuming that the at-risk populations are constant over-time.
-This assumption is useful since it requires no outside knowledge of the at-risk population and relative infection rates, though this may be less useful for longer forecasts or when there is large turnover in at-risk populations due to infection.
-
-\paragraph{Fitness models of seasonal influenza}%
-
-Motivated by the observed antigenic evolution of seasonal influenza, L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020} approximate the cumulative relative fitness between influenza seasons on the level of individual strains as
-
-\begin{align*}
-    \Lambda_{v,u}(t + \Delta t,t) = (\beta_{1} x_{v,1} + \cdots + \beta_{p} x_{v, p})\Delta t = (\vec{\beta} \cdot \vec{x}_{v}) \Delta t,
-\end{align*}
-
-where the relative fitness is determined by strain-specific predictors $\vec{x}_{v}$ and the regression parameter $\vec{\beta}_{v}$ are estimated. 
-
-This formulation fits neatly into the framework we've developed as the cumulative fitness here can be written as the integral of a relative fitness $\lambda_{v, u} =  \vec{\beta} \cdot \vec{x}_{v}$ over the time period of interest:
-
-\begin{align*}
-    \Lambda_{v,u}(t + \Delta t,t)  &= \int_{t}^{t+\Delta t} \lambda_{v,u}(s)ds\ = \int_{t}^{t + \Delta t} (\vec{\beta} \cdot \vec{x}_{v}) ds.
-\end{align*}
-
-Therefore, these models can be thought as regression-based predictors of relative fitness where frequency and external covariates contribute to estimated relative fitness.
-
-% \tbc{There needs to be more of a point here. Spell out how $\lambda$ in this model relates to your $\lambda$. I think of this like MLR, but where relative fitnesses are fixed from coefficients rather than learned from frequencies.}
-% The authors choose predictors which describe the antigenic properties of strains
 
 \paragraph{Estimating relative fitness using Gaussian Processes}%
 
 We develop a method for using Gaussian processes to model variant relative fitness.
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
-These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Görtler2019a}.
+These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
 Here, the relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyperparameters across variants.
 For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
 This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time $\lambda_v(t)$ based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
@@ -421,7 +255,9 @@ This model is used in Figure \ref{fig:gp_example} to estimate the relative fitne
 
 \paragraph{Transmisibility-Escape Tradeoff}%
 
-Extending this analysis to two variant viruses $v= \wt, \varE, \varT$ such that $\eta_{T}^{\varE} = 1$ and $\eta_{E}^{\varT} = 0$, we can write relative fitnesses an escape only variant or transmissibility increased variant as
+To understand the fitness trade-off between an increased transmissibility variant $\varT$ and immune escape variant $\varE$, we consider dynamics with one wildtype and two variant viruses $v= \wt, \varE, \varT$ such that $\eta_{T}^{\varE} = 1$ and $\eta_{E}^{\varT} = 0$.
+
+Following equation \ref{eq:two_strain_relative_fitness}, we can write relative fitnesses of the escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \eta_{E} \beta \phi_{\wt}(t)\\
     \lambda_{\varT, \wt} &= (\eta_{T} - 1) \beta S(t).
@@ -795,6 +631,185 @@ MF, TB wrote the paper.
 \renewcommand{\thesubsection}{S\arabic{subsection}}
 
 \section*{Supplemental Appendix}
+
+\subsection{Exponentially growing populations to frequency dynamics}%
+
+We consider a viral population consisting of $V$ exponentially-growing variant viruses each with prevalence $I_{v}$.
+Defining the time-varying growth rate for the prevalence of variant $v$ as $r_{v}(t)$, we can represent the prevalence using the following ordinary differential equation:
+
+\begin{equation} \label{eq:inhomo_exp_growth}
+    \frac{d I_{v}}{d t} = r_{v}(t) I_{v}(t), \quad v = 1,2, \ldots, V.
+\end{equation}
+
+The above differential equation has a known solution in terms of the integral of the time-varying growth rate and initial prevalence as follows:
+
+\begin{align*}
+I_{v}(t) = I_{v}(0) \exp\left( \int_{0}^{t} r_{v}(s) ds\right),
+\end{align*}
+where $I_{v}(0)$ is the initial prevalence of variant $v$.
+
+Now turning to the frequency dynamics of the population, we write the frequency of variant $v$ in the population as  $f_{v}(t) = I_{v}(t) / \sum_{u=1}^{V} I_{u}(t)$.
+This allows us to derive an ODE for variant frequency in terms of the variant growth rates using the quotient rule for differentiation:
+\begin{align*}
+    \frac{d f_{v}}{d t} &= f_{v} \left( \sum_{u=1}^{V} [r_{v}(t) - r_{u}(t)] f_{u} \right)\\
+                        &= f_{v} \left( r_{v}(t) - \sum_{u=1}^{V} r_{u}(t) f_{u} \right).
+\end{align*}
+
+This system of differential equations resembles a logistic growth equation and can be shown to have the following solution in terms of the initial frequencies $f_{v}(0)$ and the variant growth rates:
+\begin{align}
+    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} r_{v}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} r_{u}(s) ds)}.
+\end{align}
+
+The above representation of the variant frequency will serve as a centerpiece for many of the arguments to follow.
+We see that by tracking the rate at which variant viruses are spreading, we can construct the corresponding frequency dynamics without knowing the absolute prevalence of any variant.
+
+\paragraph{Relative frequency and relative fitness}%
+
+Using the above equation for the variant frequencies, we can write the relative frequency of variant $v$ over $u$ as $x_{v,u}(t) = f_{v}(t) / f_{u}(t)$ to see:
+\begin{align*}
+    x_{v, u}(t) = \frac{f_{v}(t)}{f_{u}(t)} &= \frac{f_{v}(0)}{f_{u}(0)} \exp \left( \int_{0}^{t} [r_{v}(s) - r_{u}(s)] ds \right)\\
+                                            &=x_{v,u}(0)\exp \left( \int_{0}^{t} \lambda_{v,u}(s) ds \right).
+\end{align*}
+
+Notice this relative frequency change depends on the initial relative frequencies and the \emph{relative fitness} $\lambda_{v,u}(t) = r_{v}(t) - r_{u}(t)$ of $v$ over $u$.
+This relative fitness has the same units as the exponential growth rate (e.g. per day). 
+Using the definition of relative fitness, we can notice that
+\begin{align}
+\lambda_{v, u}(t) = r_{v}(t) - r_{u}(t) = \frac{d }{d t} \left[\log \left( x_{v,u}(t) \right) \right] = - \lambda_{u,v}(t)
+\end{align}
+
+We can see that there is a symmetry in the relative fitnesses and that the associated frequency dynamics depend on the differences between relative fitnesses.
+This suggests that absolute fitness (in terms of the growth of infections) may not be inferable from frequencies alone.
+This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent these models as having the form:
+\begin{align}
+    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)},
+\end{align}
+where the growth rate of $v$ is expressed as relative to an arbitrary pivot variant.
+
+\paragraph{Cumulative relative-fitness and frequency change}
+
+Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals $\Lambda_{v,u}(0, t) = \int_{0}^{t} \lambda_{v, u}(s)ds$.
+We can then characterize approaches for modeling frequency change in terms of how they represent, estimate, and forecast these relative fitnesses.
+This framework includes various existing methods for analyzing frequency data such as the seasonal influenza forecasting models of L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020}, multinomial logistic regression for frequency estimation \cite{Annavajhala2021} and the SARS-CoV-2 mutational fitness model of Obermeyer et al \cite{Obermeyer2022}.
+%Question: How would I nest Piantham in this framework? Can I?
+
+Though this framework can be used to describe existing statistical methods for frequency modeling, it is also applicable to traditional compartmental models of epidemics.
+In fact, applying these ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
+
+\paragraph{Two-strain SIR}%
+
+For simplicity, we will begin by analyzing a two-strain SIR model in which the a variant virus $v$ can differ from wildtype virus wt by increased intrinsic transmissibility (via $\eta_{T}$) and immune escape against wild-type immunity (via $\eta_{E}$).
+This system of 5 ordinary differential equations follows
+
+%TODO: Add 3.x
+\begin{align*}
+    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \eta_{T} S I_{v}\\
+    \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
+    \frac{d I_{v}}{dt} &= \beta \eta_{T} S I_{v} + \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v} - \gamma I_{v}\\
+    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \eta_{T} \eta_{E} \phi_{\wt} I_{v}\\
+    \frac{d \phi_{v}}{dt} &= \gamma I_{v}.
+\end{align*}
+where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes immunity derived from wild-type infection.
+In this model, the variant virus can infect both susceptible individuals $S$ and individuals with immunity to wild-type virus $\phi_{\wt}$.
+Increased intrinsic transmissibility increases the baseline transmission rate from $\beta$ in wild-type to $\beta \eta_{T}$ in the variant virus and immune escape increases the transmission rate against those with wildtype immunity, so that the at-risk population is $\eta_{E} \phi_{\wt}$.
+
+Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \eta_{T} \beta  S + \beta \eta_{T} \eta_{E} \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
+\begin{equation} \label{eq:two_strain_relative_fitness}
+\lambda_{v,\wt}(t) = (\eta_{T} - 1)\beta S(t) + \eta_{T} \eta_{E} \beta \phi_{\wt}(t).
+\end{equation}
+
+From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\eta_{T} > 1$) or immune escape ($\eta_{E} > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
+
+\paragraph{$n$-strain SIR}%
+
+This model can also be extended to an $n$-strain SIR model where each variant strain $v_i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\eta_{T}^{(i)},\eta_{E}^{(i)})$  relative to the wildtype ($\theta_{\text{wt}} = \theta_{1} = (0, 0)$).
+
+\begin{align*}
+    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \eta_{T} S I_{v_{i}}\\
+    \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
+    \frac{d I_{v_{i}}}{dt} &= \beta \eta_{T, i} S I_{v_{i}} + \beta \eta_{T, i} \eta_{E, i} \phi_{\wt} I_{v_{i}} - \gamma I_{v_{i}}\\
+    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \eta_{T, i} \eta_{E, i} \phi_{\wt} I_{v_{i}}\\
+    \frac{d \phi_{v_{i}}}{dt} &= \gamma I_{v_{i}}, \quad i \in \{2, \ldots, n\}.
+\end{align*}
+
+In this formulation, the variant viruses compete only for susceptible population and those with previous wild-type infection.
+This formulation can be generalized to allow for competition between all variants for any exposure history and will be discussed in the following sections.
+In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \eta_{E})$, and a transmissibility increase variant T with $\theta_{3} = (\eta_{T}, 0)$.
+% \tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
+% I've added a discussion about units when I define relative fitness. I can also do this when we define the exponential growth rate as well
+
+
+\paragraph{Models of immune escape against heterogeneous backgrounds}%
+
+We'll now consider a model where all hosts are assumed to fall into one of $B$ immune backgrounds $\phi_{b}$ for $b =1, \ldots, B$.
+We assume that infection by each variant $v$ then leaves recovered hosts in the corresponding immune background of the most recent infection $b_{v}$.
+Variant transmission then occurs via immune escape against a background leading to a matrix of escape rates $\vec{\eta} = \eta_{v,b}$ for variants $v$ and background $b$.
+
+We can then write the system of ordinary differential equations as
+\begin{align*}
+    \frac{d I_{v}}{dt} &= \beta \sum_{1\leq b \leq B} \eta_{v, b} \phi_{b} I_{v} - \gamma I_{v}, \quad v = 1, \ldots, V\\
+    \frac{d \phi_{b}}{dt} &= - \beta \sum_{1\leq v \leq V} \eta_{v,b}\phi_{b} I_{v} +  \sum_{v:\ b_{v} = b} \gamma I_{v}.
+\end{align*}
+
+With this model, susceptible and recovered compartments in the standard SIR model can be thought of as immune backgrounds.
+This allows us to represent the standard SIR model as $S = \phi_{S}$, $I = I_{\wt}$, $R = \phi_{\wt}$ and $\eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0$ and $b_{\wt} = \wt$.
+We can also think of the two-strain SIR with $\eta_{T} = 1$ as a special case of this model where we set $S = \phi_{S}, \eta_{\wt, S} = 1, \eta_{\wt, \wt} = 0, \eta_{v, S} = 1, \eta_{v, \wt} = \eta_{E}$ and keep all other parameters the same.
+
+With this formulation of immune escape, we can then write the relative fitnesses in terms of the escape rates $\eta_{v,b}$ and the immune background proportions $\phi_{b}$ as
+
+\begin{equation} \label{eq:escape_relative_fitness}
+    \lambda_{v, u}(t) = \beta \sum_{1\leq b \leq B}(\eta_{v,b} - \eta_{u,b}) \phi_{b}(t).
+\end{equation}
+
+Under this model of immune escape, we can see relative fitness among variants can be decomposed into differences in immune escape among immune backgrounds within a population.
+Due to the dependence here on the proportion of each immune background in determining fitness, this suggests that the overall distribution of susceptibility to strains is potentially an important consideration when translating individual-level measures of immune escape to population-level estimates of variant fitness.
+Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
+However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change i.e. $\frac{d\phi_{b}}{dt}$.
+
+Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in Supplemental Appendix \ref{ssec:full_immune_history}.
+
+\subsection{Revisiting existing models for frequency growth}
+
+Using the theory developed for exponentially-growing variant populations, we now re-visit existing methods for modeling viral frequency dynamics.
+
+\paragraph{Multinomial Logistic Regression}%
+
+We begin with multinomial logistic regression (MLR) with fixed relative fitness.
+This model can be written as
+
+\begin{align*}
+    f_{v}(t) = \frac{f_{v}(0) \exp(\lambda_{v} t)}{\sum_{u} f_{u}(0) \exp(\lambda_{u} t)},
+\end{align*}
+
+where $f_{v}(t)$ is the frequency of variant $v$ at time $t$ and $\lambda_{v}$ is the relative fitness of variant $v$.
+This provides estimates of the relative fitness compared to some reference strain $u^{*}$ for which $\lambda_{u^*} = 0$.
+In this model, initial frequencies $f_{v}(0)$ and relative fitness $\lambda_{v}$ are estimated from frequency dynamics.
+Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time \cite{Wallinga2006}.
+
+Comparing this to equation \ref{eq:two_strain_relative_fitness}, we can see this model of fixed relative fitness results from assuming that the at-risk populations are constant over-time.
+This assumption is useful since it requires no outside knowledge of the at-risk population and relative infection rates, though this may be less useful for longer forecasts or when there is large turnover in at-risk populations due to infection.
+
+\paragraph{Fitness models of seasonal influenza}%
+
+Motivated by the observed antigenic evolution of seasonal influenza, L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020} approximate the cumulative relative fitness between influenza seasons on the level of individual strains as
+
+\begin{align*}
+    \Lambda_{v,u}(t + \Delta t,t) = (\beta_{1} x_{v,1} + \cdots + \beta_{p} x_{v, p})\Delta t = (\vec{\beta} \cdot \vec{x}_{v}) \Delta t,
+\end{align*}
+
+where the relative fitness is determined by strain-specific predictors $\vec{x}_{v}$ and the regression parameter $\vec{\beta}_{v}$ are estimated. 
+
+This formulation fits neatly into the framework we've developed as the cumulative fitness here can be written as the integral of a relative fitness $\lambda_{v, u} =  \vec{\beta} \cdot \vec{x}_{v}$ over the time period of interest:
+
+\begin{align*}
+    \Lambda_{v,u}(t + \Delta t,t)  &= \int_{t}^{t+\Delta t} \lambda_{v,u}(s)ds\ = \int_{t}^{t + \Delta t} (\vec{\beta} \cdot \vec{x}_{v}) ds.
+\end{align*}
+
+Therefore, these models can be thought as regression-based predictors of relative fitness where frequency and external covariates contribute to estimated relative fitness.
+
+% \tbc{There needs to be more of a point here. Spell out how $\lambda$ in this model relates to your $\lambda$. I think of this like MLR, but where relative fitnesses are fixed from coefficients rather than learned from frequencies.}
+% The authors choose predictors which describe the antigenic properties of strains
+
 
 \subsection{Relative fitness for full immune history models}\label{ssec:full_immune_history}
 
