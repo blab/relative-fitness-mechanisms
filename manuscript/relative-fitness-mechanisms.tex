@@ -458,80 +458,73 @@ We find that the distances in the pseudo-immunity embedding space are correlated
 
 \section*{Discussion}
 
-% As is, this is a bit undirected though all valid
-
-% Need to mention models and the way to intrepret results
-
-% Need to mention selective pressure metric, utility of it
-
-% Need to mention benefits of transformer model
-
-% Then neeeed to talk about the limitations, public implementaitons, and donclussion
-
 % Overview of methods
 
 % Mechanistic models
-We find that multi-strain mechanistic models of epidemics can be used to inform changes in variant frequency over time.
-This enabled us to illustrate the trade-off between intrinsic transmissibility increase and immune escape in environments with heterogeneous past exposure.
-These mechanistic models also suggest a structure in which relative fitness is determined by environmental constraints such as the human landscape which we model as several time-varying immunity classes.
-Though there appears to be limits to our ability to attribute dynamics to particular mechanisms, the structure of these models suggests that we may improve forecasting by incorporating information about assumed transmission mechanisms or empirically supported mechanisms.
-These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. \cite{Huddleston2020, luksza2014predictive}
-Future work should seek to identify and incorporate informative data sources for relative fitness estimation and forecasting for particular pathogens alongside model development.
+Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics. 
+This enables a more detailed picture of variant sucess in environments with heterogenous population immunity.
+
+One key insight from this was the trade-off between intrinsic transmissibility increase and immune escape. 
+We showed that this trade-off is shifted by changes in population immunity, so that immune escape dominates as exposure increases.
+Though there are limits to our ability to attribute dynamics to particular mechanisms from frequency data alone, the structure of these models suggests that we may improve forecasting by incorporating information about empirically supported mechanisms such as immune escape via antigenic evolution.
 
 % Models we developed
-In the absence of data that can inform relative fitness, there is still hope.
-We find that relative fitness can still be estimated and forecasted in the short-term using frequency data alone.
-
-We develop a scalable approximate Gaussian process model for fitness estimation which captures time-varying variant fitness with improved computational efficiency. This technique simplifies the traditional cubic complexity of GPs by using shared basis functions across variants, making the framework scalable for large datasets and long time periods.
-
-%TODO: Sentence about practical impact here.
-
-Additionally, we introduce a latent factor model which decomposes variant fitness into pseudo-escape rates and pseudo-immunity proportions. This allows for a deeper understanding of immune dynamics and how they shape variant success. The latent factor model, applied to SARS-CoV-2 data across several countries, successfully captures these immune escape dynamics and their impact on variant fitness.
-
-The model also addresses geographic and temporal variation in viral fitness, recognizing that fitness can differ across regions due to variations in population immunity.
-From this geographic and temporal variation, we can learn a structured immune space that is consistent with human titer data.
-
-By incorporating these regional differences into the framework, we can provide more tailored public health strategies to mitigate variant spread.
-% Though motivated by models of immune escape and well-explined by titer data, latent variable methods may not estimate latent factors that are truly indicative of immune escape directly.
-
-However, it is important to note that these models may not be reliable for longer terms forecasts due to the emergence of new variants or improper specification of mechanism.
+Our work shows that even in the absence of data that can inform relative fitness, there is still hope.
+We introduce a novel approach to estimate viral fitness over time using a scalable approximate Gaussian process model.
+Traditional Gaussian process, while flexible, face challenges for large time-series and large data set.
+Our approach overcomes this using a Hilbert Space Gaussian Process (HGSP) approximation, making the framework scalable for many variants and long time periods.
+This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying mechanism.
 
 % Selective pressure
-In the meantime, metrics derived from these models can be informative of much more than just the underlying frequency dynamics.
-We define ``selective pressure'' which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
-This metric allows us to predict the epidemic growth rate using sequence counts alone and
-By integrating fitness estimates and variant frequency dynamics, this metric acts as an early warning system, empowering public health agencies to anticipate and respond to new variant-driven outbreaks. This metric has been validated using data from both the United States and the United Kingdom.
+In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
+We present a ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
+This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
+By integrating fitness estimates and variant frequency dynamics, this metric can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
+This metric has been validated using data from both the United States and the United Kingdom.
 Furthermore, this approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
 
 %TODO: Rephrase as limitation
 This provides a simple measure of epidemic growth in the absence of high quality case counts though it can be biased by non-evolutionary effects on the epidemic growth.
+%Note: This should be the aim for next project, learning these non-genetic contributions using other data.
 
-%% Latent factor model
-% Add parts that highlight the sucess
-% These models can still be better extended for short-term forecasts or adapted for longer time horizons.
-% For example, to account for more complicated patterns in relative fitness, we can extend the Hilbert Space Gaussian Process models to non-stationary kernels.
-%
-%
+Additionally, we introduce a latent factor model which decomposes variant fitness into pseudo-escape rates and pseudo-immunity proportions. 
+This is offers a tool for a deeper understanding of immune dynamics and how they shape variant success.
+The latent factor model, applied to SARS-CoV-2 data across several countries, successfully captures these immune escape dynamics and their impact on variant fitness.
+ By using only genetic sequence data, we approximate the immunological distances between variants, providing insights similar to those gained from antigenic cartography but without the need for serological data.
+ Further, we can estimate the proportion of these latent immune pools in the population and how they vary geographically and over time.
+ This approach can be applied to other rapidly evolving pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 
+
+
+Despite these advances, there are limitations to our approach. 
+Long-term forecasts remain difficult, particularly as new variants with unknown fitness profiles emerge.
+This framework suggests that considering both the escape against individual immune backgrounds as well as the diversity in human immune escape is most useful for improving forecasts of relative fitness.
+Additionally, our models, while powerful in estimating short-term variant dynamics, rely on assumptions about transmission mechanisms that may not always hold across different pathogens or contexts.
+In fact, as we've shown, it's entirely possible for shifts in population immunity to change the dominant transmission mechanism.
+
+Furthermore, the models considered here are deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
+In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the chance for stochastic extinction of beneficial variants remains.
+This presents trouble for long-term forecasting as it will require a model of emergence, tying the potential for a variant to emerge with its potential to transmit in the current environment.
+Future work should focus on improving the integration of real-time genomic data with serological and epidemiological data, providing a more comprehensive understanding of variant dynamics over time.
+
+% These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. \cite{Huddleston2020, luksza2014predictive}
+
+% Future work should seek to identify and integrative informative data sources for relative fitness estimation and forecasting for particular pathogens, providing a more comprehensive understanding of variant dynamics over time.
 
 % Limitations of existing simple mechanism models
-The compartment models discussed here are described by simple mechanisms and more work is needed to adapt this framework to complicated epidemic models such as those with non-exponential generation times could be useful.
-Furthermore, the models considered here are primarily deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
+% The compartment models discussed here are described by simple mechanisms and more work is needed to adapt this framework to complicated epidemic models such as those with non-exponential generation times could be useful.
+% That being said, models which account for the appearance of genetic variants through mutation exist, often assuming a latent antigenic space with which fitness is determined.
+%
+% However, it is important to note that these models may not be reliable for longer terms forecasts due to the emergence of new variants or improper specification of mechanism.
 
-In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the chance for stochastic extinction of beneficial variants remains.
-That being said, models which account for the appearance of genetic variants through mutation exist, often assuming a latent antigenic space with which fitness is determined.
+% Despite the limitations discussed above, the framework presented here illustrates the importance of transmission mechanism in the evolution of pathogens, highlighting the importance of both variant characteristics and population susceptibility in selection.
+% We suggest that future models of pathogen transmission and evolution attempt to incorporate current knowledge of the transmission process into their forecasts.
+% In particular, for viruses such as influenza and SARS-CoV-2 which undergo antigenic evolution, our work suggests that incorporating knowledge on both the diversity in human immune response and the escape potential of emerging variants could prove useful in improving long-term forecasts of the viral population.
 
-Despite the limitations discussed above, the framework presented here illustrates the importance of transmission mechanism in the evolution of pathogens, highlighting the importance of both variant characteristics and population susceptibility in selection.
-We suggest that future models of pathogen transmission and evolution attempt to incorporate current knowledge of the transmission process into their forecasts.
-
-In particular, for viruses such as influenza and SARS-CoV-2 which undergo antigenic evolution, our work suggests that incorporating knowledge on both the diversity in human immune response and the escape potential of emerging variants could prove useful in improving long-term forecasts of the viral population.
-
-%TODO: Borader implications, detailed landscapes, robust framework
-While this framework has been applied to SARS-CoV-2, it is broadly generalizable to other rapidly evolving pathogens, including influenza, seasonal coronaviruses, and zoonatic viruses. 
-
-%TODO: Clean up
-The combination of genetic data, immune escape, and fitness estimation makes the framework a powerful tool for pandemic preparedness and public health surveillance. 
-This approach provides real-time insights into viral evolution and can inform decisions about vaccine strategy, resource allocation, and policy interventions
+In conclusion, our framework represents a significant advance in our understanding of viral evolution and transmission dynamics. 
+By linking variant fitness to specific transmission mechanisms, we provide a more nuanced and accurate prediction of how variants will spread and impact population-level epidemic growth. 
+The selective pressure metric and latent immunity model offer new tools for public health agencies to monitor viral evolution in real time, enabling proactive intervention and insight into the variant difference and wave potential.
+While our work has been applied to SARS-CoV-2, the methods developed here are broadly applicable to other evolving pathogens, offering a versatile approach for improving epidemic forecasting, variant monitering, and overall pandemic preparedness.
 
 \section*{Methods}
 
