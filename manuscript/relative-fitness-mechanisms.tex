@@ -143,51 +143,54 @@ These insights refine real-time forecasting and lay the groundwork for research 
 
 \section*{Main text}
 
-%%% Introduction: ~718 words
+%%% Introduction
 
 %TODO: Flesh out, focusing on the emergence of looking at empirical variant advantage with frequency based model due to increased sequencing globally + tools like Nextclade.
 
-The COVID-19 pandemic has been marked by the successive emergence of SARS-CoV-2 variant viruses, driving repeated epidemics globally \cite{tegally2021detection, Volz2021}.
-While these repeated large waves have occurred with the emergence of novel variants, the mechanism driving these variants' transmission has changed over time.
-Early mutations and viral variants such as Alpha, Beta, Gamma, Delta and their associated infection waves were largely driven by increases in intrinsic transmissibility.
-%TODO: Citations: Bloom lab (Greaney Delta paper?)
-The Omicron variant showed substantial immune escape and subsequent derived lineages within Omicron including XBB, EG.5.1, JN.1 appear to be driven by immune escape as evidenced through molecular studies of neutralization using human sera \cite{Cao2021, Cao2022, Bekliz2024, Jian2023}.
-%TODO: Citations: Bloom lab?
+The COVID-19 pandemic was marked by the successive emergence of SARS-CoV-2 variant viruses, driving repeated epidemics globally \cite{tegally2021detection, Volz2021}.
+While these repeated large waves occurred with the emergence of novel variants, the mechanism driving these variants' success changed over time.
+The spread of early variants such as Alpha, Beta, Gamma and Delta were largely driven by increases in intrinsic transmissibility \cite{carabelli2023sars}.
+The Omicron variant showed substantial immune escape \cite{carabelli2023sars} and subsequent derived lineages within Omicron including XBB, EG.5.1 and JN.1 appear to be driven by immune escape as evidenced through molecular studies of neutralization using human sera \cite{Cao2021, Cao2022, Bekliz2024, Jian2023}.
 Since 2022, there has been repeated replacement by subsequent Omicron-derived lineages.
-This rapid viral population turnover is consistent with antigenic evolution and is observed in other viruses such as seasonal influenza, although SARS-CoV-2 currently remains an outlier in terms of pace of its evolution \cite{Koel2013, Bedford2014, kistler2023atlas}.
+This rapid viral population turnover is consistent with antigenic evolution and is observed in other viruses such as seasonal influenza \cite{bedford2014integrating}, although SARS-CoV-2 currently remains an outlier in terms of pace of its evolution \cite{kistler2023atlas}.
 This transition from transmissibility-driven to immune escape-driven success is a consequence of the interplay between population immunity and variant fitness.
 
 % Given the rapid emergence and spread of SARS-CoV-2 variants, it is important to assess the rate of turnover as this is an indicator of variant advantage and in addition to understanding how quickly a particular variant is spreading, it may signal the mechanism by which it spreads.
-% With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for insight into the evolution of SARS-CoV-2.
 
-Several models of variant frequency have been developed to estimate the fitness of emerging SARS-CoV-2 variants \cite{susswein2023leveraging, figgins2022sars, Piantham2022, Annavajhala2021, Lefrancq2023}.
-% These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
+With the increased temporal and geographical scale of sequencing alongside a detailed genetic nomenclature \cite{rambaut2020dynamic} and bioinformatic tools for lineage assignment \cite{turakhia2021ultrafast, aksamentov2021nextclade}, we have gained more data for SARS-CoV-2 than for other circulating viruses giving a unique opportunity for insight into its evolution.
+Several models of variant frequency have been developed to estimate the fitness of emerging SARS-CoV-2 variants \cite{Annavajhala2021, Piantham2022, figgins2022sars, susswein2023leveraging, Lefrancq2023, abousamra2024fitness}.
+These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
 Relative fitness in these models is often assumed to be constant and intrinsic to the variant of interest, however this may be an oversimplification of the transmission process.
 % Additionally, translating these relative fitness estimates to a population-level transmission advantage (in terms of variant infections per wildtype infection) typically requires assumptions on the generation time of the transmission though this can also be approached by jointly modeling the transmission process alongside frequencies \cite{Wallinga2006, figgins2022sars}.
 
 It has been shown that these transmission advantages differ geographically and temporally, suggesting that variant transmission advantages are not necessarily fixed and may be informed by within-region population differences \cite{figgins2022sars, vanDorp2022}.
-In fact, they may be well explained by regional differences in immune structure as Dadonaite and co-authors show deep mutational scanning estimates are well correlated with estimated variant growth advantages \cite{Dadonaite2023}.
+In fact, they may be well explained by regional differences in immune structure as Dadonaite et al.\ \cite{Dadonaite2023} show deep mutational scanning estimates of immune escape are well correlated with estimated variant growth advantages.
 Existing models which allow variant transmission advantages to change in time generally do not have a mechanistic underpinning for why transmission advantages exist and vary geographically and temporally \cite{figgins2022sars, susswein2023leveraging}.
 % These non-mechanistic transmission advantages are useful for real-time situation analysis though more work is required to develop theory for how various mechanisms determine viral fitness.
 % In particular, distinguishing between mechanisms of immune escape and transmissibility may improve our ability to make informed short-term forecasts or include other forms of data to explain patterns of relative fitness.
 This lack of mechanistic grounding limits our ability to accurately predict variant dynamics, especially in diverse geographic regions with varying levels of population immunity.
 
 In response to this gap, we introduce a novel framework that links variant dynamics directly to transmission mechanisms using compartmental models of infectious diseases.
-By modeling both intrinsic transmissibility and immune escape, we explain how shifts in population immunity shape the relative fitness of viral variants and selects for immune escape over intrinsic transmissibility with increasing past exposure.
+By modeling both intrinsic transmissibility and immune escape, we explain how shifts in population immunity shape the relative fitness of viral variants and select for immune escape over intrinsic transmissibility with increasing past exposure.
 Furthermore, including these mechanisms suggests that relative fitness varies in time, reflecting the evolving landscape of population immunity and exposure regardless of the underlying mechanism.
 
-We, therefore, present a novel non-parametric method for estimating time-varying fitness regardless of the underlying transmission mechanism.
-Additionally, we introduce a ``selective pressure'' metric which quantifies the impact of variant turnover on population-level epidemic growth rates.
-Using this metric alongside historical case data, we develop a method for predicting case growth rates from sequence counts alone.
-This is especially useful when case numbers are sparse or absence, as it can be used to give an early signal of variant-driven infection waves before widespread transmission occurs.
-
-Lastly, we develop a latent immunity model which we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants.
-These pseudo-immune groups serve as a proxy for the immune heterogeneity between and within regions and the estimated pseudo-escape correlate with titer distances for circulating variants and human sera.
-This method enables a representation of variant similarity under escape-driven transmission similar to antigenic cartography using only genetic sequences.
-
+Here, we present a novel non-parametric method for estimating time-varying fitness regardless of the underlying transmission mechanism.
+Alongside this development we introduce a ``selective pressure'' metric which quantifies the impact of variant turnover on population-level epidemic growth rates, as well as a latent immunity model which we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants.
 Overall, our framework bridges the gap between genetic data and transmission dynamics, offering a new way to predict and manage viral outbreaks.
-By linking viral evolution to immune escape and transmissibility, we offer a powerful tool for predicting variant-driven outbreaks and managing future waves of SARS-CoV-2.
-The selective pressure metric and latent immunity model provide critical insights into the epidemiological and immunological factors that drive variant success, improving real-time analysis using genetic sequence data alone and informing public health strategy.
+
+% TB: These two below paragraphs on predicting epidemic growth and latent immunity are too detailed for the normal `preview' of manuscript contents.
+% Additionally, we introduce a ``selective pressure'' metric which quantifies the impact of variant turnover on population-level epidemic growth rates.
+% Using this metric alongside historical case data, we develop a method for predicting  growth in incidence rates from sequence counts alone.
+% This is especially useful when case numbers are under-reported or absent, as it can be used to give an early signal of variant-driven infection waves before widespread transmission occurs.
+%
+% Lastly, we develop a latent immunity model which we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants.
+% These pseudo-immune groups serve as a proxy for the immune heterogeneity between and within regions and the estimated pseudo-escape correlate with titer distances for circulating variants and human sera.
+% This method enables a representation of variant similarity under escape-driven transmission similar to antigenic cartography using only genetic sequences.
+
+% TB: If we keep this text it should be moved to the Discussion
+% Overall, our framework bridges the gap between genetic data and transmission dynamics, offering a new way to predict and manage viral outbreaks.
+% By linking viral evolution to immune escape and transmissibility, we offer a powerful tool for predicting variant-driven outbreaks and managing future waves of SARS-CoV-2.
+% The selective pressure metric and latent immunity model provide critical insights into the epidemiological and immunological factors that drive variant success, improving real-time analysis using genetic sequence data alone and informing public health strategy.
 
 %%% Results
 
