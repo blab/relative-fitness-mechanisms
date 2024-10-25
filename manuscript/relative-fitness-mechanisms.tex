@@ -141,8 +141,9 @@ These insights refine real-time forecasting and lay the groundwork for research 
 % Champredon paper on SE^nI^mR models so that we can extend to models with non-exponential generation times including latent periods .etc
 
 
-% Introduction: ~718 words
-\section*{Introduction}
+\section*{Main text}
+
+%%% Introduction: ~718 words
 
 %TODO: Flesh out, focusing on the emergence of looking at empirical variant advantage with frequency based model due to increased sequencing globally + tools like Nextclade.
 
@@ -158,7 +159,6 @@ This transition from transmissibility-driven to immune escape-driven success is 
 
 % Given the rapid emergence and spread of SARS-CoV-2 variants, it is important to assess the rate of turnover as this is an indicator of variant advantage and in addition to understanding how quickly a particular variant is spreading, it may signal the mechanism by which it spreads.
 % With the increased temporal and geographical scale of sequencing that has occurred, we have gained more data than available for other circulating viruses giving a unique opportunity for insight into the evolution of SARS-CoV-2.
-
 
 Several models of variant frequency have been developed to estimate the fitness of emerging SARS-CoV-2 variants \cite{susswein2023leveraging, figgins2022sars, Piantham2022, Annavajhala2021, Lefrancq2023}.
 % These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
@@ -189,7 +189,7 @@ Overall, our framework bridges the gap between genetic data and transmission dyn
 By linking viral evolution to immune escape and transmissibility, we offer a powerful tool for predicting variant-driven outbreaks and managing future waves of SARS-CoV-2.
 The selective pressure metric and latent immunity model provide critical insights into the epidemiological and immunological factors that drive variant success, improving real-time analysis using genetic sequence data alone and informing public health strategy.
 
-\section*{Results}
+%%% Results
 
 \subsection*{Transmission mechanisms determine relative fitness of variants}
 
@@ -233,7 +233,7 @@ These models will provide us with an intuition of how strain-level selection dep
 \end{figure}
 
 
-\paragraph{Estimating relative fitness using Gaussian Processes}%
+\subsection*{Estimating relative fitness using Gaussian Processes}
 
 We develop a method for using Gaussian processes to model variant relative fitness.
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
@@ -242,9 +242,7 @@ Here, the relative fitnesses are modeled using an approximate Gaussian process w
 For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
 This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time $\lambda_v(t)$ based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
 
-
-
-\paragraph{Transmisibility-Escape Tradeoff}%
+\subsection*{Determining the transmisibility-escape tradeoff}
 
 To understand the fitness trade-off between an increased transmissibility variant $\varT$ and immune escape variant $\varE$, we consider dynamics with one wildtype and two variant viruses $v= \wt, \varE, \varT$ such that $\eta_{T}^{\varE} = 1$ and $\eta_{E}^{\varT} = 0$.
 
@@ -276,7 +274,7 @@ We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}.
     \label{fig:transmission_tradeoff}
 \end{figure}
 
-\paragraph{Initial growth rates are insufficient for predicting short-term frequency growth}%
+\subsection*{Initial growth rates insufficient for predicting short-term frequency growth}
 
 One question of interest is whether the mechanism meaningful informs our ability to forecast short-term frequency growth.
 The first step to addressing this is to understand how the relative fitness may change in time to understand the predictability of relative fitness in the short-term.
@@ -310,8 +308,7 @@ We find that though relative fitness trajectories will share the same decreasing
 
 This can lead to large changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
 
-
-\paragraph{Correlations are insufficient for mechanism identification}%
+\subsection*{Correlations insufficient for mechanism identification}
 
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
 Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
@@ -335,7 +332,7 @@ This appears to hold up until both variants' initial effective reproduction numb
 \label{fig:mechanism_identification}
 \end{figure}
 
-\paragraph{Selective Pressure}
+\subsection*{Quantifying selective pressure}
 
 Though it is useful to quantify the individual relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
 This will occur not just on the level of frequencies and frequency growth, but additionally on the level of population-level growth rates.
@@ -381,7 +378,7 @@ We can then use this to reconstruct the relative incidence as:
          &= \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
 \end{align*}
 
-\paragraph{Predicting epidemic growth rates using selective pressure}%
+\subsection*{Predicting epidemic growth rates using selective pressure}%
 
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we developed a predictive model of the epidemic growth rate using estimates of selective pressure.
 Using selective pressure computed using the approximate Gaussian process model, we predict the epidemic growth rate using the selective pressure for the previous 30 days.
@@ -403,7 +400,7 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
     \label{fig:selective_pressure_prediction}
 \end{figure}
 
-\paragraph{Latent factor models of relative fitness}
+\subsection*{Latent factor models of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
@@ -428,9 +425,9 @@ We find that the distances in the pseudo-immunity embedding space are correlated
 \label{fig:latent_immune}
 \end{figure}
 
-\section*{Discussion}
+%%% Discussion
 
-% Overview of methods
+\subsection*{Overview of methods}
 
 % Mechanistic models
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
@@ -466,7 +463,7 @@ The latent factor model, applied to SARS-CoV-2 data across several countries, su
  Further, we can estimate the proportion of these latent immune pools in the population and how they vary geographically and over time.
  This approach can be applied to other rapidly evolving pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 
-
+\subsection*{Conclusions, limitations, and future work}
 
 Despite these advances, there are limitations to our approach.
 Long-term forecasts remain difficult, particularly as new variants with unknown fitness profiles emerge.
