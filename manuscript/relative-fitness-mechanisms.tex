@@ -245,18 +245,6 @@ Here, the relative fitnesses are modeled using an approximate Gaussian process w
 For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
 This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time $\lambda_v(t)$ based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
-    \caption{\textbf{Estimating relative fitness with Gaussian Processes.}
-    Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
-    This figure uses Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
-    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Figure \ref{fig:vis_mechanisms}C.
-    B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
-    C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
-}
-    \label{fig:gp_example}
-\end{figure}
 
 
 \paragraph{Transmisibility-Escape Tradeoff}%
@@ -325,19 +313,6 @@ We find that though relative fitness trajectories will share the same decreasing
 
 This can lead to large changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\linewidth]{./figures/short_term_divergence.png}
-    \caption{\textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
-    Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T.
-    We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
-    (A) The prevalence for the variants.
-    (B) The relative fitness from the variants.
-    (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
-    (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
-    }%
-    \label{fig:short_term_divergence}
-\end{figure}
 
 \paragraph{Correlations are insufficient for mechanism identification}%
 
@@ -524,7 +499,7 @@ Future work should focus on improving the integration of real-time genomic data 
 In conclusion, our framework represents a significant advance in our understanding of viral evolution and transmission dynamics. 
 By linking variant fitness to specific transmission mechanisms, we provide a more nuanced and accurate prediction of how variants will spread and impact population-level epidemic growth. 
 The selective pressure metric and latent immunity model offer new tools for public health agencies to monitor viral evolution in real time, enabling proactive intervention and insight into the variant difference and wave potential.
-While our work has been applied to SARS-CoV-2, the methods developed here are broadly applicable to other evolving pathogens, offering a versatile approach for improving epidemic forecasting, variant monitering, and overall pandemic preparedness.
+While our work has been applied to SARS-CoV-2, the methods developed here are broadly applicable to other evolving pathogens, offering a versatile approach for improving epidemic forecasting, variant monitoring, and overall pandemic preparedness.
 
 \section*{Methods}
 
@@ -858,12 +833,40 @@ Therefore, our relative fitnesses can be written as
 \end{align*}
 where for simplicity we define $\eta_{v, B} = 0$ if $v \in B$.
 
-    \begin{figure}[t!]
-        \centering
-        \includegraphics[width=0.9\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
-        \caption{
-            \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
-        }
-        \label{fig:empirical-growth-rate-predictions-all}
-    \end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
+    \caption{\textbf{Estimating relative fitness with Gaussian Processes.}
+    Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
+    This figure uses Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
+    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Figure \ref{fig:vis_mechanisms}C.
+    B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
+    C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
+}
+    \label{fig:gp_example}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./figures/short_term_divergence.png}
+    \caption{\textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
+    Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T.
+    We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
+    (A) The prevalence for the variants.
+    (B) The relative fitness from the variants.
+    (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
+    (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
+    }%
+    \label{fig:short_term_divergence}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.9\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
+    \caption{
+        \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
+    }
+    \label{fig:empirical-growth-rate-predictions-all}
+\end{figure}
 \end{document}
