@@ -1,0 +1,85 @@
+\documentclass[11pt]{article}
+
+\usepackage{geometry}
+\geometry{left=1.1in, right=1.1in, top=1.0in, bottom=0.95in}
+
+% graphicx package, useful for including eps and pdf graphics
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+% basic packages
+\usepackage{color}
+\usepackage{parskip}
+\setlength{\parskip}{0.16cm}
+\usepackage{float}
+\usepackage{todonotes}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\definecolor{green}{rgb}{0.20,0.50,0.48}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=green}
+
+\setlength{\parindent}{0pt} % Remove paragraph indent
+
+\definecolor{brown}{rgb}{0.700,0.150,0.150}
+\def\mfc#1{\textcolor{brown}{[#1]}}
+
+\begin{document}
+
+\thispagestyle{empty} % Remove page headers/footers
+
+\mbox{}\hfill
+\begin{tabular}{l @{}}
+	% \includegraphics[width=6.5cm]{figures/fhcrc_logo} \\
+	Vaccine and Infectious Disease Division \\
+	Fred Hutchinson Cancer Center \\
+	1100 Fairview Ave N \\
+	Seattle, WA 98109, USA \\
+	Phone: (206) 667-6372 \\
+	Email: \href{mailto:mfiggins@uw.edu}{mfiggins@uw.edu} \\
+\end{tabular}
+
+\vspace{0.1in} % Vertical skip between sender/receiver address
+
+\begin{tabular}{@{} l}
+  \today
+\end{tabular}
+
+\vspace{0.1in} % Vertical skip between receive address and letter opening
+
+Dear Editors,
+
+\medskip % Vertical skip between letter opening and letter body
+
+Please find attached our manuscript entitled ``Transmission mechanisms and selective pressure shape viral fitness and growth''.
+We would be grateful if you would consider it for publication in \textit{Science}.
+
+Viral variants, like those seen during the COVID-19 pandemic, have captured the world’s attention.
+However, understanding which variants will dominate and why has remained a challenge for scientists and public health officials alike.
+Despite the repeated emergence of SARS-CoV-2 variants causing large waves of infection, surprisingly little work has focused on what shapes variant advantage and how these dynamics impact transmission.
+Our research directly addresses this gap.
+
+By integrating genetic data with key epidemiological forces-- transmissibility and immune escape-- we provide a model that explains the mechanisms driving variant success.
+This allows us to understand how past exposure creates a trade-off between transmissibility increase and immune evasion for pathogens.
+We introduce a novel method for estimating changes in variant fitness using Gaussian processes, which offers a flexible way to track time-varying fitness regardless of underlying mechanism.
+Combined with our selective pressure metric, we can quantify the impact of genetic changes on population-level epidemic growth.
+This enables us to predict transmission rates even in the absence of case data-- an increasingly important feature as case surveillance declines in much of the world.
+
+Additionally, we develop a method motivated by models of immune escape that allows us to estimate approximate antigenic similarities between variants, providing insight into immune escape without the need to collect serological data.
+This approach also allows us to estimate differences in immunity and escape risk of variants globally without the use of serological data.
+
+As data availability declines, the ability to predict transmission rates and immunological similarity using sequences alone represents a major shift in how we can monitor evolving pathogens including SARS-CoV-2, influenza, and future viral threats.
+We believe this manuscript will resonate with a broad and diverse audience, from researchers in evolutionary biology and epidemiology to public health professionals, policymakers, and anyone intrigued by how and why SARS-CoV-2 variant emerge and spread.
+For this reason, we would greatly appreciate your consideration for publication in Science.
+
+\vspace{0.3in} % Vertical skip between letter closing and signature start
+
+Sincerely, \newline
+\vspace{0.05in} \newline
+Marlin Figgins \newline
+PhD Candidate \newline
+Department of Applied Mathematics, University of Washington \newline
+Vaccine and Infectious Disease Division, Fred Hutchinson Cancer Center
+
+\end{document}
