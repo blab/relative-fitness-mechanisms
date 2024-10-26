@@ -175,7 +175,7 @@ By modeling both intrinsic transmissibility and immune escape, we explain how sh
 Furthermore, including these mechanisms suggests that relative fitness varies in time, reflecting the evolving landscape of population immunity and exposure regardless of the underlying mechanism.
 
 Here, we present a novel non-parametric method for estimating time-varying fitness regardless of the underlying transmission mechanism.
-Alongside this development we introduce a ``selective pressure'' metric which quantifies the impact of variant turnover on population-level epidemic growth rates, as well as a latent immunity model which we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants.
+Alongside this development we introduce a ``selective pressure'' metric that quantifies the impact of variant turnover on population-level epidemic growth rates, as well as a latent immunity model that we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants.
 Overall, our framework bridges the gap between genetic data and transmission dynamics, offering a new way to predict and manage viral outbreaks.
 
 % TB: These two below paragraphs on predicting epidemic growth and latent immunity are too detailed for the normal `preview' of manuscript contents.
@@ -194,10 +194,10 @@ Overall, our framework bridges the gap between genetic data and transmission dyn
 
 %%% Results
 
-\subsection*{Transmission mechanisms determine relative fitness of variants}
+\subsection*{Variant dynamics and relative fitness in multistrain models}
 
-Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity \cite{Gog2002, Wen2022}.
-These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza \cite{Bedford2014} and seasonal coronaviruses OC43 and 229E \cite{Kistler2021, Eguia2021}.
+Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity \cite{Gog2002, bedford2012canalization}.
+These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza virus \cite{bedford2014integrating} and seasonal coronaviruses \cite{Kistler2021, Eguia2021}.
 
 We begin by modeling a population of $V$ exponentially growing variant viruses each with prevalence $I_v(t)$ and time-varying growth rate $r_v(t)$.
 By considering the difference in these growth rates, we can define the relative fitness as $\lambda_{v, u}(t) = r_v(t) - r_u(t)$.
@@ -209,40 +209,45 @@ This relative fitness determines the change in the frequencies of the variants i
 
 where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative to.
 
-In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we can apply the above framework to compartmental models of epidemics which can be written as time-varying exponential growth (Equation~\ref{eq:inhomo_exp_growth}).
-These models will provide us with an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
+In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Materials and Methods and Supplementary Text).
+These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
+We summarize dynamics of a three-variant mechanistic transmission model in Figure \ref{fig:vis_mechanisms}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./figures/vis_mechanisms.png}
-    \caption{\textbf{Method overview.}
-    Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
-    Simulations of a three-variant model including a wildtype, one intrinsic transmission increased variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
-    We begin the simulation with initial wildtype frequency $10^{-4}$, $R_{0,\wt} = 1.4$, and $\gamma^{-1} = 1.8$.
-    We introduce the transmissibility variant at $t=20$ with $\eta_T = 1.5$ and initial frequency $10^{-5}$, and introduce the escape variant at $t=70$ with $\eta_E = 1.05$ and initial frequency $10^{-6}$.
-    A. Prevalence by variant.
-    B. Exponential growth rate by variant.
-    C. Variant frequency.
-    D. Relative fitness relative to wildtype.
-    E. Underlying immune pools.
-    F. Effective reproduction number by variant.
-    % \tbc{It's a little confusing having the left-hand panels be so much wider than the right-hand panels when they share exactly the same x-axis. I'd suggest to make left and right panels equal widths.}
-    % \tbc{I'm confused on why variant E has growth rate $r$ and relative fitness $\lambda$ only measured starting at time = $\sim$70, while reproductive number $R$ is measured from time = 0. Ie if you can measure $R$, can't you also measure $r$?}
-    % \tbc{Include in legend the initial frequencies / prevalences of the three variants as well as the values of $\eta_{E}$ and $\eta_{T}$.}
-    % \tbc{It would be nice to have y-axis for proportions in panels C and E be labeled 0\%, 20\%, etc\ldots, instead of 0.0, 0.20, etc\ldots.}
-    % \tbc{It would be nice to connect your notation here, where panel B would read `Epidemic growth rate $r$' and panel D would read `Relative fitness to wildtype $\lambda$'}
-}%
+    \caption{
+      \textbf{Simulated variant dynamics in a mechanistic model.}
+      Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
+      Simulations of a three-variant model including a wildtype, one intrinsic transmission variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
+      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 10^{-4}$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $\gamma^{-1} = 1.8$ days.
+      \tbc{I assumed that you meant initial \textit{prevalence} of $10^{-4}$ and not initial \textit{frequency} of $10^{-4}$.}
+      \tbc{Duration of infection of 1.8 days is really fast. I know this is meant as a toy simulation, but it's still nice for toy simulations to have realistic parameters. I'd suggest updating this to $\gamma^{-1} = 3.0$ days and just adjusting the x axis timeframe correspondingly.}
+      We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\eta_T = 1.5$.
+      We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\eta_E = 1.05$.
+      \tbc{Include degree of immune escape parameter here.}
+      \tbc{It seemed somewhat surprising that the immune escape variant also has a slight transmissibility increase over wildtype. I'd think cleaner to have $\eta_E = 1.0$.}
+      (A) Prevalence $I$ by variant.
+      \tbc{I don't understand the units on prevalence. The y axis goes to 0.05. I believe you're actually showing $I/N$ rather than $I$. Reading the text where prevalence is specified as $I_v(t)$ I assumed that prevalence is number of hosts. I'd either specify in the text that you mean prevalence as fraction of the population or use a specific host population size and report prevalence as number of hosts.}
+      (B) Exponential growth rate $r$ by variant.
+      (C) Variant frequency $f$.
+      (D) Fitness relative to wildtype $\lambda$.
+      (E) Underlying immune pools.
+      (F) Effective reproduction number $R_t$ by variant.
+      \tbc{Label the x-axis with "Days".}
+    }
     \label{fig:vis_mechanisms}
 \end{figure}
 
-
-\subsection*{Estimating relative fitness using Gaussian Processes}
+% \subsection*{Estimating relative fitness using Gaussian Processes}
 
 We develop a method for using Gaussian processes to model variant relative fitness.
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
 These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
-Here, the relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyperparameters across variants.
-For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
+Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
+% TB: The following two sentences are probably too detailed for Main Text. I tried for the above simple lay summary, but please revise. These two sentences may need to now move to Methods / Supplementary Text.
+% Here, relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyperparameters across variants.
+% For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
 This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time $\lambda_v(t)$ based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
 
 \subsection*{Determining the transmisibility-escape tradeoff}
@@ -855,7 +860,7 @@ where for simplicity we define $\eta_{v, B} = 0$ if $v \in B$.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
-    \caption{\textbf{Estimating relative fitness with Gaussian Processes.}
+    \caption{\textbf{Estimating relative fitness with Gaussian processes.}
     Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
     This figure uses Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
     A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Figure \ref{fig:vis_mechanisms}C.
