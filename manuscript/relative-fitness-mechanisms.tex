@@ -222,20 +222,16 @@ We summarize dynamics of a three-variant mechanistic transmission model in Figur
       \textbf{Simulated variant dynamics in a mechanistic model.}
       Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
       Simulations of a three-variant model including a wildtype, one intrinsic transmission variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
-      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 10^{-4}$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $\gamma^{-1} = 1.8$ days.
-      \tbc{I assumed that you meant initial \textit{prevalence} of $10^{-4}$ and not initial \textit{frequency} of $10^{-4}$.}
-      \tbc{Duration of infection of 1.8 days is really fast. I know this is meant as a toy simulation, but it's still nice for toy simulations to have realistic parameters. I'd suggest updating this to $\gamma^{-1} = 3.0$ days and just adjusting the x axis timeframe correspondingly.}
+      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $\gamma^{-1} = 3.0$ days.
       We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 1.5$.
       We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 1.05$.
       % TB: I was confused by \eta_E and \eta_T, assuming this meant transmissibility of E and T, when instead it's degree of escape vs degree of transmissibility. I think it will be clearer moving to \eta for "escape" and \rho for "transmission"
       (A) Prevalence $I$ by variant.
-      \tbc{I don't understand the units on prevalence. The y axis goes to 0.05. I believe you're actually showing $I/N$ rather than $I$. Reading the text where prevalence is specified as $I_v(t)$ I assumed that prevalence is number of hosts. I'd either specify in the text that you mean prevalence as fraction of the population or use a specific host population size and report prevalence as number of hosts.}
       (B) Exponential growth rate $r$ by variant.
       (C) Variant frequency $f$.
       (D) Fitness relative to wildtype $\lambda$.
       (E) Underlying immune pools.
       (F) Effective reproduction number $R_t$ by variant.
-      \tbc{Label the x-axis with "Days".}
     }
     \label{fig:vis_mechanisms}
 \end{figure}
