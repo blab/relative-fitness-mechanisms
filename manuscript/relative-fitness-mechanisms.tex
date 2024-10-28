@@ -266,7 +266,7 @@ In the simplest case where individuals are either susceptible or have wildtype i
 \end{equation}
 
 For past exposure level greater than $\phi^{*}$, escape variant have a higher relative fitness.
-This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Figure \ref{fig:transmission_tradeoff}).
+This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Fig.~\ref{fig:transmission_tradeoff}).
 Additionally, this shows that when intrinsic transmissibility increases are limited escape is more likely to be a dominant mechanism for variant turnover.
 
 We visualize this trade-off in Fig.~\ref{fig:transmission_tradeoff}.
@@ -462,7 +462,6 @@ By integrating fitness estimates and variant frequency dynamics, this metric can
 This metric has been validated using data from both the United States and the United Kingdom.
 Furthermore, this approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
 
-%TODO: Rephrase as limitation
 This provides a simple measure of epidemic growth in the absence of high quality case counts though it can be biased by non-evolutionary effects on the epidemic growth.
 %Note: This should be the aim for next project, learning these non-genetic contributions using other data.
 
@@ -556,9 +555,8 @@ Supplementary Information for \\
 \paragraph{Generating sequence counts}
 
 We prepared sequence count data sets using the Nextstrain-curated SARS-CoV-2 sequence metadata \cite{Hadfield2018} which is created using the GISAID EpiCoV database \cite{khare2021gisaid}.
-These sequences were tallied according to either their annotated Nextstrain clade or Pango lineage depending on the data set to produce sequence count for each variant, for each day over the period of interest, and in each location analysed.
+These sequences were tallied according to either their annotated Nextstrain clade or Pango lineage depending on the data set to produce sequence count for each variant, for each day over the period of interest, and in each location analysed \cite{aksamentov2021nextclade}.
 
-\cite{aksamentov2021nextclade}
 
 \paragraph{Likelihood of sequence counts given frequencies}
 
@@ -588,6 +586,7 @@ This induces a structure on the covariance of the relative fitness values over t
 For computational efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes.
 This approximation allow us to share basis functions between variants \cite{riutortmayol2022practical}.
 Under this approximation, the relative fitnesses are computed as
+
 \begin{equation}
     \lambda_{v}(t) \approx \sum_{j=1}^{m} S_{\theta}(\sqrt{\mu_{j}})^{1/2} \cdot \phi_{j}(t) \cdot \beta_{j},
 \end{equation}
