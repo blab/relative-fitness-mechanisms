@@ -243,22 +243,17 @@ We develop a method for using Gaussian processes to model variant relative fitne
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
 These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
 Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
-% TB: The following two sentences are probably too detailed for Main Text. I tried for the above simple lay summary, but please revise. These two sentences may need to now move to Methods / Supplementary Text.
-%MF: Moved these two sentences to the supplment.
 This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
 To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 0$ and $\varEscape_\varE > 0$.
-% TB: Changed from $\mathrm{tranmiss}$ to $T$. $T$ and $E$ are already used in Figure 1 and using an italics letter as placeholder is more obvious.
-% TB: I was getting quite confused here (and previously in Figure 1) by \eta_T vs \eta_E. I've moved these to two separate Greek letters \varEscape and \varTransmission. I believe this should be clear and it also makes it so you don't have to construct things like \eta_{T}^\mathrm{escape} where it's not clear to the reader whether the subscript or superscript refers to the variant in question vs the parameter in question
 
 Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t)\\
     \lambda_{\varT, \wt} &= (\varTransmission - 1) \beta S(t).
 \end{align*}
-% TB: Again this was confusing for me in I don't know if the E in \eta_{E} is referring to the variant or the parameter, I've revised to \rho vs \eta
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
@@ -293,7 +288,6 @@ We can think of each of these functions $\Upsilon_b$ as an immune background and
 \begin{align*}
 \lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \Upsilon_{b}(t).
 \end{align*}
-% \tbc{This is confusing to me. I don't know if $b$ is an immune background or something else. Here, I'd either make this explicitly immune pools and use the same notation or make it explicitly something else and don't re-use notation.}
 
 Even in the case of complete knowledge of the relative fitness and the underlying fitness contributions in the present and past, we have that change in the relative fitness is determined by
 
@@ -306,8 +300,6 @@ By considering a Taylor expansion of the relative fitness about the point of est
 \begin{align*}
     \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
 \end{align*}
-% \tbc{I \textit{think} this $\eta$ is referring to escape compared to specific immunity, as this is the notation you introduce in ``Models of immune escape against heterogeneous backgrounds'', but I'm actually not sure this is the case. You might be just using $b$ here and $b$ in the latent model? Can you please clarify? If this $b$ In general the main text needs to be significantly adjusted to not rely on people understanding notation that's now buried in Supplemental Text.}
-% MF: I updated this to be more consistent. I use $\beta$ throughout and define $b$ as an immune background and reference the supplementary text for the motivation of this form.
 
 This suggests small differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses through changes in the underlying immune backgrounds.
 
@@ -757,9 +749,6 @@ This model can also be extended to an $n$-strain SIR model where each variant st
 In this formulation, the variant viruses compete only for susceptible population and those with previous wild-type infection.
 This formulation can be generalized to allow for competition between all variants for any exposure history and will be discussed in the following sections.
 In Fig.~\ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \varEscape)$, and a transmissibility increase variant T with $\theta_{3} = (\varTransmission, 0)$.
-% \tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
-% I've added a discussion about units when I define relative fitness. I can also do this when we define the exponential growth rate as well
-
 
 \paragraph{Models of immune escape against heterogeneous backgrounds}%
 
@@ -828,10 +817,6 @@ This formulation fits neatly into the framework we've developed as the cumulativ
 \end{align*}
 
 Therefore, these models can be thought as regression-based predictors of relative fitness where frequency and external covariates contribute to estimated relative fitness.
-
-% \tbc{There needs to be more of a point here. Spell out how $\lambda$ in this model relates to your $\lambda$. I think of this like MLR, but where relative fitnesses are fixed from coefficients rather than learned from frequencies.}
-% The authors choose predictors which describe the antigenic properties of strains
-
 
 \subsection{Relative fitness for full immune history models}\label{ssec:full_immune_history}
 
