@@ -328,18 +328,19 @@ This appears to hold up until both variants' initial effective reproduction numb
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/correlation_not_mechanism.png}
-    \caption{\textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
-    We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
-    Darker colors represent lower vaccine uptake.
-    We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
-        A. Prevalence of variant, each line is its own simulation.
-        B. Frequency of variant.
-        C. Relative fitness for variant over time.
-        D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
-        E. Same as D. but using data from the entire period shown. Notice the drop-off of relative fitness above $1 / R_{v}$ at which both variants are declining.
+    \includegraphics[width=1.0\linewidth]{./figures/correlation_not_mechanism.png}
+    \caption{
+      \textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
+      We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
+      Darker colors represent lower vaccine uptake.
+      We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
+      A. Prevalence of variant, each line is its own simulation.
+      B. Frequency of variant.
+      C. Relative fitness for variant over time.
+      D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
+      E. Same as D. but using data from the entire period shown. Notice the drop-off of relative fitness above $1 / R_{v}$ at which both variants are declining.
     }
-\label{fig:mechanism_identification}
+    \label{fig:mechanism_identification}
 \end{figure}
 
 \subsection*{Quantifying selective pressure}
@@ -399,14 +400,15 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/selective_pressure_prediction.png}
-    \caption{\textbf{Predicting epidemic growth rate using estimated selective pressure.}
-    A-F. Predictions for empirical growth rate from selective pressure for selected US states.
-    The light gray period is the training period and the darker gray is the testing period.
-    G. Estimated selective pressure in England.
-    H. Prevalence estimates for England.
-    I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
-}
+    \includegraphics[width=1.0\linewidth]{./figures/selective_pressure_prediction.png}
+    \caption{
+      \textbf{Predicting epidemic growth rate using estimated selective pressure.}
+      A-F. Predictions for empirical growth rate from selective pressure for selected US states.
+      The light gray period is the training period and the darker gray is the testing period.
+      G. Estimated selective pressure in England.
+      H. Prevalence estimates for England.
+      I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
+    }
     \label{fig:selective_pressure_prediction}
 \end{figure}
 
@@ -422,17 +424,18 @@ We find that the distances in the pseudo-immunity embedding space are correlated
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/latent_immune.png}
-    \caption{\textbf{Latent factor models of immunity describe variant structure.}
-        We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
-        A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
-        B. Estimated relative fitness for selected variants and countries.
-        C. Estimated pseudo-immunity over time for multiple countries.
-        D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
-        F. Estimated pseudo-escape rates for each variant.
-        H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
+    \includegraphics[width=1.0\linewidth]{./figures/latent_immune.png}
+    \caption{
+      \textbf{Latent factor models of immunity describe variant structure.}
+      We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
+      A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
+      B. Estimated relative fitness for selected variants and countries.
+      C. Estimated pseudo-immunity over time for multiple countries.
+      D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
+      F. Estimated pseudo-escape rates for each variant.
+      H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
-\label{fig:latent_immune}
+    \label{fig:latent_immune}
 \end{figure}
 
 %%% Discussion
@@ -859,36 +862,38 @@ where for simplicity we define $\varEscape_{v, B} = 0$ if $v \in B$.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
-    \caption{\textbf{Estimating relative fitness with Gaussian processes.}
-    Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
-    This figure uses Gaussian processes to model the 3 variant example shown in Fig.~\ref{fig:vis_mechanisms}.
-    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Fig.~\ref{fig:vis_mechanisms}C.
-    B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
-    C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
-}
+    \includegraphics[width=1.0\linewidth]{./supplementary_figures/gp_example.png}
+    \caption{
+    \textbf{Estimating relative fitness with Gaussian processes.}
+      Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
+      This figure uses Gaussian processes to model the 3 variant example shown in Fig.~\ref{fig:vis_mechanisms}.
+      A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Fig.~\ref{fig:vis_mechanisms}C.
+      B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
+      C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
+    }
     \label{fig:gp_example}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/short_term_divergence.png}
-    \caption{\textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
-    Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T.
-    We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
-    (A) The prevalence for the variants.
-    (B) The relative fitness from the variants.
-    (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
-    (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
-    }%
+    \includegraphics[width=1.0\linewidth]{./supplementary_figures/short_term_divergence.png}
+    \caption{
+      \textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
+      Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T (purple).
+      We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
+      (A) The prevalence for the variants.
+      (B) The relative fitness from the variants.
+      (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
+      (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
+    }
     \label{fig:short_term_divergence}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=0.9\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
     \caption{
-        \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
+      \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
     }
     \label{fig:empirical-growth-rate-predictions-all}
 \end{figure}
