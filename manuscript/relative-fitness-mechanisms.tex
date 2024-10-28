@@ -225,7 +225,6 @@ We summarize dynamics of a three-variant mechanistic transmission model in Figur
       We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $\gamma^{-1} = 3.0$ days.
       We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 1.5$.
       We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 1.05$.
-      % TB: I was confused by \eta_E and \eta_T, assuming this meant transmissibility of E and T, when instead it's degree of escape vs degree of transmissibility. I think it will be clearer moving to \eta for "escape" and \rho for "transmission"
       (A) Prevalence $I$ by variant.
       (B) Exponential growth rate $r$ by variant.
       (C) Variant frequency $f$.
@@ -287,35 +286,35 @@ We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}.
 One question of interest is whether the mechanism meaningful informs our ability to forecast short-term frequency growth.
 The first step to addressing this is to understand how the relative fitness may change in time to understand the predictability of relative fitness in the short-term.
 
-To be consistent with the relative fitness framing used through this paper, we model the relative fitness as being the weighted average of several time varying functions $\phi_{b}(t)$ with weights $\beta_{b}$, so that
+We find that the mechanistic forms analyzed in this paper (see Supplementary text) can be represented as weighted combinations of $B$ time-varying functions $\upsilon_{b}(t)$ with weights $\beta_{b}$.
+We can think of each of these functions $\Upsilon_b$ as an immune background and the coefficient $\beta_{b}$ as a transmission differential, so that
 
 \begin{align*}
-\lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \phi_{b}(t).
+\lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \Upsilon_{b}(t).
 \end{align*}
-\tbc{This is confusing to me. I don't know if $b$ is an immune background or something else. Here, I'd either make this explicitly immune pools and use the same notation or make it explicitly something else and don't re-use notation.}
+% \tbc{This is confusing to me. I don't know if $b$ is an immune background or something else. Here, I'd either make this explicitly immune pools and use the same notation or make it explicitly something else and don't re-use notation.}
 
 Even in the case of complete knowledge of the relative fitness and the underlying fitness contributions in the present and past, we have that change in the relative fitness is determined by
 
 \begin{align*}
-    \frac{d\lambda_{v,u}}{dt} = \sum_{1 \leq b \leq B} \beta_{b} \frac{d\phi_{b}}{dt}(t).
+    \frac{d\lambda_{v,u}}{dt} = \sum_{1 \leq b \leq B} \beta_{b} \frac{d\Upsilon_{b}}{dt}(t).
 \end{align*}
 
 By considering a Taylor expansion of the relative fitness about the point of estimation $t_{0}$, we can approximate the relative fitness in the future as:
 
 \begin{align*}
-    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} (\eta_{v, b} - \eta_{u,b}) \frac{d\phi_b}{dt}(t_0).
+    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
 \end{align*}
-\tbc{I \textit{think} this $\eta$ is referring to escape compared to specific immunity, as this is the notation you introduce in ``Models of immune escape against heterogeneous backgrounds'', but I'm actually not sure this is the case. You might be just using $b$ here and $b$ in the latent model? Can you please clarify? If this $b$ In general the main text needs to be significantly adjusted to not rely on people understanding notation that's now buried in Supplemental Text.}
+% \tbc{I \textit{think} this $\eta$ is referring to escape compared to specific immunity, as this is the notation you introduce in ``Models of immune escape against heterogeneous backgrounds'', but I'm actually not sure this is the case. You might be just using $b$ here and $b$ in the latent model? Can you please clarify? If this $b$ In general the main text needs to be significantly adjusted to not rely on people understanding notation that's now buried in Supplemental Text.}
+% MF: I updated this to be more consistent. I use $\beta$ throughout and define $b$ as an immune background and reference the supplementary text for the motivation of this form.
 
-The idea here being that large differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses.
-%TODO: However knowledge of the underlying mechanism can inform the evolution of relative fitness
+This suggests small differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses through changes in the underlying immune backgrounds.
 
 We investigate whether relative fitnesses vary predictably in the short-term regardless of mechanism, so that short-term forecasts are unaffected by mechanistic differences in the assumed transmission process.
 
 To address this, we apply the two-variant model developed in previous sections for two different mechanisms (immune escape and increased transmissibility).
 We fix the relative fitness of the novel variant at a prediction time $t_{0}$ using equation \ref{eq:critical_immunity} and assess the change in the relative fitness in the short-term.
 We find that though relative fitness trajectories will share the same decreasing shape, they may decline at different rates depending on the mechanism (Fig.~\ref{fig:short_term_divergence}).
-
 This can lead to large changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
 
 \subsection*{Correlations insufficient for mechanism identification}
