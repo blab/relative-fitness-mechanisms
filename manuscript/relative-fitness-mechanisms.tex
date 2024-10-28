@@ -65,6 +65,8 @@
 \newcommand{\varTransmission}{\rho}
 \newcommand{\vac}{\text{vac}}
 
+\renewcommand{\figurename}{Fig.}
+
 % Inline comments
 \usepackage[normalem]{ulem}
 \definecolor{purple}{rgb}{0.459,0.109,0.538}
@@ -213,7 +215,7 @@ where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative
 
 In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Materials and Methods and Supplementary Text).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
-We summarize dynamics of a three-variant mechanistic transmission model in Figure \ref{fig:vis_mechanisms}.
+We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}.
 
 \begin{figure}[h]
     \centering
@@ -268,7 +270,7 @@ For past exposure level greater than $\phi^{*}$, escape variant have a higher re
 This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Figure \ref{fig:transmission_tradeoff}).
 Additionally, this shows that when intrinsic transmissibility increases are limited escape is more likely to be a dominant mechanism for variant turnover.
 
-We visualize this trade-off in Figure \ref{fig:transmission_tradeoff}.
+We visualize this trade-off in Fig.~\ref{fig:transmission_tradeoff}.
 
 \begin{figure}[h]
     \centering
@@ -415,7 +417,7 @@ The representation of relative fitness using discrete immune backgrounds suggest
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 
 We generate sequence counts for 14 countries and 41 variants in this period, estimating the relative fitness of each variant over time in each country, the pseudo-escape rates for each variant, and the pseudo-immunity for each country.
-The results of these models are visualized in Figure \ref{fig:latent_immune} for several selected variants and countries of interest.
+The results of these models are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 
 We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants ($R^2$ = 0.6).
 
@@ -750,7 +752,7 @@ This model can also be extended to an $n$-strain SIR model where each variant st
 
 In this formulation, the variant viruses compete only for susceptible population and those with previous wild-type infection.
 This formulation can be generalized to allow for competition between all variants for any exposure history and will be discussed in the following sections.
-In Figure \ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \varEscape)$, and a transmissibility increase variant T with $\theta_{3} = (\varTransmission, 0)$.
+In Fig.~\ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \varEscape)$, and a transmissibility increase variant T with $\theta_{3} = (\varTransmission, 0)$.
 % \tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
 % I've added a discussion about units when I define relative fitness. I can also do this when we define the exponential growth rate as well
 
@@ -863,8 +865,8 @@ where for simplicity we define $\varEscape_{v, B} = 0$ if $v \in B$.
     \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
     \caption{\textbf{Estimating relative fitness with Gaussian processes.}
     Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
-    This figure uses Gaussian processes to model the 3 variant example shown in Figure \ref{fig:vis_mechanisms}.
-    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Figure \ref{fig:vis_mechanisms}C.
+    This figure uses Gaussian processes to model the 3 variant example shown in Fig.~\ref{fig:vis_mechanisms}.
+    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Fig.~\ref{fig:vis_mechanisms}C.
     B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
     C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
 }
