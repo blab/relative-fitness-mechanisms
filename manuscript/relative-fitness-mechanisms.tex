@@ -1,5 +1,5 @@
 %Preamble
-\documentclass[12pt,oneside,letterpaper]{article}
+\documentclass[11pt,oneside,letterpaper]{article}
 
 % graphicx package, useful for including eps and pdf graphics
 \usepackage{graphicx}
@@ -213,9 +213,10 @@ This relative fitness determines the change in the frequencies of the variants i
 
 where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative to.
 
-In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Materials and Methods and Supplementary Text).
+In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Supplementary Text section S1).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
-We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}.
+We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=1.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
+% TB: As below, I've adjusted text to $\varEscape=0.05$ based on my understanding of "Two-Strain SIR"
 
 \begin{figure}[h]
     \centering
@@ -224,9 +225,10 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
       \textbf{Simulated variant dynamics in a mechanistic model.}
       Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
       Simulations of a three-variant model including a wildtype, one intrinsic transmission variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
-      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $\gamma^{-1} = 3.0$ days.
+      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
       We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 1.5$.
-      We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 1.05$.
+      We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 0.05$.
+      % TB: Looking at "Two-Strain SIR" I believe that $\varEscape$ should range from 0 (no escape) to 1 (hosts recovered to wild-type are just as susceptible as naive hosts). I've adjusted text accordingly.
       (A) Prevalence $I$ by variant.
       (B) Exponential growth rate $r$ by variant.
       (C) Variant frequency $f$.
@@ -247,13 +249,14 @@ This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitness
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
-To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 0$ and $\varEscape_\varE > 0$.
+To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 1$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 1$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 1$ and $\varEscape_\varE > 0$.
 
 Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t)\\
     \lambda_{\varT, \wt} &= (\varTransmission - 1) \beta S(t).
 \end{align*}
+% TB: I'm confused here. I thought that variant transmissibility = wildtype transmissibility when $\varTransmission = 0$. However, in the second equation here it's clear that we get $\lambda_{\varT, \wt}$ when $\varTransmission = 1$. Ah, looking at ``Two-Strain SIR'' I see that it's clearly $\varTransmission \beta$. I've fixed text above and made a note about interpreting these parameter values.}
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
@@ -264,16 +267,19 @@ For past exposure level greater than $\phi^{*}$, escape variant have a higher re
 This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Fig.~\ref{fig:transmission_tradeoff}).
 Additionally, this shows that when intrinsic transmissibility increases are limited escape is more likely to be a dominant mechanism for variant turnover.
 
-We visualize this trade-off in Fig.~\ref{fig:transmission_tradeoff}.
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/transmission_tradeoff.png}
-    \caption{\textbf{Trade-off between immune escape and transmissibility increases.}
-    A. Relative fitness for a transmissibility increasing variant and an immune escaping variant for $\varTransmission=0.3$, $\varEscape=1.2$, $\beta=0.875$.
-    The intersection point shows the point after which the escape variant is has higher fitness.
-    B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
-    C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.}
+    \includegraphics[width=1.0\linewidth]{./figures/transmission_tradeoff.png}
+    \caption{
+      \textbf{Trade-off between immune escape and transmissibility increases.}
+      A. Relative fitness for a transmissibility increasing variant $T$ and an immune escaping variant $E$ for $\varTransmission_T=0.3$, $\varEscape_E=1.2$, $\beta=0.875$.
+      \tbc{Based on ``Two-Strain SIR'' I believe that you have to mean $\varTransmission_T=1.3$ (you need greater than 1 to be above wild-type) and $\varEscape=0.2$ (this needs to be between 0 and 1).}
+      The intersection point shows the point after which the escape variant is has higher fitness.
+      B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
+      C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
+      \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ through the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
+      \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
+    }
     \label{fig:transmission_tradeoff}
 \end{figure}
 
