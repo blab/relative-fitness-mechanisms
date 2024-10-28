@@ -244,9 +244,8 @@ Gaussian processes are probability distributions over functions, where the struc
 These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
 Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
 % TB: The following two sentences are probably too detailed for Main Text. I tried for the above simple lay summary, but please revise. These two sentences may need to now move to Methods / Supplementary Text.
-% Here, relative fitnesses are modeled using an approximate Gaussian process with a Matern 5/2 kernel and shared hyperparameters across variants.
-% For efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes since the HSGP allow us to share basis functions \cite{riutortmayol2022practical}.
-This model is used in Figure \ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Figure \ref{fig:vis_mechanisms}.
+%MF: Moved these two sentences to the supplment.
+This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
@@ -585,8 +584,10 @@ That is, we model the relative fitness for each variant $v$ over time as a multi
 where $K_{\theta}$ is a potentially parameterized kernel function.
 This induces a structure on the covariance of the relative fitness values over time.
 
-For computational efficiency, we implement a Hilbert Space Gaussian process approximation, so that the relative fitnesses can be represented linearly as
 
+For computational efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes.
+This approximation allow us to share basis functions between variants \cite{riutortmayol2022practical}.
+Under this approximation, the relative fitnesses are computed as
 \begin{equation}
     \lambda_{v}(t) \approx \sum_{j=1}^{m} S_{\theta}(\sqrt{\mu_{j}})^{1/2} \cdot \phi_{j}(t) \cdot \beta_{j},
 \end{equation}
@@ -596,6 +597,10 @@ Since the eigenvalues and eigenfunctions are shared across variants, this allows
 \begin{equation*}
     \vec{\lambda}_{t} = \vec{\Phi}_{t} \sqrt{\vec{S}_{\theta}}\vec{\beta}.
 \end{equation*}
+
+
+For the analyses in this paper, we use this approximate Gaussian process with a Mat\'ern 5/2 kernel and shared hyperparameters across variants.
+We use this model to estimate relative fitnesss for the simulated data in Fig.~\ref{fig:vis_mechanisms} which are visualized in Fig.~\ref{fig:gp_example}.
 
 \paragraph{Predicting epidemic growth rate from selective pressure}%
 
