@@ -419,15 +419,21 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
     \label{fig:selective_pressure_prediction}
 \end{figure}
 
-\subsection*{Latent factor models of relative fitness}
+\subsection*{Latent factor model of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
-To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
+To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness (see Materials and Methods).
+\tbc{Say more about what this model is and how it works intuitively (correlations in relative fitness between variants and countries). Keep equations / details in Methods and Supplemental Text.}
 
-We generate sequence counts for 14 countries and 41 variants in this period, estimating the relative fitness of each variant over time in each country, the pseudo-escape rates for each variant, and the pseudo-immunity for each country.
+We generate sequence counts for 14 countries and 41 variants in this period.
+\tbc{Which period? Again, what are the variants? Why these 14 countries?}
+From these sequence counts, we estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country.
 The results of these models are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 
 We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants ($R^2$ = 0.6).
+\tbc{This needs to be greatly expanded. Simply describe the results shown in Figure \ref{fig:latent_immune} and describe how you derive ``titer differences''. There's a whole lot going on here. Note things like the striped pattern in panel F where more closely related Pango lineages are assigned similar pseudo immune escape values without this being input into the model.}
+\tbc{Make a comment of the size of immune space. Why five dimensions? If you haven't formally tested different dimensions you need to.}
+\tbc{(More reviewer questions:) How does model fit of the latent factor model compare to the Gaussian process model from earlier in the text? Or is this applied after the Gaussian process estimates of relative fitness?}
 
 \begin{figure}[h]
     \centering
@@ -436,10 +442,15 @@ We find that the distances in the pseudo-immunity embedding space are correlated
       \textbf{Latent factor models of immunity describe variant structure.}
       We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
       A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
+      \tbc{Y axis in panel A should be 0\%, 20\%, etc...}
       B. Estimated relative fitness for selected variants and countries.
+      \tbc{Relative fitness to what? Note in the y axis label.}
       C. Estimated pseudo-immunity over time for multiple countries.
+      \tbc{I read this as `principle component 1', etc... but I think these are directly immune pools. I suggest legend title of `Psuedo immune pools' over `Pool 1', `Pool 2', etc... swatches. Make this 1 to 5 and not current 0 to 4.}
+      \tbc{Order immune pools in a logical fashion in panels C and F and state what this ordering is based on.}
       D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
       F. Estimated pseudo-escape rates for each variant.
+      \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
       H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
     \label{fig:latent_immune}
