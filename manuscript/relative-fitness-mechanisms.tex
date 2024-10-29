@@ -389,12 +389,17 @@ We can then use this to reconstruct the relative incidence as:
          &= \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
 \end{align*}
 
-\subsection*{Predicting epidemic growth rates using selective pressure}%
+\tbc{With Main Text you want to describe `results', but not go into too much detail on how they were arrived at. In the most typical case you present a Figure in Main Text and describe a bit about how it was derived, but with most details in Methods. I'd suggest thinking of the math here in a similar fashion. You have the Equation 3 result (and the two equations following) as big picture understanding of selective pressure. Good to include this in Main Text. But much of the preceeding derivation of Equation 3 can probably be moved to Methods or Supplemental Text.}
 
-Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we developed a predictive model of the epidemic growth rate using estimates of selective pressure.
+\subsection*{Predicting epidemic growth rates using selective pressure}
+
+Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
 Using selective pressure computed using the approximate Gaussian process model, we predict the epidemic growth rate using the selective pressure for the previous 30 days.
-We fit a gradient boosted regressor to data from 50 states in the United States between March 2021 and March 2022, reserving data between March 2022 and September 2022 for testing.
-Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022.
+We fit a gradient boosted regressor to data from 50 states in the United States between March 2021 and March 2022, reserving data between March 2022 and September 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} A--F, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
+\tbc{More text about what's going on. You looked at case counts? What are the variants here? Are they Pango lineages, Nextstrain clades? or something else? Some of this can be clarified visually in my proposal of panel directly plotting variant frequencies.}
+\tbc{Statement on predictive performance here.}
+Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 (Fig.~\ref{fig:selective_pressure_prediction} G--I).
+\tbc{More text on what's going on with ONS. Not everyone will be familiar. Also cite them.}
 
 %TODO: Estimate correlation between the predictions and the values.
 
@@ -408,6 +413,8 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
       G. Estimated selective pressure in England.
       H. Prevalence estimates for England.
       I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
+      \tbc{This is currently a little too much magic / too divorced from intuition. I'd suggest a top set of panels that show a single state (whichever you'd like). With one panel showing variant frequencies in this state. Another panel showing case counts in this state. And a third panel showing selective pressure in this state. This then gives a bridge to the more derived information in the current figure.}
+      \tbc{Be consistent with the semantics of your colors. Currently gray means both regressor model on selected pressure and ONS prevalence.}
     }
     \label{fig:selective_pressure_prediction}
 \end{figure}
@@ -891,11 +898,12 @@ where for simplicity we define $\varEscape_{v, B} = 0$ if $v \in B$.
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/empirical_growth_rate_predictions_all.png}
     \caption{
       \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
+      \tbc{Include another supplemental figure showing variant frequencies and selective pressures across all locations. It's important to `show the data' as much as possible.}
     }
-    \label{fig:empirical-growth-rate-predictions-all}
+    \label{fig:empirical_growth_rate_predictions_all}
 \end{figure}
 
 \end{document}
