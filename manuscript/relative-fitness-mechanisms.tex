@@ -215,7 +215,7 @@ where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative
 
 In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Supplementary Text section S1).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
-We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=1.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
+We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=0.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
 % TB: As below, I've adjusted text to $\varEscape=0.05$ based on my understanding of "Two-Strain SIR"
 
 \begin{figure}[h]
@@ -226,7 +226,7 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
       Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
       Simulations of a three-variant model including a wildtype, one intrinsic transmission variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
       We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
-      We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 1.5$.
+      We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 0.5$.
       We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 0.05$.
       % TB: Looking at "Two-Strain SIR" I believe that $\varEscape$ should range from 0 (no escape) to 1 (hosts recovered to wild-type are just as susceptible as naive hosts). I've adjusted text accordingly.
       (A) Prevalence $I$ by variant.
@@ -249,18 +249,18 @@ This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitness
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
-To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 1$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 1$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 1$ and $\varEscape_\varE > 0$.
+To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 1$ and $\varEscape_\varE > 0$.
 
 Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t)\\
-    \lambda_{\varT, \wt} &= (\varTransmission - 1) \beta S(t).
+    \lambda_{\varT, \wt} &= \varTransmission \beta S(t).
 \end{align*}
 % TB: I'm confused here. I thought that variant transmissibility = wildtype transmissibility when $\varTransmission = 0$. However, in the second equation here it's clear that we get $\lambda_{\varT, \wt}$ when $\varTransmission = 1$. Ah, looking at ``Two-Strain SIR'' I see that it's clearly $\varTransmission \beta$. I've fixed text above and made a note about interpreting these parameter values.}
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
-    \phi^{*} = \frac{\varTransmission - 1}{\varEscape + \varTransmission - 1}.
+    \phi^{*} = \frac{\varTransmission}{\varEscape + \varTransmission}.
 \end{equation}
 
 For past exposure level greater than $\phi^{*}$, escape variant have a higher relative fitness.
@@ -272,12 +272,12 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
     \includegraphics[width=1.0\linewidth]{./figures/transmission_tradeoff.png}
     \caption{
       \textbf{Trade-off between immune escape and transmissibility increases.}
-      A. Relative fitness for a transmissibility increasing variant $T$ and an immune escaping variant $E$ for $\varTransmission_T=0.3$, $\varEscape_E=1.2$, $\beta=0.875$.
-      \tbc{Based on ``Two-Strain SIR'' I believe that you have to mean $\varTransmission_T=1.3$ (you need greater than 1 to be above wild-type) and $\varEscape=0.2$ (this needs to be between 0 and 1).}
+      A. Relative fitness for a transmissibility increasing variant $T$ and an immune escaping variant $E$ for $\varTransmission_T=0.2$, $\varEscape_E=0.3$, $\beta=0.875$.
       The intersection point shows the point after which the escape variant is has higher fitness.
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
-      \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
+      % \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
+      %MF: I've moved \rho -> 1 + \rho throughout. 
       \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
     }
     \label{fig:transmission_tradeoff}
@@ -745,37 +745,36 @@ In fact, applying these ideas to compartmental models enables to see how mechani
 
 \paragraph{Two-strain SIR}%
 
-For simplicity, we will begin by analyzing a two-strain SIR model in which the a variant virus $v$ can differ from wildtype virus wt by increased intrinsic transmissibility (via $\varEscape_{T}$) and immune escape against wild-type immunity (via $\varEscape_{E}$).
+For simplicity, we will begin by analyzing a two-strain SIR model in which a variant virus $v$ can differ from wildtype virus wt by increased intrinsic transmissibility (via $\varEscape_{T}$) and immune escape against wild-type immunity (via $\varEscape_{E}$).
 This system of 5 ordinary differential equations follows
 
-%TODO: Add 3.x
 \begin{align*}
     \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \varTransmission S I_{v}\\
     \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
-    \frac{d I_{v}}{dt} &= \beta \varTransmission S I_{v} + \beta \varTransmission \varEscape \phi_{\wt} I_{v} - \gamma I_{v}\\
-    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \varTransmission \varEscape \phi_{\wt} I_{v}\\
+    \frac{d I_{v}}{dt} &= \beta (1+\varTransmission) S I_{v} + \beta (1+\varTransmission) \varEscape \phi_{\wt} I_{v} - \gamma I_{v}\\
+    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta (1+\varTransmission) \varEscape \phi_{\wt} I_{v}\\
     \frac{d \phi_{v}}{dt} &= \gamma I_{v}.
 \end{align*}
 where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes immunity derived from wild-type infection.
 In this model, the variant virus can infect both susceptible individuals $S$ and individuals with immunity to wild-type virus $\phi_{\wt}$.
 Increased intrinsic transmissibility increases the baseline transmission rate from $\beta$ in wild-type to $\beta \varTransmission$ in the variant virus and immune escape increases the transmission rate against those with wildtype immunity, so that the at-risk population is $\varEscape \phi_{\wt}$.
 
-Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \varTransmission \beta  S + \beta \varTransmission \varEscape \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
+Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \varTransmission \beta  S + \beta (1+\varTransmission) \varEscape \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
 \begin{equation} \label{eq:two_strain_relative_fitness}
-\lambda_{v,\wt}(t) = (\varTransmission - 1)\beta S(t) + \varTransmission \varEscape \beta \phi_{\wt}(t).
+\lambda_{v,\wt}(t) = \varTransmission\beta S(t) + (1+\varTransmission) \varEscape \beta \phi_{\wt}(t).
 \end{equation}
 
-From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\varTransmission > 1$) or immune escape ($\varEscape > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
+From this representation of relative fitness, we can see that given fixed increases to overall transmission ($\varTransmission > 0$) or immune escape ($\varEscape > 0$), the observed fitness boost at the level of variant relative fitness still depends on the proportion of the population at risk for infection.
 
 \paragraph{$n$-strain SIR}%
 
 This model can also be extended to an $n$-strain SIR model where each variant strain $v_i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\varTransmission^{(i)}, \varEscape ^{(i)})$  relative to the wildtype ($\theta_{\text{wt}} = \theta_{1} = (0, 0)$).
 
 \begin{align*}
-    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \varTransmission S I_{v_{i}}\\
+    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta (1+\varTransmission) S I_{v_{i}}\\
     \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
-    \frac{d I_{v_{i}}}{dt} &= \beta \varTransmission_i S I_{v_{i}} + \beta \varTransmission_i \varEscape_i \phi_{\wt} I_{v_{i}} - \gamma I_{v_{i}}\\
-    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta \varTransmission_i \varEscape_i \phi_{\wt} I_{v_{i}}\\
+    \frac{d I_{v_{i}}}{dt} &= \beta (1+\varTransmission_i) S I_{v_{i}} + \beta (1+\varTransmission_i) \varEscape_i \phi_{\wt} I_{v_{i}} - \gamma I_{v_{i}}\\
+    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta (1+\varTransmission_i) \varEscape_i \phi_{\wt} I_{v_{i}}\\
     \frac{d \phi_{v_{i}}}{dt} &= \gamma I_{v_{i}}, \quad i \in \{2, \ldots, n\}.
 \end{align*}
 
