@@ -241,11 +241,21 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
 
 % \subsection*{Estimating relative fitness using Gaussian Processes}
 
-We develop a method for using Gaussian processes to model variant relative fitness.
+Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplemental Appendix \ref{ssec:frequency_dynamics}).
+This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
+However, even in the absence of external data that can inform relative fitness, there is still hope.
+
+We develop a method for using approximate Gaussian processes to model variant relative fitness.
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
 These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
 Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
+
+Traditional Gaussian process, while flexible, face challenges for large time-series and large data set.
+Our approach overcomes this using a Hilbert Space Gaussian Process (HGSP) approximation, making the framework scalable for many variants and long time periods \cite{riutortmayol2022practical}.
+This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying mechanism.
 This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
+
+Later, we apply this model to data from 50 US states and England from 2021 to 2022 to estimate relative fitness for variants circulating in that period.
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
@@ -278,7 +288,7 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
       % \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
       %MF: I've moved \rho -> 1 + \rho throughout. 
-      \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
+      % \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
     }
     \label{fig:transmission_tradeoff}
 \end{figure}
@@ -320,7 +330,7 @@ This can lead to large changes in the predicted incidence depending on the assum
 
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
 Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
-\tbc{This reads like a note to yourself. You need to signficantly expand this and reference evidence in the form of figures or Supplemental Text.}
+\tbc{This reads like a note to yourself. You need to significantly expand this and reference evidence in the form of figures or Supplemental Text.}
 
 We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape (Fig.~\ref{fig:mechanism_identification}).
 This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
@@ -376,6 +386,7 @@ In addition to estimating the relative fitness, metrics derived from these model
 Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
 This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
 This metric can be computed using any method that estimates variant frequency and relative fitnesses and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
+This approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
 
 The full derivation of this metric and its contribution to the overall growth rate can be found in Supplemental Appendix \ref{ssec:deriving_selective_pressure}.
 
@@ -387,30 +398,36 @@ The full derivation of this metric and its contribution to the overall growth ra
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
 By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
 
-Using case and sequence data from 50 US states between March 2021 and September 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades. 
-We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 30 day, reserving data between March 2022 and September 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} A--F, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
+Using case and sequence data from 50 US states between May 2021 and November 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades (Figs.~\ref{fig:selective_pressure_midwest}--\ref{fig:selective_pressure_west}). 
+We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 
-%TODO: Update figure panels for Selective pressure figure
-% \tbc{More text about what's going on. You looked at case counts? What are the variants here? Are they Pango lineages, Nextstrain clades? or something else? Some of this can be clarified visually in my proposal of panel directly plotting variant frequencies.}
-\tbc{Statement on predictive performance here.}
-Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 (Fig.~\ref{fig:selective_pressure_prediction} G--I), achieving a Spearman correlation of $R^2 =$.
+% \tbc{Statement on predictive performance here.}
+We validate this method by testing this model to estimate epidemic growth rates in Englad as derived ONS data between February 2022 and November 2022.
+Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a Spearman correlation of $R^2 = 0.254$ and mean absolute error of 0.02.
+Performance is significantly better for the first two subsequent waves, falling off in accuracy starting August 2022.
+
+Though these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
 
 %TODO: Describe ONS data and find relevant citations.
 \tbc{More text on what's going on with ONS. Not everyone will be familiar. Also cite them.}
+% MF: What is the relevant citation here? You directed me to this data, so I'd appreciate a bit of help here.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./figures/selective_pressure_prediction.png}
     \caption{
       \textbf{Predicting epidemic growth rate using estimated selective pressure.}
-      A-F. Predictions for empirical growth rate from selective pressure for selected US states.
+      A. Variant frequency estimated using the Gaussian process relative fitness model between June 2021 and November 2022.
+      B. Case counts from Washington state.
+      C. Selective pressure computed using estimated variant frequencies and relative fitness from Washington state.
+      D-I. Predictions for empirical growth rate from selective pressure for selected US states.
       The light gray period is the training period and the darker gray is the testing period.
       G. Estimated selective pressure in England.
       H. Prevalence estimates for England.
-      I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
-      \tbc{This is currently a little too much magic / too divorced from intuition. I'd suggest a top set of panels that show a single state (whichever you'd like). With one panel showing variant frequencies in this state. Another panel showing case counts in this state. And a third panel showing selective pressure in this state. This then gives a bridge to the more derived information in the current figure.}
-      \tbc{Be consistent with the semantics of your colors. Currently gray means both regressor model on selected pressure and ONS prevalence.}
-      %MF: Grey here is ONS Prevalence + the epidemic growth rate from data. The regressor is green. Will make sure I'm consistent going forward with edits.
+      I. Empirical growth rates (gray) computed from prevalence estimates in H. and predictions from our model (green).
+      % \tbc{This is currently a little too much magic / too divorced from intuition. I'd suggest a top set of panels that show a single state (whichever you'd like). With one panel showing variant frequencies in this state. Another panel showing case counts in this state. And a third panel showing selective pressure in this state. This then gives a bridge to the more derived information in the current figure.}
+      % \tbc{Be consistent with the semantics of your colors. Currently gray means both regressor model on selected pressure and ONS prevalence.}
+      %MF: Black here is ONS Prevalence / cases, Gray is the epidemic growth rate from data. The regressor is green.
     }
     \label{fig:selective_pressure_prediction}
 \end{figure}
@@ -425,29 +442,33 @@ This enables us to estimate a pseudo-escape rates for variants (Fig.~\ref{fig:la
 % \tbc{Say more about what this model is and how it works intuitively (correlations in relative fitness between variants and countries). Keep equations / details in Methods and Supplemental Text.}
 
 We generate Pango lineage-level sequence counts for 14 countries and 41 variants between March 2023 and March 2024.
-These 14 countries were chosen based on availability of sequences and the 41 variants were chosen, so that each variant met a threshold for number of sequences available.
-% \tbc{Which period? Again, what are the variants? Why these 14 countries?}
+These 14 countries were chosen based on availability of sequences.
 
+Small lineages which do not meet a count threshold are collapsed into their parent lineages.
+This leaves us with a total of 41 variants, so that each variant met a threshold for number of sequences available.
 
-From these sequence counts, we use apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $K=5$ pseudo-immune groups.
+Using these sequence counts, we apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $D=10$ pseudo-immune groups.
+Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the "elbow" method.
 % \tbc{Make a comment of the size of immune space. Why five dimensions? If you haven't formally tested different dimensions you need to.}
 %MF: Plan to add a replicate figueres with different K and then elbow plot showing the loss at different $K$.
-The results of these models are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
+The results of this model are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 
-\tbc{This needs to be greatly expanded. Simply describe the results shown in Figure \ref{fig:latent_immune} and describe how you derive ``titer differences''. There's a whole lot going on here. Note things like the striped pattern in panel F where more closely related Pango lineages are assigned similar pseudo immune escape values without this being input into the model.}
+% \tbc{This needs to be greatly expanded. Simply describe the results shown in Figure \ref{fig:latent_immune} and describe how you derive ``titer differences''. There's a whole lot going on here. Note things like the striped pattern in panel F where more closely related Pango lineages are assigned similar pseudo immune escape values without this being input into the model.}
 
 Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
-Further, our model shows that these groups of lineages tend to target particular immune groups such as Clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 2.
+Further, our model shows that these groups of lineages tend to target particular immune groups such as Clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 3.
 If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
 Using human titer data from Jian et al, we compute titer distances as average log2 differences in titer values between pairs of variants. \cite{Jian2023} 
-We, then, compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.6).
+We, then, compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.67).
+
+ This approach can be applied to other rapidly evolving pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
+ In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
 
 By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
+This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant fitness.
 
 % \tbc{(More reviewer questions:) How does model fit of the latent factor model compare to the Gaussian process model from earlier in the text? Or is this applied after the Gaussian process estimates of relative fitness?}
 %MF: This is a bit more difficult since this is a hierarchical model where the GP model is not.
-
-
 
 \begin{figure}[h]
     \centering
@@ -456,66 +477,44 @@ By approximating antigenic differences using sequence data alone, this method of
       \textbf{Latent factor models of immunity describe variant structure.}
       We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
       A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
-      \tbc{Y axis in panel A should be 0\%, 20\%, etc...}
+      % \tbc{Y axis in panel A should be 0\%, 20\%, etc...}
       B. Estimated relative fitness for selected variants and countries.
-      \tbc{Relative fitness to what? Note in the y axis label.}
+      % \tbc{Relative fitness to what? Note in the y axis label.} %MF: This is relative to other. Will add note to methods.
       C. Estimated pseudo-immunity over time for multiple countries.
-      \tbc{I read this as `principle component 1', etc... but I think these are directly immune pools. I suggest legend title of `Psuedo immune pools' over `Pool 1', `Pool 2', etc... swatches. Make this 1 to 5 and not current 0 to 4.}
-      \tbc{Order immune pools in a logical fashion in panels C and F and state what this ordering is based on.}
+      % \tbc{I read this as `principle component 1', etc... but I think these are directly immune pools. I suggest legend title of `Psuedo immune pools' over `Pool 1', `Pool 2', etc... swatches. Make this 1 to 5 and not current 0 to 4.}
+      % \tbc{Order immune pools in a logical fashion in panels C and F and state what this ordering is based on.}
       %MF: They are already ordered and this is mentioned in the methods.
       D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
       F. Estimated pseudo-escape rates for each variant.
       % \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
-      %MF: For identifiablity these are difference relative to the pivot variant, so it's fine for them to be negative
+      %MF: For identifiablity, these are difference relative to the pivot variant in terms of both transmission times escape potential, so it's fine and expected for them to be negative for some variants.
       H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
     \label{fig:latent_immune}
 \end{figure}
 
-%%% Discussion
+% \subsection*{Overview of methods}
+%
+% \tbc{This whole ``Overview of methods'' section feels largely out of place in current Main Text setup. Main Text is effectively Results and Discussion. Things like the note on the latent factor model ``This is offers a tool for a deeper understanding of immune dynamics'' should immediately follow its presentation in the text. Same thing for ``Selective Pressure'' paragraph below. Please fold this text where it's not a restatement of what's already been said directly into the sections above. There should remain roughly a paragraph that becomes the start of the ``Conclusions'' section that's effectively the first two sentences here of ``Our study demonstrates...''.}
+%
+\subsection*{Conclusions, limitations, and future work}
 
-\subsection*{Overview of methods}
-
-\tbc{This whole ``Overview of methods'' section feels largely out of place in current Main Text setup. Main Text is effectively Results and Discussion. Things like the note on the latent factor model ``This is offers a tool for a deeper understanding of immune dynamics'' should immediately follow its presentation in the text. Same thing for ``Selective Pressure'' paragraph below. Please fold this text where it's not a restatement of what's already been said directly into the sections above. There should remain roughly a paragraph that becomes the start of the ``Conclusions'' section that's effectively the first two sentences here of ``Our study demonstrates...''.}
-
-% Mechanistic models
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
-This enables a more detailed picture of variant sucess in environments with heterogenous population immunity.
+This enables a more detailed picture of variant success in environments with heterogenous population immunity.
 
 One key insight from this was the trade-off between intrinsic transmissibility increase and immune escape.
 We showed that this trade-off is shifted by changes in population immunity, so that immune escape dominates as exposure increases.
 Though there are limits to our ability to attribute dynamics to particular mechanisms from frequency data alone, the structure of these models suggests that we may improve forecasting by incorporating information about empirically supported mechanisms such as immune escape via antigenic evolution.
 
-% Models we developed
-Our work shows that even in the absence of data that can inform relative fitness, there is still hope.
-We introduce a novel approach to estimate viral fitness over time using a scalable approximate Gaussian process model.
-Traditional Gaussian process, while flexible, face challenges for large time-series and large data set.
-Our approach overcomes this using a Hilbert Space Gaussian Process (HGSP) approximation, making the framework scalable for many variants and long time periods.
-This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying mechanism.
-
-% Selective pressure
-Furthermore, this approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
-
-This provides a simple measure of epidemic growth in the absence of high quality case counts though it can be biased by non-evolutionary effects on the epidemic growth.
-%Note: This should be the aim for next project, learning these non-genetic contributions using other data.
-
-Additionally, we introduce a latent factor model which decomposes variant fitness into pseudo-escape rates and pseudo-immunity proportions.
-The latent factor model, applied to SARS-CoV-2 data across several countries, successfully captures these immune escape dynamics and their impact on variant fitness.
- By using only genetic sequence data, we approximate the immunological distances between variants, providing insights similar to those gained from antigenic cartography but without the need for serological data.
- Further, we can estimate the proportion of these latent immune pools in the population and how they vary geographically and over time.
- This approach can be applied to other rapidly evolving pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
-
-\subsection*{Conclusions, limitations, and future work}
-
 Despite these advances, there are limitations to our approach.
 Long-term forecasts remain difficult, particularly as new variants with unknown fitness profiles emerge.
-This framework suggests that considering both the escape against individual immune backgrounds as well as the diversity in human immune escape is most useful for improving forecasts of relative fitness.
+This framework suggests that considering both the escape against individual immune backgrounds and the diversity in human immune escape is most useful for improving forecasts of relative fitness.
 Additionally, our models, while powerful in estimating short-term variant dynamics, rely on assumptions about transmission mechanisms that may not always hold across different pathogens or contexts.
 In fact, as we've shown, it's entirely possible for shifts in population immunity to change the dominant transmission mechanism.
 
 Furthermore, the models considered here are deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
 In reality, there are biological constraints on the types of variants that are produced in nature and even if there is a "true" fitness boost, the chance for stochastic extinction of beneficial variants remains.
-This presents trouble for long-term forecasting as it will require a model of emergence, tying the potential for a variant to emerge with its potential to transmit in the current environment.
+These constraints present trouble for long-term forecasting as it will require a model of mutation or emergence, tying the potential for a variant to emerge with its potential to transmit in the current environment.
 Future work should focus on improving the integration of real-time genomic data with serological and epidemiological data, providing a more comprehensive understanding of variant dynamics over time.
 
 % These ideas are already represented in existing literature through the form of long-term forecast models which incorporate phylogenetic and molecular data which is thought to be indicative of selection and immune escape. \cite{Huddleston2020, luksza2014predictive}
@@ -588,7 +587,7 @@ Supplementary Information for \\
 \paragraph{Generating sequence counts}
 
 We prepared sequence count data sets using the Nextstrain-curated SARS-CoV-2 sequence metadata \cite{Hadfield2018} which is created using the GISAID EpiCoV database \cite{khare2021gisaid}.
-These sequences were tallied according to either their annotated Nextstrain clade or Pango lineage depending on the data set to produce sequence count for each variant, for each day over the period of interest, and in each location analysed \cite{aksamentov2021nextclade}.
+These sequences were tallied according to either their annotated Nextstrain clade or Pango lineage depending on the data set to produce sequence count for each variant, for each day over the period of interest, and in each location analyzed \cite{aksamentov2021nextclade}.
 
 
 \paragraph{Likelihood of sequence counts given frequencies}
@@ -630,7 +629,6 @@ Since the eigenvalues and eigenfunctions are shared across variants, this allows
     \vec{\lambda}_{t} = \vec{\Phi}_{t} \sqrt{\vec{S}_{\theta}}\vec{\beta}.
 \end{equation*}
 
-
 For the analyses in this paper, we use this approximate Gaussian process with a Mat\'ern 5/2 kernel and shared hyperparameters across variants.
 We use this model to estimate relative fitnesss for the simulated data in Fig.~\ref{fig:vis_mechanisms} which are visualized in Fig.~\ref{fig:gp_example}.
 
@@ -639,24 +637,18 @@ We use this model to estimate relative fitnesss for the simulated data in Fig.~\
 The derivation of the selective pressure metric shows that the selective pressure can be a useful tool in predicting the epidemic growth rate.
 To develop a predictive model of epidemic growth rate using selective pressure, we begin by generating estimates of selective pressure and epidemic growth rate from a period with high sequencing and case surveillance.
 
-We take sequence count and case count data from all states in the United States between March 2021 and March 2022.
+We take sequence count and case count data from all states in the United States between July 2021 and November 2022.
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 
 From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t})$.
 
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
-We use a gradient boosting regressor model fit using a mean absolute error loss function.
-% Our model uses a loss function which weights the mean absolute error and a smoothness loss on predicted trajectories.
-% \begin{equation*}
-%     \text{loss} = \text{MAE}(\hat{y}, y) + \alpha \text{Smoothness}(\hat{y}),
-% \end{equation*}
-% where $\alpha = 1\times 10^{-6}$ and $\text{Smoothness}(y) = \frac{1}{T}\sum_{t=1}^{T} (y_{t+1} - 2 y_{t} + y_{t+1})^{2}$.
-% We fit this model using an AdamW optimizer with learning rate LEARNING RATE for NUM EPOCHS epochs.
+
+We use a gradient boosting regressor model with 50 estimators and max tree depth of 5 which is fit using a mean absolute error loss function.
+This model was selected as it achieved the minimal error via time series cross-validation averaged across 10 splits among candidate models.
+The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
 
 We validate our model by comparing our predicted epidemic growth rates to estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 as well as to held-out testing data for US states.
-% As a baseline, we compare the results of this model to linear regression, lasso, ridge regression, and random forests.
-
-% Mention model specification, cross-validation, and ...
 
 \paragraph{Latent immune factor model}%
 
@@ -676,7 +668,12 @@ Additionally, in order to ensure identifiability of the parameter estimates, we 
 For the same reason, we fix the order of components, so that the components are numbered in decreasing order by their share in the first geography.
 
 We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024 for 14 countries.
+To access the necessary number of immune dimensions, we vary the number of immune dimensions between $D=2$ to $D=12$.
+Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the "elbow" method (Fig.~\ref{fig:latent_factor_dimension}).
+
 We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
+Using human titer data, we compute titer distances as the average log2 differences in titer values between pairs of variants for individuals.
+Additionally, we subset this by exposure history and repeat this analysis to find which exposure groups best explain distances in pseudo-escape space (Fig.~\ref{fig:titer_distance_correlations_by_group}).
 
 \subsection*{Data and code accessibility}
 
@@ -688,7 +685,7 @@ Source code used to generate figures, model implementations, and sequence count 
 
 \tbc{It would be good if each of these sections S1, S2 and S3 were explicitly referenced in the Main Text or Materials and Methods. Ideally a reader is working through the Main Text / Methods and knows when it's most appropriate to read section S1, etc...}
 
-\subsection{Exponentially growing populations to frequency dynamics}%
+\subsection{Exponentially growing populations to frequency dynamics}\ref{ssec:frequency_dynamics}
 
 We consider a viral population consisting of $V$ exponentially-growing variant viruses each with prevalence $I_{v}$.
 Defining the time-varying growth rate for the prevalence of variant $v$ as $r_{v}(t)$, we can represent the prevalence using the following ordinary differential equation:
@@ -820,7 +817,7 @@ However, the extent to which modeling this complexity affects estimates of relat
 
 Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in Supplemental Appendix \ref{ssec:full_immune_history}.
 
-\subsection{Revisiting existing models for frequency growth}
+\subsection{Revisiting existing models for frequency growth}\label{ssec:existing_frequency_models}
 
 Using the theory developed for exponentially-growing variant populations, we now re-visit existing methods for modeling viral frequency dynamics.
 
@@ -860,9 +857,6 @@ This formulation fits neatly into the framework we've developed as the cumulativ
 Therefore, these models can be thought as regression-based predictors of relative fitness where frequency and external covariates contribute to estimated relative fitness.
 
 \subsection{Relative fitness for full immune history models}\label{ssec:full_immune_history}
-
-%TODO: Define powers sets + macro to simplify?
-% $\mathcal{P}(M \setminus \{i\})$
 
 We show that the simple background model is consistent with an expanded immune history model.
 Beginning with the model from Lazebnik and Bunimovich-Mendrazitsky 2022 \cite{Lazebnik2022}, we consider the differential equation for the individuals with strain infection history $J$ and current infecting strain $i$ $R_{J}I_{i}$
@@ -965,14 +959,83 @@ We can then use this to reconstruct the relative incidence as:
     \label{fig:short_term_divergence}
 \end{figure}
 
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_Midwest.png}
+    \caption{
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Midwestern US states.}
+    }
+    \label{fig:selective_pressure_midwest}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_Northeast.png}
+    \caption{
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Northestern US states.}
+    }
+    \label{fig:selective_pressure_northeast}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_South.png}
+    \caption{
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Southern US states.}
+    }
+    \label{fig:selective_pressure_south}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_West.png}
+    \caption{
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Western US states.}
+    }
+    \label{fig:selective_pressure_west}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/growth-rate-prediction-model-comparison.png}
+    \caption{
+      \textbf{Cross-validation error by model}
+      We compare the errors between models fit on 10 time series cross-validation splits.
+    }
+    \label{fig:growth_rate_predictions_model_comparison}
+\end{figure}
+
 \begin{figure}[t!]
     \centering
     \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/empirical_growth_rate_predictions_all.png}
     \caption{
       \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
-      \tbc{Include another supplemental figure showing variant frequencies and selective pressures across all locations. It's important to `show the data' as much as possible.}
+      % \tbc{Include another supplemental figure showing variant frequencies and selective pressures across all locations. It's important to `show the data' as much as possible.}
     }
     \label{fig:empirical_growth_rate_predictions_all}
 \end{figure}
+
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/loss_by_latent_dimension.png}
+    \caption{
+      \textbf{Maximum a posteriori loss for latent factor model by number of latent immune dimensions.}
+    }
+    \label{fig:latent_factor_dimension}
+\end{figure}
+
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/titer_pseudo_escape_distance_by_group.png}
+    \caption{
+        \textbf{Comparing pseudo-escape distance and titer distance between exposure groups.}
+    }
+    \label{fig:titer_distance_correlations_by_group}
+\end{figure}
+
+
 
 \end{document}
