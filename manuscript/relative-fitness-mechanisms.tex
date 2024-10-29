@@ -345,63 +345,58 @@ This appears to hold up until both variants' initial effective reproduction numb
 
 \subsection*{Quantifying selective pressure}
 
-Though it is useful to quantify the individual relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
-This will occur not just on the level of frequencies and frequency growth, but additionally on the level of population-level growth rates.
 
-Beginning again from our assumption of inhomogeneous exponential growth, we can write a differential equation for the total prevalence $I(t)= \sum_{v} I_{v}(t)$ as
-
-\begin{align*}
-    \frac{d I}{d t} &= \sum_{v} \frac{d I_{v}}{d t} =  \sum_{v} r_{v}(t) I_{v}(t)\\
-                    &= \left( \sum_{v} r_{v}(t) f_{v}(t) \right) I(t),
-\end{align*}
-
-where we've used that $I_{v}(t) = f_{v}(t) I(t)$.
-This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
-Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_0(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_0(t)$.
-We can now look at the rate of change in the average growth rate by taking its derivative.
-
-\begin{align*}
-    \frac{d \overline{r}}{d t} &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
-                               &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v} + \lambda_{v} f_{v} (\lambda_{v} - \overline{\lambda})  \right]\\
-                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v} (\lambda_{v} - \overline{\lambda}) f_{v}\\
-                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v}^{2} f_{v} - \overline{\lambda}\sum_{v} \lambda_{v} f_{v}\\
-                               &= \frac{d r_{0}}{d t} + \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
-\end{align*}
-
-Here, we've written the last line in terms of expectations relative to sampling according to the frequency distribution.
-This shows us that the change in the average growth rate of the epidemic can be written in terms of the growth rate of the pivot category, the mean rate of change in the relative fitness, and the variance of the relative fitnesses.
-We will call terms which can be computed in terms of quantities derived from frequencies alone the selective pressure and denote it as
+Though it is useful to quantify the relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
+With this in mind, we can derive a metric of overall selective pressure $\psi(t)$ which describes the distribution of relative fitness in the population.
 
 \begin{equation}
 \psi(t) =  \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
 \end{equation}
 
-We can use this idea to directly write the prevalence in terms of the selective pressure and the base growth rate.
-First, we define a cumulative selective pressure as
-\begin{align*}
-\Psi(t) = \int_{0}^{t} \psi(s) ds.
-\end{align*}
+This selective pressure metric serves as an indicator for high fitness variants arising in the population as change.
+High fitness variants rising from initial low frequency leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
 
-We can then use this to reconstruct the relative incidence as:
+The selective pressure metric enables us to decompose changes in the average growth rate in the population to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$:
 
-\begin{align*}
-    \frac{I(t)}{I(0)} &= \exp\left(\int_{0}^{t} \overline{r}(s) ds\right)\\
-         &= \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
-\end{align*}
+\begin{equation}
+    \frac{d\bar{r}}{dt} = \frac{dr_0}{dt} + \psi(t).
+\end{equation}
 
-\tbc{With Main Text you want to describe `results', but not go into too much detail on how they were arrived at. In the most typical case you present a Figure in Main Text and describe a bit about how it was derived, but with most details in Methods. I'd suggest thinking of the math here in a similar fashion. You have the Equation 3 result (and the two equations following) as big picture understanding of selective pressure. Good to include this in Main Text. But much of the preceeding derivation of Equation 3 can probably be moved to Methods or Supplemental Text.}
+This shows that increased selective pressure through emerging high fitness variants can drive waves of infection.
+Further, this suggests that differences between growth rates based on selective pressure alone and observed rates are attributable to changes in baseline transmission over time.
+
+In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I(0)$ can be written directly using the cumulative selective pressure $\Psi(t) = \int_0^t \psi(s)ds$ as follows:
+
+\begin{align}
+    \bar{r}(t) &= \bar{r}(0) + [r_0(t) - r_0(0)] + \Psi(t)\\
+    \frac{I(t)}{I(0)} &= \exp(\int_0^t [r_0(s) + \Psi(s)]ds).
+\end{align}
+
+In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
+Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
+This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
+This metric can be computed using any method that estimates variant frequency and relative fitnesses and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
+
+The full derivation of this metric and its contribution to the overall growth rate can be found in Supplemental Appendix \ref{ssec:deriving_selective_pressure}.
+
+% \tbc{With Main Text you want to describe `results', but not go into too much detail on how they were arrived at. In the most typical case you present a Figure in Main Text and describe a bit about how it was derived, but with most details in Methods. I'd suggest thinking of the math here in a similar fashion. You have the Equation 3 result (and the two equations following) as big picture understanding of selective pressure. Good to include this in Main Text. But much of the preceeding derivation of Equation 3 can probably be moved to Methods or Supplemental Text.}
+% MF: Tried to address this by moving most to the supplemental text.
 
 \subsection*{Predicting epidemic growth rates using selective pressure}
 
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
-Using selective pressure computed using the approximate Gaussian process model, we predict the epidemic growth rate using the selective pressure for the previous 30 days.
-We fit a gradient boosted regressor to data from 50 states in the United States between March 2021 and March 2022, reserving data between March 2022 and September 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} A--F, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
-\tbc{More text about what's going on. You looked at case counts? What are the variants here? Are they Pango lineages, Nextstrain clades? or something else? Some of this can be clarified visually in my proposal of panel directly plotting variant frequencies.}
-\tbc{Statement on predictive performance here.}
-Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 (Fig.~\ref{fig:selective_pressure_prediction} G--I).
-\tbc{More text on what's going on with ONS. Not everyone will be familiar. Also cite them.}
+By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
 
-%TODO: Estimate correlation between the predictions and the values.
+Using case and sequence data from 50 US states between March 2021 and September 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades. 
+We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 30 day, reserving data between March 2022 and September 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} A--F, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
+
+%TODO: Update figure panels for Selective pressure figure
+% \tbc{More text about what's going on. You looked at case counts? What are the variants here? Are they Pango lineages, Nextstrain clades? or something else? Some of this can be clarified visually in my proposal of panel directly plotting variant frequencies.}
+\tbc{Statement on predictive performance here.}
+Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 (Fig.~\ref{fig:selective_pressure_prediction} G--I), achieving a Spearman correlation of $R^2 =$.
+
+%TODO: Describe ONS data and find relevant citations.
+\tbc{More text on what's going on with ONS. Not everyone will be familiar. Also cite them.}
 
 \begin{figure}[h]
     \centering
@@ -415,6 +410,7 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
       I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
       \tbc{This is currently a little too much magic / too divorced from intuition. I'd suggest a top set of panels that show a single state (whichever you'd like). With one panel showing variant frequencies in this state. Another panel showing case counts in this state. And a third panel showing selective pressure in this state. This then gives a bridge to the more derived information in the current figure.}
       \tbc{Be consistent with the semantics of your colors. Currently gray means both regressor model on selected pressure and ONS prevalence.}
+      %MF: Grey here is ONS Prevalence + the epidemic growth rate from data. The regressor is green. Will make sure I'm consistent going forward with edits.
     }
     \label{fig:selective_pressure_prediction}
 \end{figure}
@@ -478,11 +474,6 @@ Our approach overcomes this using a Hilbert Space Gaussian Process (HGSP) approx
 This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying mechanism.
 
 % Selective pressure
-In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
-We present a ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
-This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
-By integrating fitness estimates and variant frequency dynamics, this metric can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
-This metric has been validated using data from both the United States and the United Kingdom.
 Furthermore, this approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
 
 This provides a simple measure of epidemic growth in the absence of high quality case counts though it can be biased by non-evolutionary effects on the epidemic growth.
@@ -878,6 +869,52 @@ Therefore, our relative fitnesses can be written as
     \lambda_{i, j} = \beta \sum_{B \in P(M)} (\varEscape_{i, B} - \varEscape_{j, B}) R_{B},
 \end{align*}
 where for simplicity we define $\varEscape_{v, B} = 0$ if $v \in B$.
+
+\subsection{Selective pressure and contribution to epidemic growth rates}\label{ssec:deriving_selective_pressure}
+
+In this section, we derive our selective pressure metric $\psi(t)$ and show how it contributes to the overall epidemic growth rate in the population.
+
+Beginning again from our assumption of inhomogeneous exponential growth, we can write a differential equation for the total prevalence $I(t)= \sum_{v} I_{v}(t)$ as follows:
+
+\begin{align*}
+    \frac{d I}{d t} &= \sum_{v} \frac{d I_{v}}{d t} =  \sum_{v} r_{v}(t) I_{v}(t)\\
+                    &= \left( \sum_{v} r_{v}(t) f_{v}(t) \right) I(t),
+\end{align*}
+
+where we've used that $I_{v}(t) = f_{v}(t) I(t)$.
+This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
+Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_0(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_0(t)$.
+We can now look at the rate of change in the average growth rate by taking its derivative.
+
+\begin{align*}
+    \frac{d \overline{r}}{d t} &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
+                               &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v} + \lambda_{v} f_{v} (\lambda_{v} - \overline{\lambda})  \right]\\
+                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v} (\lambda_{v} - \overline{\lambda}) f_{v}\\
+                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v}^{2} f_{v} - \overline{\lambda}\sum_{v} \lambda_{v} f_{v}\\
+                               &= \frac{d r_{0}}{d t} + \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
+\end{align*}
+
+Here, we've written the last line in terms of expectations relative to sampling according to the frequency distribution.
+This shows us that the change in the average growth rate of the epidemic can be written in terms of the growth rate of the pivot category, the mean rate of change in the relative fitness, and the variance of the relative fitnesses.
+We will call terms which can be computed in terms of quantities derived from frequencies alone the selective pressure and denote it as
+
+\begin{equation}
+\psi(t) =  \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
+\end{equation}
+
+We can use this idea to directly write the prevalence in terms of the selective pressure and the base growth rate.
+First, we define a cumulative selective pressure as
+\begin{align*}
+\Psi(t) = \int_{0}^{t} \psi(s) ds.
+\end{align*}
+
+We can then use this to reconstruct the relative incidence as:
+
+\begin{align*}
+    \frac{I(t)}{I(0)} &= \exp\left(\int_{0}^{t} \overline{r}(s) ds\right)\\
+         &= \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
+\end{align*}
+
 
 \section*{Supplementary Figures}
 
