@@ -1,5 +1,5 @@
 %Preamble
-\documentclass[12pt,oneside,letterpaper]{article}
+\documentclass[11pt,oneside,letterpaper]{article}
 
 % graphicx package, useful for including eps and pdf graphics
 \usepackage{graphicx}
@@ -213,9 +213,10 @@ This relative fitness determines the change in the frequencies of the variants i
 
 where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative to.
 
-In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Materials and Methods and Supplementary Text).
+In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Supplementary Text section S1).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
-We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}.
+We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=1.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
+% TB: As below, I've adjusted text to $\varEscape=0.05$ based on my understanding of "Two-Strain SIR"
 
 \begin{figure}[h]
     \centering
@@ -224,9 +225,10 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
       \textbf{Simulated variant dynamics in a mechanistic model.}
       Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
       Simulations of a three-variant model including a wildtype, one intrinsic transmission variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
-      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $\gamma^{-1} = 3.0$ days.
+      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
       We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 1.5$.
-      We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 1.05$.
+      We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 0.05$.
+      % TB: Looking at "Two-Strain SIR" I believe that $\varEscape$ should range from 0 (no escape) to 1 (hosts recovered to wild-type are just as susceptible as naive hosts). I've adjusted text accordingly.
       (A) Prevalence $I$ by variant.
       (B) Exponential growth rate $r$ by variant.
       (C) Variant frequency $f$.
@@ -243,22 +245,18 @@ We develop a method for using Gaussian processes to model variant relative fitne
 Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
 These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
 Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
-% TB: The following two sentences are probably too detailed for Main Text. I tried for the above simple lay summary, but please revise. These two sentences may need to now move to Methods / Supplementary Text.
-%MF: Moved these two sentences to the supplment.
 This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
-To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 0$ and $\varEscape_\varE > 0$.
-% TB: Changed from $\mathrm{tranmiss}$ to $T$. $T$ and $E$ are already used in Figure 1 and using an italics letter as placeholder is more obvious.
-% TB: I was getting quite confused here (and previously in Figure 1) by \eta_T vs \eta_E. I've moved these to two separate Greek letters \varEscape and \varTransmission. I believe this should be clear and it also makes it so you don't have to construct things like \eta_{T}^\mathrm{escape} where it's not clear to the reader whether the subscript or superscript refers to the variant in question vs the parameter in question
+To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 1$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 1$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 1$ and $\varEscape_\varE > 0$.
 
 Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape only variant or transmissibility increased variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t)\\
     \lambda_{\varT, \wt} &= (\varTransmission - 1) \beta S(t).
 \end{align*}
-% TB: Again this was confusing for me in I don't know if the E in \eta_{E} is referring to the variant or the parameter, I've revised to \rho vs \eta
+% TB: I'm confused here. I thought that variant transmissibility = wildtype transmissibility when $\varTransmission = 0$. However, in the second equation here it's clear that we get $\lambda_{\varT, \wt}$ when $\varTransmission = 1$. Ah, looking at ``Two-Strain SIR'' I see that it's clearly $\varTransmission \beta$. I've fixed text above and made a note about interpreting these parameter values.}
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
@@ -269,16 +267,19 @@ For past exposure level greater than $\phi^{*}$, escape variant have a higher re
 This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Fig.~\ref{fig:transmission_tradeoff}).
 Additionally, this shows that when intrinsic transmissibility increases are limited escape is more likely to be a dominant mechanism for variant turnover.
 
-We visualize this trade-off in Fig.~\ref{fig:transmission_tradeoff}.
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/transmission_tradeoff.png}
-    \caption{\textbf{Trade-off between immune escape and transmissibility increases.}
-    A. Relative fitness for a transmissibility increasing variant and an immune escaping variant for $\varTransmission=0.3$, $\varEscape=1.2$, $\beta=0.875$.
-    The intersection point shows the point after which the escape variant is has higher fitness.
-    B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
-    C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.}
+    \includegraphics[width=1.0\linewidth]{./figures/transmission_tradeoff.png}
+    \caption{
+      \textbf{Trade-off between immune escape and transmissibility increases.}
+      A. Relative fitness for a transmissibility increasing variant $T$ and an immune escaping variant $E$ for $\varTransmission_T=0.3$, $\varEscape_E=1.2$, $\beta=0.875$.
+      \tbc{Based on ``Two-Strain SIR'' I believe that you have to mean $\varTransmission_T=1.3$ (you need greater than 1 to be above wild-type) and $\varEscape=0.2$ (this needs to be between 0 and 1).}
+      The intersection point shows the point after which the escape variant is has higher fitness.
+      B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
+      C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
+      \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
+      \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
+    }
     \label{fig:transmission_tradeoff}
 \end{figure}
 
@@ -293,7 +294,6 @@ We can think of each of these functions $\Upsilon_b$ as an immune background and
 \begin{align*}
 \lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \Upsilon_{b}(t).
 \end{align*}
-% \tbc{This is confusing to me. I don't know if $b$ is an immune background or something else. Here, I'd either make this explicitly immune pools and use the same notation or make it explicitly something else and don't re-use notation.}
 
 Even in the case of complete knowledge of the relative fitness and the underlying fitness contributions in the present and past, we have that change in the relative fitness is determined by
 
@@ -306,8 +306,6 @@ By considering a Taylor expansion of the relative fitness about the point of est
 \begin{align*}
     \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
 \end{align*}
-% \tbc{I \textit{think} this $\eta$ is referring to escape compared to specific immunity, as this is the notation you introduce in ``Models of immune escape against heterogeneous backgrounds'', but I'm actually not sure this is the case. You might be just using $b$ here and $b$ in the latent model? Can you please clarify? If this $b$ In general the main text needs to be significantly adjusted to not rely on people understanding notation that's now buried in Supplemental Text.}
-% MF: I updated this to be more consistent. I use $\beta$ throughout and define $b$ as an immune background and reference the supplementary text for the motivation of this form.
 
 This suggests small differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses through changes in the underlying immune backgrounds.
 
@@ -322,24 +320,27 @@ This can lead to large changes in the predicted incidence depending on the assum
 
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
 Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
+\tbc{This reads like a note to yourself. You need to signficantly expand this and reference evidence in the form of figures or Supplemental Text.}
 
-We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape.
+We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape (Fig.~\ref{fig:mechanism_identification}).
 This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
+\tbc{This also reads as a note to yourself. It needs to be significantly expanded.}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/correlation_not_mechanism.png}
-    \caption{\textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
-    We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
-    Darker colors represent lower vaccine uptake.
-    We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
-        A. Prevalence of variant, each line is its own simulation.
-        B. Frequency of variant.
-        C. Relative fitness for variant over time.
-        D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
-        E. Same as D. but using data from the entire period shown. Notice the drop-off of relative fitness above $1 / R_{v}$ at which both variants are declining.
+    \includegraphics[width=1.0\linewidth]{./figures/mechanism_identification.png}
+    \caption{
+      \textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
+      We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
+      Darker colors represent lower vaccine uptake.
+      We identify an early growth period where relative fitness is at its highest; the cutoff for this period is denoted with a vertical dashed line.
+      A. Prevalence of variant, each line is its own simulation.
+      B. Frequency of variant.
+      C. Relative fitness for variant over time.
+      D. Estimated log growth advantage using linear regression of log relative frequency of variant over wildtype using only data before the early cutoff.
+      E. Same as D. but using data from the entire period shown. Notice the drop-off of relative fitness above $1 / R_{v}$ at which both variants are declining.
     }
-\label{fig:mechanism_identification}
+    \label{fig:mechanism_identification}
 \end{figure}
 
 \subsection*{Quantifying selective pressure}
@@ -388,56 +389,78 @@ We can then use this to reconstruct the relative incidence as:
          &= \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
 \end{align*}
 
-\subsection*{Predicting epidemic growth rates using selective pressure}%
+\tbc{With Main Text you want to describe `results', but not go into too much detail on how they were arrived at. In the most typical case you present a Figure in Main Text and describe a bit about how it was derived, but with most details in Methods. I'd suggest thinking of the math here in a similar fashion. You have the Equation 3 result (and the two equations following) as big picture understanding of selective pressure. Good to include this in Main Text. But much of the preceeding derivation of Equation 3 can probably be moved to Methods or Supplemental Text.}
 
-Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we developed a predictive model of the epidemic growth rate using estimates of selective pressure.
+\subsection*{Predicting epidemic growth rates using selective pressure}
+
+Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
 Using selective pressure computed using the approximate Gaussian process model, we predict the epidemic growth rate using the selective pressure for the previous 30 days.
-We fit a gradient boosted regressor to data from 50 states in the United States between March 2021 and March 2022, reserving data between March 2022 and September 2022 for testing.
-Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022.
+We fit a gradient boosted regressor to data from 50 states in the United States between March 2021 and March 2022, reserving data between March 2022 and September 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} A--F, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
+\tbc{More text about what's going on. You looked at case counts? What are the variants here? Are they Pango lineages, Nextstrain clades? or something else? Some of this can be clarified visually in my proposal of panel directly plotting variant frequencies.}
+\tbc{Statement on predictive performance here.}
+Our model is able to replicate patterns seen in estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 (Fig.~\ref{fig:selective_pressure_prediction} G--I).
+\tbc{More text on what's going on with ONS. Not everyone will be familiar. Also cite them.}
 
 %TODO: Estimate correlation between the predictions and the values.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/selective_pressure_prediction.png}
-    \caption{\textbf{Predicting epidemic growth rate using estimated selective pressure.}
-    A-F. Predictions for empirical growth rate from selective pressure for selected US states.
-    The light gray period is the training period and the darker gray is the testing period.
-    G. Estimated selective pressure in England.
-    H. Prevalence estimates for England.
-    I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
-}
+    \includegraphics[width=1.0\linewidth]{./figures/selective_pressure_prediction.png}
+    \caption{
+      \textbf{Predicting epidemic growth rate using estimated selective pressure.}
+      A-F. Predictions for empirical growth rate from selective pressure for selected US states.
+      The light gray period is the training period and the darker gray is the testing period.
+      G. Estimated selective pressure in England.
+      H. Prevalence estimates for England.
+      I. Empirical growth rates computed from prevalence estimates in H. and predictions from our model.
+      \tbc{This is currently a little too much magic / too divorced from intuition. I'd suggest a top set of panels that show a single state (whichever you'd like). With one panel showing variant frequencies in this state. Another panel showing case counts in this state. And a third panel showing selective pressure in this state. This then gives a bridge to the more derived information in the current figure.}
+      \tbc{Be consistent with the semantics of your colors. Currently gray means both regressor model on selected pressure and ONS prevalence.}
+    }
     \label{fig:selective_pressure_prediction}
 \end{figure}
 
-\subsection*{Latent factor models of relative fitness}
+\subsection*{Latent factor model of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
-To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
+To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness (see Materials and Methods).
+\tbc{Say more about what this model is and how it works intuitively (correlations in relative fitness between variants and countries). Keep equations / details in Methods and Supplemental Text.}
 
-We generate sequence counts for 14 countries and 41 variants in this period, estimating the relative fitness of each variant over time in each country, the pseudo-escape rates for each variant, and the pseudo-immunity for each country.
+We generate sequence counts for 14 countries and 41 variants in this period.
+\tbc{Which period? Again, what are the variants? Why these 14 countries?}
+From these sequence counts, we estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country.
 The results of these models are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 
 We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants ($R^2$ = 0.6).
+\tbc{This needs to be greatly expanded. Simply describe the results shown in Figure \ref{fig:latent_immune} and describe how you derive ``titer differences''. There's a whole lot going on here. Note things like the striped pattern in panel F where more closely related Pango lineages are assigned similar pseudo immune escape values without this being input into the model.}
+\tbc{Make a comment of the size of immune space. Why five dimensions? If you haven't formally tested different dimensions you need to.}
+\tbc{(More reviewer questions:) How does model fit of the latent factor model compare to the Gaussian process model from earlier in the text? Or is this applied after the Gaussian process estimates of relative fitness?}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/latent_immune.png}
-    \caption{\textbf{Latent factor models of immunity describe variant structure.}
-        We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
-        A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
-        B. Estimated relative fitness for selected variants and countries.
-        C. Estimated pseudo-immunity over time for multiple countries.
-        D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
-        F. Estimated pseudo-escape rates for each variant.
-        H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
+    \includegraphics[width=1.0\linewidth]{./figures/latent_immune.png}
+    \caption{
+      \textbf{Latent factor models of immunity describe variant structure.}
+      We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
+      A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
+      \tbc{Y axis in panel A should be 0\%, 20\%, etc...}
+      B. Estimated relative fitness for selected variants and countries.
+      \tbc{Relative fitness to what? Note in the y axis label.}
+      C. Estimated pseudo-immunity over time for multiple countries.
+      \tbc{I read this as `principle component 1', etc... but I think these are directly immune pools. I suggest legend title of `Psuedo immune pools' over `Pool 1', `Pool 2', etc... swatches. Make this 1 to 5 and not current 0 to 4.}
+      \tbc{Order immune pools in a logical fashion in panels C and F and state what this ordering is based on.}
+      D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
+      F. Estimated pseudo-escape rates for each variant.
+      \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
+      H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
-\label{fig:latent_immune}
+    \label{fig:latent_immune}
 \end{figure}
 
 %%% Discussion
 
 \subsection*{Overview of methods}
+
+\tbc{This whole ``Overview of methods'' section feels largely out of place in current Main Text setup. Main Text is effectively Results and Discussion. Things like the note on the latent factor model ``This is offers a tool for a deeper understanding of immune dynamics'' should immediately follow its presentation in the text. Same thing for ``Selective Pressure'' paragraph below. Please fold this text where it's not a restatement of what's already been said directly into the sections above. There should remain roughly a paragraph that becomes the start of the ``Conclusions'' section that's effectively the first two sentences here of ``Our study demonstrates...''.}
 
 % Mechanistic models
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
@@ -654,6 +677,8 @@ Source code used to generate figures, model implementations, and sequence count 
 
 \section*{Supplementary Text}
 
+\tbc{It would be good if each of these sections S1, S2 and S3 were explicitly referenced in the Main Text or Materials and Methods. Ideally a reader is working through the Main Text / Methods and knows when it's most appropriate to read section S1, etc...}
+
 \subsection{Exponentially growing populations to frequency dynamics}%
 
 We consider a viral population consisting of $V$ exponentially-growing variant viruses each with prevalence $I_{v}$.
@@ -757,9 +782,6 @@ This model can also be extended to an $n$-strain SIR model where each variant st
 In this formulation, the variant viruses compete only for susceptible population and those with previous wild-type infection.
 This formulation can be generalized to allow for competition between all variants for any exposure history and will be discussed in the following sections.
 In Fig.~\ref{fig:vis_mechanisms}, we implement and simulate a 3-strain model with wildtype as above, an escape variant E with $\theta_{2} = (0, \varEscape)$, and a transmissibility increase variant T with $\theta_{3} = (\varTransmission, 0)$.
-% \tbc{I'm confused on the units of relative fitness. If $r_{v}(t)$ has units of `per day', then relative fitness will also be `per day'? I ran into this in trying to get a sense of the scale of fitness differences in Figure 1.}
-% I've added a discussion about units when I define relative fitness. I can also do this when we define the exponential growth rate as well
-
 
 \paragraph{Models of immune escape against heterogeneous backgrounds}%
 
@@ -829,10 +851,6 @@ This formulation fits neatly into the framework we've developed as the cumulativ
 
 Therefore, these models can be thought as regression-based predictors of relative fitness where frequency and external covariates contribute to estimated relative fitness.
 
-% \tbc{There needs to be more of a point here. Spell out how $\lambda$ in this model relates to your $\lambda$. I think of this like MLR, but where relative fitnesses are fixed from coefficients rather than learned from frequencies.}
-% The authors choose predictors which describe the antigenic properties of strains
-
-
 \subsection{Relative fitness for full immune history models}\label{ssec:full_immune_history}
 
 %TODO: Define powers sets + macro to simplify?
@@ -866,38 +884,41 @@ where for simplicity we define $\varEscape_{v, B} = 0$ if $v \in B$.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/gp_example.png}
-    \caption{\textbf{Estimating relative fitness with Gaussian processes.}
-    Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
-    This figure uses Gaussian processes to model the 3 variant example shown in Fig.~\ref{fig:vis_mechanisms}.
-    A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Fig.~\ref{fig:vis_mechanisms}C.
-    B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
-    C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
-}
+    \includegraphics[width=1.0\linewidth]{./supplementary_figures/gp_example.png}
+    \caption{
+    \textbf{Estimating relative fitness with Gaussian processes.}
+      Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time.
+      This figure uses Gaussian processes to model the 3 variant example shown in Fig.~\ref{fig:vis_mechanisms}.
+      A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Fig.~\ref{fig:vis_mechanisms}C.
+      B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
+      C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
+    }
     \label{fig:gp_example}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/short_term_divergence.png}
-    \caption{\textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
-    Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T.
-    We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
-    (A) The prevalence for the variants.
-    (B) The relative fitness from the variants.
-    (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
-    (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
-    }%
+    \includegraphics[width=1.0\linewidth]{./supplementary_figures/short_term_divergence.png}
+    \caption{
+      \textbf{Differences in fitness mechanisms impact frequency and prevalence in the short-term.}
+      Comparing simulations from two independent two-variant systems with either an escape variant E (orange) or a transmissibility variant T (purple).
+      We fix the initial relative fitness for the two variants using Equation \ref{eq:critical_immunity} and simulate dynamics for 365 days.
+      (A) The prevalence for the variants.
+      (B) The relative fitness from the variants.
+      (C) The cumulative wildtype incidence as a function of the initial wildtype frequency.
+      (D) The difference between the cumulative incidence between the escape variant and the transmissibility variant as a function of wildtype incidence.
+    }
     \label{fig:short_term_divergence}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=0.9\textwidth=0.01]{./supplementary_figures/empirical-growth-rate-predictions-all.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/empirical_growth_rate_predictions_all.png}
     \caption{
-        \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
+      \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
+      \tbc{Include another supplemental figure showing variant frequencies and selective pressures across all locations. It's important to `show the data' as much as possible.}
     }
-    \label{fig:empirical-growth-rate-predictions-all}
+    \label{fig:empirical_growth_rate_predictions_all}
 \end{figure}
 
 \end{document}
