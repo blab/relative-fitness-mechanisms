@@ -277,7 +277,7 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
       The intersection point shows the point after which the escape variant is has higher fitness.
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
-      \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ through the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
+      \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
       \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
     }
     \label{fig:transmission_tradeoff}
@@ -320,15 +320,15 @@ This can lead to large changes in the predicted incidence depending on the assum
 
 Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
 Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
-\tbc{This reads a note to yourself. You need to signficantly expand this and reference evidence in the form of figures or Supplemental Text.}
+\tbc{This reads like a note to yourself. You need to signficantly expand this and reference evidence in the form of figures or Supplemental Text.}
 
-We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape.
+We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape (Fig.~\ref{fig:mechanism_identification}).
 This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
 \tbc{This also reads as a note to yourself. It needs to be significantly expanded.}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1.0\linewidth]{./figures/correlation_not_mechanism.png}
+    \includegraphics[width=1.0\linewidth]{./figures/mechanism_identification.png}
     \caption{
       \textbf{Relative fitness is correlated with vaccination levels in the absence of immune escape.}
       We simulate the growth of a pure transmissibility increased variant at varying levels of vaccination.
