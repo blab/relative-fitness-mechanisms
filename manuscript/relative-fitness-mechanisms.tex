@@ -229,12 +229,12 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
       We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 0.5$.
       We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 0.05$.
       % TB: Looking at "Two-Strain SIR" I believe that $\varEscape$ should range from 0 (no escape) to 1 (hosts recovered to wild-type are just as susceptible as naive hosts). I've adjusted text accordingly.
-      (A) Prevalence $I$ by variant.
-      (B) Exponential growth rate $r$ by variant.
-      (C) Variant frequency $f$.
-      (D) Fitness relative to wildtype $\lambda$.
-      (E) Underlying immune pools.
-      (F) Effective reproduction number $R_t$ by variant.
+      A. Prevalence $I$ by variant.
+      B. Exponential growth rate $r$ by variant.
+      C. Variant frequency $f$.
+      D. Fitness relative to wildtype $\lambda$.
+      E. Underlying immune pools.
+      F. Effective reproduction number $R_t$ by variant.
     }
     \label{fig:vis_mechanisms}
 \end{figure}
@@ -398,7 +398,7 @@ The full derivation of this metric and its contribution to the overall growth ra
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
 By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
 
-Using case and sequence data from 50 US states between May 2021 and November 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades (Figs.~\ref{fig:selective_pressure_midwest}--\ref{fig:selective_pressure_west}). 
+Using case and sequence data from 50 US states between May 2021 and November 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades (Figs.~\ref{fig:selective_pressure_east}--\ref{fig:selective_pressure_west}). 
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 
 % \tbc{Statement on predictive performance here.}
@@ -443,7 +443,6 @@ This enables us to estimate a pseudo-escape rates for variants (Fig.~\ref{fig:la
 
 We generate Pango lineage-level sequence counts for 14 countries and 41 variants between March 2023 and March 2024.
 These 14 countries were chosen based on availability of sequences.
-
 Small lineages which do not meet a count threshold are collapsed into their parent lineages.
 This leaves us with a total of 41 variants, so that each variant met a threshold for number of sequences available.
 
@@ -488,7 +487,7 @@ This enables an embedding similar to those from antigenic cartography but withou
       F. Estimated pseudo-escape rates for each variant.
       % \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
       %MF: For identifiablity, these are difference relative to the pivot variant in terms of both transmission times escape potential, so it's fine and expected for them to be negative for some variants.
-      H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
+      H. Comparing distances in the pseudo-immune space C. to observed distances in human titer data.
     }
     \label{fig:latent_immune}
 \end{figure}
@@ -500,7 +499,7 @@ This enables an embedding similar to those from antigenic cartography but withou
 \subsection*{Conclusions, limitations, and future work}
 
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
-This enables a more detailed picture of variant success in environments with heterogenous population immunity.
+This enables a more detailed picture of variant success in environments with heterogeneous population immunity.
 
 One key insight from this was the trade-off between intrinsic transmissibility increase and immune escape.
 We showed that this trade-off is shifted by changes in population immunity, so that immune escape dominates as exposure increases.
@@ -685,7 +684,7 @@ Source code used to generate figures, model implementations, and sequence count 
 
 \tbc{It would be good if each of these sections S1, S2 and S3 were explicitly referenced in the Main Text or Materials and Methods. Ideally a reader is working through the Main Text / Methods and knows when it's most appropriate to read section S1, etc...}
 
-\subsection{Exponentially growing populations to frequency dynamics}\ref{ssec:frequency_dynamics}
+\subsection{Exponentially growing populations to frequency dynamics}\label{ssec:frequency_dynamics}
 
 We consider a viral population consisting of $V$ exponentially-growing variant viruses each with prevalence $I_{v}$.
 Defining the time-varying growth rate for the prevalence of variant $v$ as $r_{v}(t)$, we can represent the prevalence using the following ordinary differential equation:
@@ -959,6 +958,14 @@ We can then use this to reconstruct the relative incidence as:
     \label{fig:short_term_divergence}
 \end{figure}
 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_East.png}
+    \caption{
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Eastern US states.}
+    }
+    \label{fig:selective_pressure_east}
+\end{figure}
 
 \begin{figure}[t!]
     \centering
@@ -1024,6 +1031,42 @@ We can then use this to reconstruct the relative incidence as:
       \textbf{Maximum a posteriori loss for latent factor model by number of latent immune dimensions.}
     }
     \label{fig:latent_factor_dimension}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_2_dims.png}
+    \caption{
+      \textbf{Latent factor model. $D=2$}
+    }
+    \label{fig:latent_factor_2}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_4_dims.png}
+    \caption{
+      \textbf{Latent factor model. $D=4$}
+    }
+    \label{fig:latent_factor_4}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_6_dims.png}
+    \caption{
+      \textbf{Latent factor model. $D=6$}
+    }
+    \label{fig:latent_factor_6}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_8_dims.png}
+    \caption{
+      \textbf{Latent factor model. $D=8$}
+    }
+    \label{fig:latent_factor_8}
 \end{figure}
 
 
