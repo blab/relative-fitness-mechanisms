@@ -418,18 +418,36 @@ Our model is able to replicate patterns seen in estimates of the epidemic growth
 \subsection*{Latent factor model of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
-To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness (see Materials and Methods).
-\tbc{Say more about what this model is and how it works intuitively (correlations in relative fitness between variants and countries). Keep equations / details in Methods and Supplemental Text.}
+To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
+This model assumes that variants intrinsically escape the immune responses with particular groups and that differences in a variant's relative fitness between geographies is attributable to differences in immunity between populations.
+This enables us to estimate a pseudo-escape rates for variants (Fig.~\ref{fig:latent_immune}F) as well as pseudo-immunity groups within geographies over time (Fig.~\ref{fig:latent_immune}C).
 
-We generate sequence counts for 14 countries and 41 variants in this period.
-\tbc{Which period? Again, what are the variants? Why these 14 countries?}
-From these sequence counts, we estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country.
+% \tbc{Say more about what this model is and how it works intuitively (correlations in relative fitness between variants and countries). Keep equations / details in Methods and Supplemental Text.}
+
+We generate Pango lineage-level sequence counts for 14 countries and 41 variants between March 2023 and March 2024.
+These 14 countries were chosen based on availability of sequences and the 41 variants were chosen, so that each variant met a threshold for number of sequences available.
+% \tbc{Which period? Again, what are the variants? Why these 14 countries?}
+
+
+From these sequence counts, we use apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $K=5$ pseudo-immune groups.
+% \tbc{Make a comment of the size of immune space. Why five dimensions? If you haven't formally tested different dimensions you need to.}
+%MF: Plan to add a replicate figueres with different K and then elbow plot showing the loss at different $K$.
 The results of these models are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 
-We find that the distances in the pseudo-immunity embedding space are correlated with titer differences between variants ($R^2$ = 0.6).
 \tbc{This needs to be greatly expanded. Simply describe the results shown in Figure \ref{fig:latent_immune} and describe how you derive ``titer differences''. There's a whole lot going on here. Note things like the striped pattern in panel F where more closely related Pango lineages are assigned similar pseudo immune escape values without this being input into the model.}
-\tbc{Make a comment of the size of immune space. Why five dimensions? If you haven't formally tested different dimensions you need to.}
-\tbc{(More reviewer questions:) How does model fit of the latent factor model compare to the Gaussian process model from earlier in the text? Or is this applied after the Gaussian process estimates of relative fitness?}
+
+Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
+Further, our model shows that these groups of lineages tend to target particular immune groups such as Clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 2.
+If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
+Using human titer data from Jian et al, we compute titer distances as average log2 differences in titer values between pairs of variants. \cite{Jian2023} 
+We, then, compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.6).
+
+By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
+
+% \tbc{(More reviewer questions:) How does model fit of the latent factor model compare to the Gaussian process model from earlier in the text? Or is this applied after the Gaussian process estimates of relative fitness?}
+%MF: This is a bit more difficult since this is a hierarchical model where the GP model is not.
+
+
 
 \begin{figure}[h]
     \centering
@@ -444,9 +462,11 @@ We find that the distances in the pseudo-immunity embedding space are correlated
       C. Estimated pseudo-immunity over time for multiple countries.
       \tbc{I read this as `principle component 1', etc... but I think these are directly immune pools. I suggest legend title of `Psuedo immune pools' over `Pool 1', `Pool 2', etc... swatches. Make this 1 to 5 and not current 0 to 4.}
       \tbc{Order immune pools in a logical fashion in panels C and F and state what this ordering is based on.}
+      %MF: They are already ordered and this is mentioned in the methods.
       D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
       F. Estimated pseudo-escape rates for each variant.
-      \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
+      % \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
+      %MF: For identifiablity these are difference relative to the pivot variant, so it's fine for them to be negative
       H. Comparing distances in the pseudo-immune space (C) to observed distances in human titer data.
     }
     \label{fig:latent_immune}
@@ -480,7 +500,6 @@ This provides a simple measure of epidemic growth in the absence of high quality
 %Note: This should be the aim for next project, learning these non-genetic contributions using other data.
 
 Additionally, we introduce a latent factor model which decomposes variant fitness into pseudo-escape rates and pseudo-immunity proportions.
-This is offers a tool for a deeper understanding of immune dynamics and how they shape variant success.
 The latent factor model, applied to SARS-CoV-2 data across several countries, successfully captures these immune escape dynamics and their impact on variant fitness.
  By using only genetic sequence data, we approximate the immunological distances between variants, providing insights similar to those gained from antigenic cartography but without the need for serological data.
  Further, we can estimate the proportion of these latent immune pools in the population and how they vary geographically and over time.
@@ -654,10 +673,9 @@ In the results shown above, we model $\text{logit}(\phi_{d}^{g})$ using 4th orde
 Though we choose to model these latent factors with splines, other models would work here.
 For example, one alternative would be the approximate Gaussian processes described above.
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\varEscape_{v^*, d} = 0$ for all $1\leq d\leq D$.
-For the same reason, we order the components in the first geography.
+For the same reason, we fix the order of components, so that the components are numbered in decreasing order by their share in the first geography.
 
-We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024.
-
+We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024 for 14 countries.
 We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
 
 \subsection*{Data and code accessibility}
