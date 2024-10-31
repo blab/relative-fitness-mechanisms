@@ -398,12 +398,12 @@ The full derivation of this metric and its contribution to the overall growth ra
 Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
 By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
 
-Using case and sequence data from 50 US states between May 2021 and November 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades (Figs.~\ref{fig:selective_pressure_east}--\ref{fig:selective_pressure_west}). 
+Using case and sequence data from 50 US states between January 2021 and November 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades (Figs.~\ref{fig:selective_pressure_east}--\ref{fig:selective_pressure_west}).
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 
 % \tbc{Statement on predictive performance here.}
-We validate this method by testing this model to estimate epidemic growth rates in Englad as derived ONS data between February 2022 and November 2022.
-Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a Spearman correlation of $R^2 = 0.254$ and mean absolute error of 0.02.
+We validate this method by testing this model to estimate epidemic growth rates in England as derived ONS data between February 2022 and November 2022.
+Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a Spearman correlation of $R^2 = 0.306$ and mean absolute error of 0.022.
 Performance is significantly better for the first two subsequent waves, falling off in accuracy starting August 2022.
 
 Though these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
@@ -417,7 +417,7 @@ Though these predictions can be biased by non-evolutionary effects on the epidem
     \includegraphics[width=1.0\linewidth]{./figures/selective_pressure_prediction.png}
     \caption{
       \textbf{Predicting epidemic growth rate using estimated selective pressure.}
-      A. Variant frequency estimated using the Gaussian process relative fitness model between June 2021 and November 2022.
+      A. Variant frequency estimated using the Gaussian process relative fitness model between January 2021 and November 2022.
       B. Case counts from Washington state.
       C. Selective pressure computed using estimated variant frequencies and relative fitness from Washington state.
       D-I. Predictions for empirical growth rate from selective pressure for selected US states.
@@ -458,7 +458,8 @@ Our results show that closely related Pango lineages are often assigned similar 
 Further, our model shows that these groups of lineages tend to target particular immune groups such as Clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 3.
 If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
 Using human titer data from Jian et al, we compute titer distances as average log2 differences in titer values between pairs of variants. \cite{Jian2023} 
-We, then, compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.67).
+We, then, compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.26).
+We bootstrap this analysis among 1,000 replicates to get a distribution among $R^2$ (Fig.`\ref{fig:latent_immune_bootstrap}).
 
  This approach can be applied to other rapidly evolving pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
  In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
@@ -636,18 +637,18 @@ We use this model to estimate relative fitnesss for the simulated data in Fig.~\
 The derivation of the selective pressure metric shows that the selective pressure can be a useful tool in predicting the epidemic growth rate.
 To develop a predictive model of epidemic growth rate using selective pressure, we begin by generating estimates of selective pressure and epidemic growth rate from a period with high sequencing and case surveillance.
 
-We take sequence count and case count data from all states in the United States between July 2021 and November 2022.
+We take sequence count and case count data from all states in the United States between January 2021 and November 2022.
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 
 From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t})$.
 
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
 
-We use a gradient boosting regressor model with 50 estimators and max tree depth of 5 which is fit using a mean absolute error loss function.
-This model was selected as it achieved the minimal error via time series cross-validation averaged across 10 splits among candidate models.
+We use a gradient boosting regressor model with 100 estimators and max tree depth of 5 which is fit using a mean absolute error loss function.
+This model was selected as it achieved the minimal error via time series cross-validation averaged across 5 splits among candidate models.
 The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
 
-We validate our model by comparing our predicted epidemic growth rates to estimates of the epidemic growth rates in England derived from ONS data between Jan 2022 and Sep 2022 as well as to held-out testing data for US states.
+We validate our model by comparing our predicted epidemic growth rates to estimates of the epidemic growth rates in England derived from ONS data between January 2022 and September 2022 as well as to held-out testing data for US states.
 
 \paragraph{Latent immune factor model}%
 
@@ -672,6 +673,7 @@ Looking at the loss for the latent factor model for increasing $D$, we choose $D
 
 We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
 Using human titer data, we compute titer distances as the average log2 differences in titer values between pairs of variants for individuals.
+This analysis is repeated among 1,000 bootstrapped samples to create a distribution of $R^2$ values (Fig.~\ref{fig:latent_immune_bootstrap}).
 Additionally, we subset this by exposure history and repeat this analysis to find which exposure groups best explain distances in pseudo-escape space (Fig.~\ref{fig:titer_distance_correlations_by_group}).
 
 \subsection*{Data and code accessibility}
@@ -1069,6 +1071,14 @@ We can then use this to reconstruct the relative incidence as:
     \label{fig:latent_factor_8}
 \end{figure}
 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/pseudo_escape_titer_correlation_bootstrap.png}
+    \caption{
+      \textbf{Bootstrapping pseudo-immune distance and human titer distance analysis. $N=1,000$}
+    }
+    \label{fig:latent_immune_bootstrap}
+\end{figure}
 
 \begin{figure}[t!]
     \centering
