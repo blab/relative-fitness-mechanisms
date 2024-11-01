@@ -421,7 +421,7 @@ We use these estimates to fit a gradient-boosted regressor to predict epidemic g
 
 % \tbc{Statement on predictive performance here.}
 We validate this method by testing this model to estimate epidemic growth rates in England as derived ONS data between February 2022 and November 2022.
-Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a Spearman correlation of $R^2 = 0.306$ and mean absolute error of 0.022.
+Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a Spearman correlation of $R^2 = 0.377$ and mean absolute error of 0.016.
 Performance is significantly better for the first two subsequent waves, falling off in accuracy starting August 2022.
 
 Though these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
@@ -438,14 +438,14 @@ Though these predictions can be biased by non-evolutionary effects on the epidem
       A. Variant frequency estimated using the Gaussian process relative fitness model between January 2021 and November 2022.
       B. Case counts from Washington state.
       C. Selective pressure computed using estimated variant frequencies and relative fitness from Washington state.
-      \tbc{Label panels A and C with `Washington' as well.}
+      % \tbc{Label panels A and C with `Washington' as well.}
       D-I. Predictions for empirical growth rate from selective pressure for selected US states.
       The light gray period is the training period and the darker gray is the testing period.
-      \tbc{I think the dashed line got accidently moved to the end of the time series? I suggest actually  dropping the vertical dashed lines and instead relying on lighter / darker background shading to denote training vs test split.}
+      % \tbc{I think the dashed line got accidently moved to the end of the time series? I suggest actually  dropping the vertical dashed lines and instead relying on lighter / darker background shading to denote training vs test split.}
       G. Estimated selective pressure in England.
       H. Prevalence estimates for England.
       I. Empirical growth rates (gray) computed from prevalence estimates in H. and predictions from our model (green).
-      \tbc{Same statment about slightly increasing font size of tick labels.}
+      % \tbc{Same statment about slightly increasing font size of tick labels.}
     }
     \label{fig:selective_pressure_prediction}
 \end{figure}
