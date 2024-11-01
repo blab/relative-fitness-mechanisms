@@ -312,7 +312,7 @@ Even in the case of complete knowledge of the relative fitness and the underlyin
 \end{align*}
 By considering a Taylor expansion of the relative fitness about the point of estimation $t_{0}$, we can approximate the relative fitness in the future as:
 \begin{align*}
-    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
+    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + (t - t_0)\sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
 \end{align*}
 This suggests small differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses through changes in the underlying immune backgrounds.
 
