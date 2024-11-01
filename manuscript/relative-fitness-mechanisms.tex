@@ -281,10 +281,10 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
     \includegraphics[width=1.0\linewidth]{./figures/transmission_tradeoff.png}
     \caption{
       \textbf{Trade-off between degree of immune escape and increased transmissibility.}
-      A. Relative fitness for a transmissibility increasing variant $T$ with $\varTransmission_T=0.2$ and an immune escaping variant $E$ with $\varEscape_E=0.3$ for $R_{0, \wildtype}=2.8$ and $1 / \gamma = 3.0$.
+      A. Relative fitness for a transmissibility increasing variant $T$ with $\varTransmission_T=0.2$ and an immune escaping variant $E$ with $\varEscape_E=0.3$ for $R_{0, \wt}=2.8$ and $1 / \gamma = 3.0$.
       % \tbc{Fig.~\ref{fig:vis_mechanisms} uses $R_0$ instead of $\beta$. I do think $R_0$ is generally more interpretable and I'd swap $\beta$ for $R_0$ here unless for some reason $\beta$ matters in a way that $R_0$ does not.}
       % MF: I used $\beta$ here since that's what goes into the relative fitness calculation used here. Happy to switch to $R_0$ and $1 / \gamma$.
-      The intersection point shows that after 40\% of the population has wildtype immunity, the escape variant is has higher fitness.
+      The intersection point shows that after 40\% of the population has wildtype immunity, the escape variant has higher fitness.
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
       % \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
@@ -420,7 +420,7 @@ Motivated by the relationship between epidemic growth rate and selective pressur
 Using empirical SARS-CoV-2 case and sequence data from 50 US states between January 2021 and November 2022, we estimate epidemic growth rates through time in each state using case counts, and estimate selective pressure through time using our approximate Gaussian process model on sequence counts  (Fig.~\ref{fig:selective_pressure_prediction} A--C.)
 Here we group variants at the granularity of Nextstrain clades \cite{aksamentov2021nextclade} resulting in 37 distinct variants over this time period.
 % \tbc{Fill in XXX with variant count, including `other' variant in the total.}
-As expected we see that relative fitness increases through time and that selective pressure corresponds to speed of clade turnover where the sweep of Omicron BA.1 (clade 21K) yields the strongest signal of selective pressure (Figs.~\ref{fig:selective_pressure_east}--\ref{fig:selective_pressure_west}).
+As expected we see that relative fitness increases through time and that selective pressure corresponds to speed of clade turnover where the sweep of Omicron BA.1 (clade 21K) yields the strongest signal of selective pressure (Figs.~\ref{fig:selective_pressure_group_1}--\ref{fig:selective_pressure_group_5}).
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 
 % \tbc{Statement on predictive performance here.}
@@ -1001,53 +1001,53 @@ We can then use this to reconstruct the relative incidence as:
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_East.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_group_1.png}
     \caption{
-      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Eastern US states.}
-      \tbc{These requests are for all five selection pressure supp figures.}
-      \tbc{Keep consistent y bounds for relative fitness and selective pressure across all states}
-      \tbc{Move legend from $\sim$5 rows to $\sim$2 rows to try to make it extend across the entire figure}
-      \tbc{Add WHO / Pango parenthicals to each legend entry, e.g.\ `20I (Alpha)'. An appropriate set of labels can be seen here \url{http://github.com/nextstrain/ncov/blob/master/defaults/clade_display_names.yml}}
-      \tbc{Update coloring so that common clades get colors and rare clades get grays. Currently, I see that common clades like Delta 21J in gray.}
-      \tbc{Finally, you'll probably be better served with 5 supp figures each with 10 panels even if there's a less clean geographic labeling for each figure.}
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure. Alabama through Georgia.}
+      % \tbc{These requests are for all five selection pressure supp figures.}
+      % \tbc{Keep consistent y bounds for relative fitness and selective pressure across all states}
+      % \tbc{Move legend from $\sim$5 rows to $\sim$2 rows to try to make it extend across the entire figure}
+      % \tbc{Add WHO / Pango parenthicals to each legend entry, e.g.\ `20I (Alpha)'. An appropriate set of labels can be seen here \url{http://github.com/nextstrain/ncov/blob/master/defaults/clade_display_names.yml}}
+      % \tbc{Update coloring so that common clades get colors and rare clades get grays. Currently, I see that common clades like Delta 21J in gray.}
+      % \tbc{Finally, you'll probably be better served with 5 supp figures each with 10 panels even if there's a less clean geographic labeling for each figure.}
     }
-    \label{fig:selective_pressure_east}
+    \label{fig:selective_pressure_group_1}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_Midwest.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_group_2.png}
     \caption{
-      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Midwestern US states.}
+        \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure. Hawaii to Maryland.}
     }
-    \label{fig:selective_pressure_midwest}
+    \label{fig:selective_pressure_group_2}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_Northeast.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_group_3.png}
     \caption{
-      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Northestern US states.}
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure. Massachusetts to New Jersey.}
     }
-    \label{fig:selective_pressure_northeast}
+    \label{fig:selective_pressure_group_3}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_South.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_group_4.png}
     \caption{
-      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Southern US states.}
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure. New Mexico to South Carolina.}
     }
-    \label{fig:selective_pressure_south}
+    \label{fig:selective_pressure_group_4}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_West.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_group_5.png}
     \caption{
-      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Western US states.}
+      \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure. South Dakota to Wyoming.}
     }
-    \label{fig:selective_pressure_west}
+    \label{fig:selective_pressure_group_5}
 \end{figure}
 
 \begin{figure}[t!]
