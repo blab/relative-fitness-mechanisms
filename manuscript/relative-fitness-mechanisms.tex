@@ -387,6 +387,7 @@ With this in mind, we can derive a metric of overall selective pressure $\psi(t)
 This selective pressure metric serves as an indicator for high fitness variants arising in the population as change.
 High fitness variants rising from initial low frequency leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
 
+
 The selective pressure metric enables us to decompose changes in the average growth rate in the population to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$:
 
 \begin{equation}
@@ -395,6 +396,9 @@ The selective pressure metric enables us to decompose changes in the average gro
 
 This shows that increased selective pressure through emerging high fitness variants can drive waves of infection.
 Further, this suggests that differences between growth rates based on selective pressure alone and observed rates are attributable to changes in baseline transmission over time.
+This mirrors ideas of Fisher's theorem of natural selection and its later interpretations with the variance of fitness contributing directly to the change in transmission rates (or fitness) \cite{Ewens1989, Ewens2024}.
+This definition of selective pressure captures how relative fitness contributes to epidemic growth.
+This is similar to ideas quantifying rates of adaptation via fitness flux \cite{Mustonen2010}.
 
 In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I(0)$ can be written directly using the cumulative selective pressure $\Psi(t) = \int_0^t \psi(s)ds$ as follows:
 
