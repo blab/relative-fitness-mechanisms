@@ -679,7 +679,7 @@ To develop a predictive model of epidemic growth rate using selective pressure, 
 We take sequence count and case count data from all states in the United States between January 2021 and November 2022.
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 
-From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t})$.
+From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$.
 
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
 
