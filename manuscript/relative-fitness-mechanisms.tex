@@ -378,11 +378,11 @@ With this in mind, we can derive a metric of overall selective pressure $\psi(t)
 This selective pressure metric serves as an indicator for high fitness variants arising in the population as change.
 High fitness variants rising from initially low frequency leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
 
-The selective pressure metric enables us to decompose changes in the average growth rate in the population to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$:
+The selective pressure metric enables us to decompose changes in the average growth rate in the population to an evolutionary component $\psi$ and a residual baseline growth rate $r_\wt$:
 
-The selective pressure metric enables us to decompose changes in the average growth rate in the population $d\bar{r}/dt$ to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$ following
+The selective pressure metric enables us to decompose changes in the average growth rate in the population $d\bar{r}/dt$ to an evolutionary component $\psi$ and a residual baseline growth rate $r_\wt$ following
 \begin{equation}
-    \frac{d\bar{r}}{dt} = \frac{dr_0}{dt} + \psi(t).
+    \frac{d\bar{r}}{dt} = \frac{dr_{\wt}}{dt} + \psi(t).
 \end{equation}
 This shows that increased selective pressure through emerging high fitness variants can drive waves of infection.
 Further, this suggests that differences between growth rates based on selective pressure alone and observed rates are attributable to changes in baseline transmission over time.
@@ -392,15 +392,18 @@ This is similar to ideas quantifying rates of adaptation via fitness flux \cite{
 
 In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I(0)$ can be written directly using the cumulative selective pressure $\Psi(t) = \int_0^t \psi(s)ds$ as follows:
 \begin{align}
-    \bar{r}(t) &= \bar{r}(0) + [r_0(t) - r_0(0)] + \Psi(t)\\
-    \frac{I(t)}{I(0)} &= \exp \left( \int_0^t [r_0(s) + \Psi(s)]ds \right).
+    \bar{r}(t) &= \bar{r}(0) + [r_{\wt}(t) - r_{\wt}(0)] + \Psi(t)\\
+    \frac{I(t)}{I(0)} &= \exp \left( \int_0^t [r_{\wt}(s) + \Psi(s)]ds \right).
 \end{align}
-\tbc{Is $r_0(t)$ exponential growth rate of wildtype (pivot) variant? The only way I've so far seen $r$ subscripted is $r_v(t)$. If this is the case, I'd use something like $r_W(t)$ instead to be consistent with earlier use.}
-\tbc{Also what's up with the brackets in $[r_0(t) - r_0(0)]$? Is this equivalent to $(r_0(t) - r_0(0))$? If so, can the brackets just be dropped in Equation 5?}
+% \tbc{Is $r_0(t)$ exponential growth rate of wildtype (pivot) variant? The only way I've so far seen $r$ subscripted is $r_v(t)$. If this is the case, I'd use something like $r_W(t)$ instead to be consistent with earlier use.}
+%MF: Switching to W
+% \tbc{Also what's up with the brackets in $[r_0(t) - r_0(0)]$? Is this equivalent to $(r_0(t) - r_0(0))$? If so, can the brackets just be dropped in Equation 5?}
+% MF: I didn't want to introduce a delta notation but wanted to make sure that it was clear that this is the change over the period
 In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
 
 Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population and is independent of pivot choice for relative fitness estimation.
-\tbc{Or is the ``selective pressure'' metric cumulative selection pressure $\Psi(t)$?}
+% \tbc{Or is the ``selective pressure'' metric cumulative selection pressure $\Psi(t)$?}
+% MF: Both would work here! I was just clear that the chnge in growth rate are controlled by little \psi. The total depends on the cummulative. Similar situation with relative fitness and cumulative relative fitness.
 This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
 This metric can be computed using any method that estimates variant frequency and relative fitnesses and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
 This approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
@@ -931,15 +934,15 @@ Beginning again from our assumption of inhomogeneous exponential growth, we can 
 
 where we've used that $I_{v}(t) = f_{v}(t) I(t)$.
 This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
-Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_0(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_0(t)$.
+Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_\wt(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_\wt(t)$.
 We can now look at the rate of change in the average growth rate by taking its derivative.
 
 \begin{align*}
-    \frac{d \overline{r}}{d t} &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
-                               &= \frac{d r_{0}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v} + \lambda_{v} f_{v} (\lambda_{v} - \overline{\lambda})  \right]\\
-                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v} (\lambda_{v} - \overline{\lambda}) f_{v}\\
-                               &= \frac{d r_{0}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v}^{2} f_{v} - \overline{\lambda}\sum_{v} \lambda_{v} f_{v}\\
-                               &= \frac{d r_{0}}{d t} + \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
+    \frac{d \overline{r}}{d t} &= \frac{d r_{\wt}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
+                               &= \frac{d r_{\wt}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v} + \lambda_{v} f_{v} (\lambda_{v} - \overline{\lambda})  \right]\\
+                               &= \frac{d r_{\wt}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v} (\lambda_{v} - \overline{\lambda}) f_{v}\\
+                               &= \frac{d r_{\wt}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v}^{2} f_{v} - \overline{\lambda}\sum_{v} \lambda_{v} f_{v}\\
+                               &= \frac{d r_{\wt}}{d t} + \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
 \end{align*}
 
 Here, we've written the last line in terms of expectations relative to sampling according to the frequency distribution.
@@ -960,7 +963,7 @@ We can then use this to reconstruct the relative incidence as:
 
 \begin{align*}
     \frac{I(t)}{I(0)} &= \exp\left(\int_{0}^{t} \overline{r}(s) ds\right)\\
-         &= \exp \left(\int_{0}^{t} [r_{0}(s) + \Psi(s)]ds \right).
+         &= \exp \left(\int_{0}^{t} [r_{\wt}(s) + \Psi(s)]ds \right).
 \end{align*}
 
 
