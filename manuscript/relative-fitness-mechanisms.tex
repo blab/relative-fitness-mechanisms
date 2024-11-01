@@ -242,6 +242,7 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
 
 Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplementary Text \ref{ssec:frequency_dynamics}).
 This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
+Additionally, when working with variant classifications, non-neutral evolution within a variant will cause the relative fitness of that variant to change in time.
 However, even in the absence of external data that can inform relative fitness, there is still hope.
 
 We develop a method for using approximate Gaussian processes to model variant relative fitness.
@@ -375,8 +376,9 @@ With this in mind, we can derive a metric of overall selective pressure $\psi(t)
 \psi(t) =  \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
 \end{equation}
 This selective pressure metric serves as an indicator for high fitness variants arising in the population as change.
-High fitness variants rising from initially low frequencies leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
-\tbc{Maybe reference Fisher's theorem here.}
+High fitness variants rising from initially low frequency leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
+
+The selective pressure metric enables us to decompose changes in the average growth rate in the population to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$:
 
 The selective pressure metric enables us to decompose changes in the average growth rate in the population $d\bar{r}/dt$ to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$ following
 \begin{equation}
@@ -384,6 +386,9 @@ The selective pressure metric enables us to decompose changes in the average gro
 \end{equation}
 This shows that increased selective pressure through emerging high fitness variants can drive waves of infection.
 Further, this suggests that differences between growth rates based on selective pressure alone and observed rates are attributable to changes in baseline transmission over time.
+This mirrors ideas of Fisher's theorem of natural selection and its later interpretations with the variance of fitness contributing directly to the change in transmission rates (or fitness) \cite{Ewens1989, Ewens2024}.
+This definition of selective pressure captures how relative fitness contributes to epidemic growth.
+This is similar to ideas quantifying rates of adaptation via fitness flux \cite{Mustonen2010}.
 
 In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I(0)$ can be written directly using the cumulative selective pressure $\Psi(t) = \int_0^t \psi(s)ds$ as follows:
 \begin{align}
@@ -393,11 +398,14 @@ In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I
 \tbc{Is $r_0(t)$ exponential growth rate of wildtype (pivot) variant? The only way I've so far seen $r$ subscripted is $r_v(t)$. If this is the case, I'd use something like $r_W(t)$ instead to be consistent with earlier use.}
 \tbc{Also what's up with the brackets in $[r_0(t) - r_0(0)]$? Is this equivalent to $(r_0(t) - r_0(0))$? If so, can the brackets just be dropped in Equation 5?}
 In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
-Our ``selective pressure'' metric $\psi(t)$ allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
+
+Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population and is independent of pivot choice for relative fitness estimation.
 \tbc{Or is the ``selective pressure'' metric cumulative selection pressure $\Psi(t)$?}
-This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are under-reported or delayed.
-This metric can be computed using any method that estimates variant frequency and relative fitness and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
-% This approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
+This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
+This metric can be computed using any method that estimates variant frequency and relative fitnesses and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
+This approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
+
+%The full derivation of this metric and its contribution to the overall growth rate can be found in Supplemental Appendix \ref{ssec:deriving_selective_pressure}.
 
 The full derivation of this metric and its contribution to the overall growth rate can be found in Supplementary Text \ref{ssec:deriving_selective_pressure}.
 
@@ -653,7 +661,7 @@ We divide the period into early and late epidemic with the breakpoint being $t=5
 In Fig.~\ref{fig:mechanism_identification}D-E, we estimate the log Growth advantage for the variant in the early and full periods using a logit-linear model:
 
 \begin{equation*}
-\log \left( \frac{f_v(t)}{1 - f_v(t)} \right) = \beta t/ + \alpha,
+\log \left( \frac{f_v(t)}{1 - f_v(t)} \right) = \beta t / \tau + \alpha,
 \end{equation*}
 where we take the model slope $\beta$ to be our log growth advantage.
 
