@@ -243,6 +243,7 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
 
 Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplemental Appendix \ref{ssec:frequency_dynamics}).
 This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
+Additionally, when working with variant classifications, non-neutral evolution within a variant will cause the relative fitness of that variant to change in time.
 However, even in the absence of external data that can inform relative fitness, there is still hope.
 
 We develop a method for using approximate Gaussian processes to model variant relative fitness.
@@ -403,7 +404,7 @@ In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I
 \end{align}
 
 In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
-Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population.
+Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population and is independent of pivot choice for relative fitness estimation.
 This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
 This metric can be computed using any method that estimates variant frequency and relative fitnesses and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
 This approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
