@@ -2,9 +2,10 @@ from functools import partial
 
 import jax
 import jax.numpy as jnp
+import numpy as np
 import pandas as pd
+import torch
 import torch.utils.data as data
-from flax import linen as nn
 from sklearn.model_selection import train_test_split
 
 
@@ -33,17 +34,22 @@ def create_lagged_features(
 
     return result_df
 
-
-def process_inputs_all(input_dfs: dict[str, pd.DataFrame], target: str):
+def process_inputs_all(input_dfs: dict[str, pd.DataFrame], target: str | list[str], add_location_intercept: bool = False):
     # Combine inputs into single sorted data frame
     input_df = pd.concat([df for _, df in input_dfs.items()])
+    if add_location_intercept:
+        dummies = pd.get_dummies(input_df["location"], drop_first=False)
+        input_df = pd.concat([input_df, dummies], axis=1)
+
     X = input_df.sort_values(["date"]).reset_index(drop=True)
 
     # Extract dates and location
     dates, locations = X["date"], X["location"]
+    if not isinstance(target, list):
+        target = [target]
 
     y = X[target]  # Target
-    X = X.drop([target, "date", "location"], axis=1)  # Features
+    X = X.drop(target + ["date", "location"], axis=1)  # Features
 
     return dates, locations, X, y
 
@@ -85,6 +91,40 @@ class SelectivePressureData(data.Dataset):
 
     def __getitem__(self, idx):
         return self.x[idx], self.y[idx]
+
+class SelectivePressureTSData(data.Dataset):
+    def __init__(self, X, y, locations, dates, sequence_length):
+        self.X = X
+        self.y = y
+        self.locations_vec = locations
+        self.dates_vec = dates
+        self.sequence_length = sequence_length
+        
+        # Extract unique locations
+        self.locations = locations.unique()
+        
+        # Store time-series data per location
+        self.data = {
+            location: (self.X[self.locations_vec == location], self.y[self.locations_vec == location])
+            for location in self.locations
+        }
+        
+    def __len__(self):
+        return len(self.locations)
+
+    def __getitem__(self, idx):
+        # Get data for the selected location
+        location = self.locations[idx]
+        x,y = self.data[location]
+        
+        # Randomly select the starting point of the sequence
+        max_start_idx = len(x) - self.sequence_length
+        if max_start_idx <= 0:
+            raise ValueError(f"Sequence length {self.sequence_length} is too long for location {location}.")
+        
+        start_idx = np.random.randint(0, max_start_idx + 1)
+        end_idx = start_idx + self.sequence_length
+        return x[start_idx:end_idx], y[start_idx:end_idx]
 
 
 def smoothness_loss(params, model, x):
