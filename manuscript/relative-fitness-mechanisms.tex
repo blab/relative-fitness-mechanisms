@@ -216,7 +216,6 @@ where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative
 In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Supplementary Text section S1).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
 We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=0.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
-% TB: As below, I've adjusted text to $\varEscape=0.05$ based on my understanding of "Two-Strain SIR"
 
 \begin{figure}[h]
     \centering
@@ -224,24 +223,24 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
     \caption{
       \textbf{Simulated variant dynamics in a mechanistic model.}
       Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
-      Simulations of a three-variant model including a wildtype, one intrinsic transmission variant, and one immune escape variant show the relationship between population-level transmission and selection for variants.
+      Simulations of a three-variant model including wildtype $W$, an intrinsic transmission variant $T$, and an immune escape variant $E$ show the relationship between population-level transmission and selection.
       We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
-      We introduce the transmissibility variant at $t=20$ with frequency $f_T(20) = 10^{-5}$ and transmissibility increase $\varTransmission_T = 0.5$.
-      We introduce the escape variant at $t=70$ with frequency $f_E(70) = 10^{-6}$ and $\varEscape_E = 0.05$.
-      % TB: Looking at "Two-Strain SIR" I believe that $\varEscape$ should range from 0 (no escape) to 1 (hosts recovered to wild-type are just as susceptible as naive hosts). I've adjusted text accordingly.
+      We introduce transmissibility variant $T$ at $t=20$ with frequency $f_T(20) = 10^{-5}$ and a 50\% increase in transmissibility $\varTransmission_T = 0.5$.
+      We introduce escape variant $E$ at $t=70$ with frequency $f_E(70) = 10^{-6}$ that infects 5\% of hosts possessing wildtype immunity $\varEscape_E = 0.05$.
       A. Prevalence $I$ by variant.
       B. Exponential growth rate $r$ by variant.
       C. Variant frequency $f$.
       D. Fitness relative to wildtype $\lambda$.
       E. Underlying immune pools.
       F. Effective reproduction number $R_t$ by variant.
+      \tbc{The axes labels of `Days', `Prevalence', etc...\ are a great size. However, you should slightly size up the the x and y tick labels of 0, 25, 50, etc...}
     }
     \label{fig:vis_mechanisms}
 \end{figure}
 
 % \subsection*{Estimating relative fitness using Gaussian Processes}
 
-Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplemental Appendix \ref{ssec:frequency_dynamics}).
+Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplementary Text \ref{ssec:frequency_dynamics}).
 This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
 Additionally, when working with variant classifications, non-neutral evolution within a variant will cause the relative fitness of that variant to change in time.
 However, even in the absence of external data that can inform relative fitness, there is still hope.
@@ -251,40 +250,40 @@ Gaussian processes are probability distributions over functions, where the struc
 These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
 Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
 
-Traditional Gaussian process, while flexible, face challenges for large time-series and large data set.
+Traditional Gaussian process, while flexible, face challenges for large time series and large data sets.
 Our approach overcomes this using a Hilbert Space Gaussian Process (HGSP) approximation, making the framework scalable for many variants and long time periods \cite{riutortmayol2022practical}.
 This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying mechanism.
 This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
 
-Later, we apply this model to data from 50 US states and England from 2021 to 2022 to estimate relative fitness for variants circulating in that period.
+Later, we apply this model to empirical SARS-CoV-2 sequence data from 50 US states and England from 2021 to 2022 to estimate relative fitness for variants circulating in that period, but first we continue analytic investigation into fitness dynamics.
 
 \subsection*{Determining the transmisibility-escape tradeoff}
 
-To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with one wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 1$ and $\varEscape_\varE > 0$.
+To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with a wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 0$ and $\varEscape_\varE > 0$.
 
-Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape only variant or transmissibility increased variant as
+Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape variant or transmissibility variant as
 \begin{align*}
     \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t)\\
     \lambda_{\varT, \wt} &= \varTransmission \beta S(t).
 \end{align*}
-% TB: I'm confused here. I thought that variant transmissibility = wildtype transmissibility when $\varTransmission = 0$. However, in the second equation here it's clear that we get $\lambda_{\varT, \wt}$ when $\varTransmission = 1$. Ah, looking at ``Two-Strain SIR'' I see that it's clearly $\varTransmission \beta$. I've fixed text above and made a note about interpreting these parameter values.}
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
     \phi^{*} = \frac{\varTransmission}{\varEscape + \varTransmission}.
 \end{equation}
 
-For past exposure level greater than $\phi^{*}$, escape variant have a higher relative fitness.
-This trade off shows that increasing escape rate entails that a lower proportion of past exposure is needed for escape variants to be preferred (Fig.~\ref{fig:transmission_tradeoff}).
+For past exposure level greater than $\phi^{*}$ escape variants have a higher relative fitness.
+This trade off shows that increasing degree of escape entails that a lower proportion of past exposure is needed for escape variants to be preferred (Fig.~\ref{fig:transmission_tradeoff}).
 Additionally, this shows that when intrinsic transmissibility increases are limited escape is more likely to be a dominant mechanism for variant turnover.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./figures/transmission_tradeoff.png}
     \caption{
-      \textbf{Trade-off between immune escape and transmissibility increases.}
-      A. Relative fitness for a transmissibility increasing variant $T$ and an immune escaping variant $E$ for $\varTransmission_T=0.2$, $\varEscape_E=0.3$, $\beta=0.875$.
-      The intersection point shows the point after which the escape variant is has higher fitness.
+      \textbf{Trade-off between degree of immune escape and increased transmissibility.}
+      A. Relative fitness for a transmissibility increasing variant $T$ with $\varTransmission_T=0.2$ and an immune escaping variant $E$ with $\varEscape_E=0.3$ for $\beta=0.875$.
+      \tbc{Fig.~\ref{fig:vis_mechanisms} uses $R_0$ instead of $\beta$. I do think $R_0$ is generally more interpretable and I'd swap $\beta$ for $R_0$ here unless for some reason $\beta$ matters in a way that $R_0$ does not.}
+      The intersection point shows that after 40\% of the population has wildtype immunity, the escape variant is has higher fitness.
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
       % \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
@@ -296,36 +295,31 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
 
 \subsection*{Initial growth rates insufficient for predicting short-term frequency growth}
 
-One question of interest is whether the mechanism meaningful informs our ability to forecast short-term frequency growth.
+One question of interest is whether knowledge of mechanism meaningfully informs our ability to forecast short-term frequency growth.
 The first step to addressing this is to understand how the relative fitness may change in time to understand the predictability of relative fitness in the short-term.
 
-We find that the mechanistic forms analyzed in this paper (see Supplementary text) can be represented as weighted combinations of $B$ time-varying functions $\upsilon_{b}(t)$ with weights $\beta_{b}$.
+We find that the mechanistic forms analyzed in this paper (see Supplementary Text \ref{ssec:frequency_dynamics}) can be represented as weighted combinations of $B$ time-varying functions $\Upsilon_{b}(t)$ with weights $\beta_{b}$.
 We can think of each of these functions $\Upsilon_b$ as an immune background and the coefficient $\beta_{b}$ as a transmission differential, so that
-
+% TB: Shouldn't both of these be \Upsilon_b? Rather than the current "time-varying functions $\upsilon_{b}(t)$" and "these functions $\Upsilon_b$". I've made this change, but could be missing something.
 \begin{align*}
 \lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \Upsilon_{b}(t).
 \end{align*}
 
 Even in the case of complete knowledge of the relative fitness and the underlying fitness contributions in the present and past, we have that change in the relative fitness is determined by
-
 \begin{align*}
     \frac{d\lambda_{v,u}}{dt} = \sum_{1 \leq b \leq B} \beta_{b} \frac{d\Upsilon_{b}}{dt}(t).
 \end{align*}
-
 By considering a Taylor expansion of the relative fitness about the point of estimation $t_{0}$, we can approximate the relative fitness in the future as:
-
 \begin{align*}
     \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + \sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
 \end{align*}
-
 This suggests small differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses through changes in the underlying immune backgrounds.
 
-We investigate whether relative fitnesses vary predictably in the short-term regardless of mechanism, so that short-term forecasts are unaffected by mechanistic differences in the assumed transmission process.
-
-To address this, we apply the two-variant model developed in previous sections for two different mechanisms (immune escape and increased transmissibility).
-We fix the relative fitness of the novel variant at a prediction time $t_{0}$ using equation \ref{eq:critical_immunity} and assess the change in the relative fitness in the short-term.
-We find that though relative fitness trajectories will share the same decreasing shape, they may decline at different rates depending on the mechanism (Fig.~\ref{fig:short_term_divergence}).
-This can lead to large changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
+We investigate whether relative fitnesses vary predictably in the short-term regardless of mechanism.
+To do so, we apply the two-variant model developed in previous sections for different mechanisms of immune escape and increased transmissibility.
+We fix the relative fitness of the novel variant at a prediction time $t_{0}$ using Equation \ref{eq:critical_immunity} and assess the change in the relative fitness in the short-term.
+We find that although relative fitness trajectories share the same decreasing shape, they may decline at different rates depending on the mechanism (Fig.~\ref{fig:short_term_divergence}).
+This can lead to substantial changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
 
 \subsection*{Correlations insufficient for mechanism identification}
 
@@ -376,24 +370,20 @@ This approach also enables clearer comparison between different potential mechan
 
 \subsection*{Quantifying selective pressure}
 
-
-Though it is useful to quantify the relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
-With this in mind, we can derive a metric of overall selective pressure $\psi(t)$ which describes the distribution of relative fitness in the population.
-
+Although it is useful to quantify the relative fitnesses of individual variants, we are often interested in quantifying the overall effects of selection in the population.
+With this in mind, we can derive a metric of overall selective pressure $\psi(t)$ which describes the distribution of relative fitness in the population
 \begin{equation}
 \psi(t) =  \Expect_{f(t)}\left[ \frac{d \lambda_v}{d t}\right] +  \Var_{f(t)}[\lambda_{v}].
 \end{equation}
-
 This selective pressure metric serves as an indicator for high fitness variants arising in the population as change.
-High fitness variants rising from initial low frequency leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
-
+High fitness variants rising from initially low frequency leads to large increases in the variance of the fitness distribution and therefore increases in the selective pressure.
 
 The selective pressure metric enables us to decompose changes in the average growth rate in the population to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$:
 
+The selective pressure metric enables us to decompose changes in the average growth rate in the population $d\bar{r}/dt$ to an evolutionary component $\psi$ and a residual baseline growth rate $r_0$ following
 \begin{equation}
     \frac{d\bar{r}}{dt} = \frac{dr_0}{dt} + \psi(t).
 \end{equation}
-
 This shows that increased selective pressure through emerging high fitness variants can drive waves of infection.
 Further, this suggests that differences between growth rates based on selective pressure alone and observed rates are attributable to changes in baseline transmission over time.
 This mirrors ideas of Fisher's theorem of natural selection and its later interpretations with the variance of fitness contributing directly to the change in transmission rates (or fitness) \cite{Ewens1989, Ewens2024}.
@@ -401,29 +391,32 @@ This definition of selective pressure captures how relative fitness contributes 
 This is similar to ideas quantifying rates of adaptation via fitness flux \cite{Mustonen2010}.
 
 In this case, the overall growth rate $\bar{r}$ and relative incidence $I(t) / I(0)$ can be written directly using the cumulative selective pressure $\Psi(t) = \int_0^t \psi(s)ds$ as follows:
-
 \begin{align}
     \bar{r}(t) &= \bar{r}(0) + [r_0(t) - r_0(0)] + \Psi(t)\\
-    \frac{I(t)}{I(0)} &= \exp(\int_0^t [r_0(s) + \Psi(s)]ds).
+    \frac{I(t)}{I(0)} &= \exp \left( \int_0^t [r_0(s) + \Psi(s)]ds \right).
 \end{align}
-
+\tbc{Is $r_0(t)$ exponential growth rate of wildtype (pivot) variant? The only way I've so far seen $r$ subscripted is $r_v(t)$. If this is the case, I'd use something like $r_W(t)$ instead to be consistent with earlier use.}
+\tbc{Also what's up with the brackets in $[r_0(t) - r_0(0)]$? Is this equivalent to $(r_0(t) - r_0(0))$? If so, can the brackets just be dropped in Equation 5?}
 In addition to estimating the relative fitness, metrics derived from these models can be informative of much more.
+
 Our ``selective pressure'' metric which allows us to model the contribution of evolution to changes in the epidemic growth rate of a population and is independent of pivot choice for relative fitness estimation.
+\tbc{Or is the ``selective pressure'' metric cumulative selection pressure $\Psi(t)$?}
 This metric acts as an early warning system for variant-driven outbreaks, especially in scenarios where case data are sparse or delayed.
 This metric can be computed using any method that estimates variant frequency and relative fitnesses and serves as a simple tool for understanding the contribution of selection to the overall population dynamics.
 This approach is compatible with any method which estimates frequency and relative fitness, enabling broad applicability to many pathogens.
 
-The full derivation of this metric and its contribution to the overall growth rate can be found in Supplemental Appendix \ref{ssec:deriving_selective_pressure}.
+%The full derivation of this metric and its contribution to the overall growth rate can be found in Supplemental Appendix \ref{ssec:deriving_selective_pressure}.
 
-% \tbc{With Main Text you want to describe `results', but not go into too much detail on how they were arrived at. In the most typical case you present a Figure in Main Text and describe a bit about how it was derived, but with most details in Methods. I'd suggest thinking of the math here in a similar fashion. You have the Equation 3 result (and the two equations following) as big picture understanding of selective pressure. Good to include this in Main Text. But much of the preceeding derivation of Equation 3 can probably be moved to Methods or Supplemental Text.}
-% MF: Tried to address this by moving most to the supplemental text.
+The full derivation of this metric and its contribution to the overall growth rate can be found in Supplementary Text \ref{ssec:deriving_selective_pressure}.
 
 \subsection*{Predicting epidemic growth rates using selective pressure}
 
-Motivated by the relationship between the epidemic growth rate and the selective pressure demonstrated above, we develop a predictive model of the epidemic growth rate using estimates of selective pressure.
-By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
-
-Using case and sequence data from 50 US states between January 2021 and November 2022, we estimate epidemic growth rates in these states and as well as selective pressure using our approximate Gaussian model on sequence counts grouped at the level of Nextstrain clades (Figs.~\ref{fig:selective_pressure_east}--\ref{fig:selective_pressure_west}).
+Motivated by the relationship between epidemic growth rate and selective pressure demonstrated above, we develop a predictive model of epidemic growth rate using estimates of selective pressure.
+% By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
+Using empirical SARS-CoV-2 case and sequence data from 50 US states between January 2021 and November 2022, we estimate epidemic growth rates through time in each state using case counts, and estimate selective pressure through time using our approximate Gaussian process model on sequence counts  (Fig.~\ref{fig:selective_pressure_prediction} A--C.)
+Here we group variants at the granularity of Nextstrain clades \cite{aksamentov2021nextclade} resulting in XXX distinct variants over this time period.
+\tbc{Fill in XXX with variant count, including `other' variant in the total.}
+As expected we see that relative fitness increases through time and that selective pressure corresponds to speed of clade turnover where the sweep of Omicron BA.1 (clade 21K) yields the strongest signal of selective pressure (Figs.~\ref{fig:selective_pressure_east}--\ref{fig:selective_pressure_west}).
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 
 % \tbc{Statement on predictive performance here.}
@@ -445,14 +438,14 @@ Though these predictions can be biased by non-evolutionary effects on the epidem
       A. Variant frequency estimated using the Gaussian process relative fitness model between January 2021 and November 2022.
       B. Case counts from Washington state.
       C. Selective pressure computed using estimated variant frequencies and relative fitness from Washington state.
+      \tbc{Label panels A and C with `Washington' as well.}
       D-I. Predictions for empirical growth rate from selective pressure for selected US states.
       The light gray period is the training period and the darker gray is the testing period.
+      \tbc{I think the dashed line got accidently moved to the end of the time series? I suggest actually  dropping the vertical dashed lines and instead relying on lighter / darker background shading to denote training vs test split.}
       G. Estimated selective pressure in England.
       H. Prevalence estimates for England.
       I. Empirical growth rates (gray) computed from prevalence estimates in H. and predictions from our model (green).
-      % \tbc{This is currently a little too much magic / too divorced from intuition. I'd suggest a top set of panels that show a single state (whichever you'd like). With one panel showing variant frequencies in this state. Another panel showing case counts in this state. And a third panel showing selective pressure in this state. This then gives a bridge to the more derived information in the current figure.}
-      % \tbc{Be consistent with the semantics of your colors. Currently gray means both regressor model on selected pressure and ONS prevalence.}
-      %MF: Black here is ONS Prevalence / cases, Gray is the epidemic growth rate from data. The regressor is green.
+      \tbc{Same statment about slightly increasing font size of tick labels.}
     }
     \label{fig:selective_pressure_prediction}
 \end{figure}
@@ -858,7 +851,7 @@ Due to the dependence here on the proportion of each immune background in determ
 Understanding the size and complexity of this immune space may therefore be useful for parameterization and forecasting of variant frequencies.
 However, the extent to which modeling this complexity affects estimates of relative fitness also depends on how quickly the distribution of immune backgrounds change i.e. $\frac{d\phi_{b}}{dt}$.
 
-Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in Supplemental Appendix \ref{ssec:full_immune_history}.
+Though the derivation above uses a simplified model of using most recent infection to sort individuals into an immune group, we show that a more complicated model that accounts for the entire exposure history of the host also gives a similar decomposition to relative fitness in Supplementary Text \ref{ssec:full_immune_history}.
 
 \subsection{Revisiting existing models for frequency growth}\label{ssec:existing_frequency_models}
 
@@ -1007,6 +1000,12 @@ We can then use this to reconstruct the relative incidence as:
     \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_East.png}
     \caption{
       \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure in Eastern US states.}
+      \tbc{These requests are for all five selection pressure supp figures.}
+      \tbc{Keep consistent y bounds for relative fitness and selective pressure across all states}
+      \tbc{Move legend from $\sim$5 rows to $\sim$2 rows to try to make it extend across the entire figure}
+      \tbc{Add WHO / Pango parenthicals to each legend entry, e.g.\ `20I (Alpha)'. An appropriate set of labels can be seen here \url{http://github.com/nextstrain/ncov/blob/master/defaults/clade_display_names.yml}}
+      \tbc{Update coloring so that common clades get colors and rare clades get grays. Currently, I see that common clades like Delta 21J in gray.}
+      \tbc{Finally, you'll probably be better served with 5 supp figures each with 10 panels even if there's a less clean geographic labeling for each figure.}
     }
     \label{fig:selective_pressure_east}
 \end{figure}
