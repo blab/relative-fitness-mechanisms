@@ -443,66 +443,52 @@ Although these predictions can be biased by non-evolutionary effects on the epid
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
 To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
 This model assumes that variants intrinsically escape the immune responses with particular groups and that differences in a variant's relative fitness between geographies is attributable to differences in immunity between populations.
-This enables us to estimate a pseudo-escape rates for variants (Fig.~\ref{fig:latent_immune}F) as well as pseudo-immunity groups within geographies over time (Fig.~\ref{fig:latent_immune}C).
-
-% \tbc{Say more about what this model is and how it works intuitively (correlations in relative fitness between variants and countries). Keep equations / details in Methods and Supplemental Text.}
+This enables us to estimate a pseudo-escape rates for variants as well as pseudo-immunity groups within geographies over time.
 
 We generate Pango lineage-level sequence counts for 14 countries and 41 variants between March 2023 and March 2024.
-These 14 countries were chosen based on availability of sequences.
+These 14 countries were chosen based on availability of sequence data.
 Small lineages which do not meet a count threshold are collapsed into their parent lineages.
 This leaves us with a total of 41 variants, so that each variant met a threshold for number of sequences available.
 
 Using these sequence counts, we apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $D=10$ pseudo-immune groups.
-Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the "elbow" method.
-% \tbc{Make a comment of the size of immune space. Why five dimensions? If you haven't formally tested different dimensions you need to.}
-%MF: Plan to add a replicate figueres with different K and then elbow plot showing the loss at different $K$.
+Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the "elbow" method (Fig.~\ref{fig:latent_factor_dimension}).
+With $D=10$ we fit 10 pseudo-immune pools for each country resulting in 140 immune pools and a matrix of pseudo escape per variant per pseudo-immune pool resulting in 410 escape values.
+Thus, per-country per-variant relative fitnesses are defined by these 550 parameters.
+Compare this parameterization to estimating relative fitness per variant per country that would require 574 parameters.
+\tbc{This probably needs to be cleaned up, but I think important to emphasize that this seemingly fancier model is actually more constrained than the earlier variant x country models.}
+
 The results of this model are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
-
-% \tbc{This needs to be greatly expanded. Simply describe the results shown in Figure \ref{fig:latent_immune} and describe how you derive ``titer differences''. There's a whole lot going on here. Note things like the striped pattern in panel F where more closely related Pango lineages are assigned similar pseudo immune escape values without this being input into the model.}
-
 Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
-Further, our model shows that these groups of lineages tend to target particular immune groups such as Clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 3.
+Further, our model shows that these groups of lineages tend to target particular immune groups such as clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 3.
 If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
-Using human titer data from Jian et al, we compute titer distances as average log2 differences in titer values between pairs of variants. \cite{Jian2023} 
-We, then, compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.26).
-We bootstrap this analysis among 1,000 replicates to get a distribution among $R^2$ (Fig.`\ref{fig:latent_immune_bootstrap}).
+Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
+We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.26).
+We bootstrap this analysis among 1000 replicates to assess signficance of this correlation (Fig.~\ref{fig:latent_immune_bootstrap}, $p = $).
+\tbc{Insert p-value as the fraction of the 1000 replicates with correlation coefficient greater than 0 (I think this is what you want).}
 
- This approach can be applied to other rapidly evolving pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
- In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
-
+This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
+In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
 By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
 This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant fitness.
-
-% \tbc{(More reviewer questions:) How does model fit of the latent factor model compare to the Gaussian process model from earlier in the text? Or is this applied after the Gaussian process estimates of relative fitness?}
-%MF: This is a bit more difficult since this is a hierarchical model where the GP model is not.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./figures/latent_immune.png}
     \caption{
-      \textbf{Latent factor models of immunity describe variant structure.}
+      \textbf{Latent factor models of immunity describe variant dynamics.}
       We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
-      A. Variant frequency. Lines are colored by variant with the style of the line denoting countries of interest.
-      % \tbc{Y axis in panel A should be 0\%, 20\%, etc...}
+      A. Variant frequency. Lines are colored to show 4 variants of interest (of 41 total variants) with the style of the line denoting 3 countries of interest (of 14 total countries).
       B. Estimated relative fitness for selected variants and countries.
-      % \tbc{Relative fitness to what? Note in the y axis label.} %MF: This is relative to other. Will add note to methods.
-      C. Estimated pseudo-immunity over time for multiple countries.
-      % \tbc{I read this as `principle component 1', etc... but I think these are directly immune pools. I suggest legend title of `Psuedo immune pools' over `Pool 1', `Pool 2', etc... swatches. Make this 1 to 5 and not current 0 to 4.}
-      % \tbc{Order immune pools in a logical fashion in panels C and F and state what this ordering is based on.}
-      %MF: They are already ordered and this is mentioned in the methods.
-      D, E. Dimensionality-reduced pseudo-escape rates using Multidimensional Scaling.
-      F. Estimated pseudo-escape rates for each variant.
-      % \tbc{Why are there negative values here? I thought that pseudo-escape ranges from 0 to 1.}
-      %MF: For identifiablity, these are difference relative to the pivot variant in terms of both transmission times escape potential, so it's fine and expected for them to be negative for some variants.
-      H. Comparing distances in the pseudo-immune space C. to observed distances in human titer data.
+      C. Estimated pseudo-immunity cohorts (PIC) over time for multiple countries ordered by decreasing share in the first geography
+      D, E. Dimensionality-reduced pseudo-escape rates using multidimensional scaling (MDS).
+      F. Estimated pseudo-escape rates for each variant relative to pivot variant.
+      \tbc{Currently the colors in panels D and E are meaningful but it's hard to convey that. You could do so by coloring the clade and lineage label text at the bottom and top of the matrix by these same colors.}
+      \tbc{It would be nice if these clade and lineage labels were larger. I struggle to read them at the moment.}
+      H. Comparing pairwise distance between variants in the pseudo-immune space to observed distances in human titer data.
     }
     \label{fig:latent_immune}
 \end{figure}
 
-% \subsection*{Overview of methods}
-%
-% \tbc{This whole ``Overview of methods'' section feels largely out of place in current Main Text setup. Main Text is effectively Results and Discussion. Things like the note on the latent factor model ``This is offers a tool for a deeper understanding of immune dynamics'' should immediately follow its presentation in the text. Same thing for ``Selective Pressure'' paragraph below. Please fold this text where it's not a restatement of what's already been said directly into the sections above. There should remain roughly a paragraph that becomes the start of the ``Conclusions'' section that's effectively the first two sentences here of ``Our study demonstrates...''.}
-%
 \subsection*{Conclusions, limitations, and future work}
 
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
