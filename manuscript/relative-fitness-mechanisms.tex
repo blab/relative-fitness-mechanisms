@@ -411,10 +411,13 @@ We observe a strong correpondence between observed epidemic growth rate and mode
 \tbc{Please fill in these values.}
 \tbc{Currently Fig.~\ref{fig:growth_rate_predictions_model_comparison} is never referenced in the text. I believe you want to reference it here.}
 
+
+% \tbc{Statement on predictive performance here.}
 We validate this method by testing this model to estimate epidemic growth rates in England derived from the Office for National Statistics (ONS) Coronavirus Infection Survey between February 2022 and November 2022.
 The ONS Infection Survey represented a randomly sampled panel survey of households where nasal swabs were collected regardless of symptom status allowing for prevalence estimates despite faltering case reporting \cite{pouwels2021community}.
-Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a Spearman correlation of $\rho = 0.614$ and mean absolute error of 0.016 on per day epidemic growth rate.
+Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a coefficient of variation of $R^2 = 0.328$ and mean absolute error of 0.019.
 % TB: I'm used to using \rho and not \rho^2 to report Spearman correlations
+%MF: This is a typo on my end. I'm using coefficient of variation / explained variance here.
 Performance is significantly better for the first two subsequent waves, falling off in accuracy for the fall 2022 BQ.1 (clade 22E) wave.
 
 Although these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
