@@ -288,7 +288,7 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
       % \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
-      %MF: I've moved \rho -> 1 + \rho throughout. 
+      %MF: I've moved \rho -> 1 + \rho throughout.
       % \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
     }
     \label{fig:transmission_tradeoff}
@@ -659,7 +659,7 @@ We then use the past 28 days of selective pressure to predict the empirical grow
 We use a gradient boosting regressor model with 100 estimators and max tree depth of 5 which is fit using a mean absolute error loss function.
 This model was selected as it achieved the minimal error via time series cross-validation averaged across 5 splits among candidate models (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
 % \tbc{Currently Fig.~\ref{fig:growth_rate_predictions_model_comparison} is never referenced in the text. I believe you want to reference it here.}V
-%MF: Moved this to where we describe the model selection component. 
+%MF: Moved this to where we describe the model selection component.
 The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
 
 
