@@ -233,7 +233,6 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
       D. Fitness relative to wildtype $\lambda$.
       E. Underlying immune pools.
       F. Effective reproduction number $R_t$ by variant.
-      % \tbc{The axes labels of `Days', `Prevalence', etc...\ are a great size. However, you should slightly size up the the x and y tick labels of 0, 25, 50, etc...}
     }
     \label{fig:vis_mechanisms}
 \end{figure}
@@ -282,14 +281,9 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
     \caption{
       \textbf{Trade-off between degree of immune escape and increased transmissibility.}
       A. Relative fitness for a transmissibility increasing variant $T$ with $\varTransmission_T=0.2$ and an immune escaping variant $E$ with $\varEscape_E=0.3$ for $R_{0, \wt}=2.8$ and $1 / \gamma = 3.0$ days.
-      % \tbc{Fig.~\ref{fig:vis_mechanisms} uses $R_0$ instead of $\beta$. I do think $R_0$ is generally more interpretable and I'd swap $\beta$ for $R_0$ here unless for some reason $\beta$ matters in a way that $R_0$ does not.}
-      % MF: I used $\beta$ here since that's what goes into the relative fitness calculation used here. Happy to switch to $R_0$ and $1 / \gamma$.
       The intersection point shows that after 40\% of the population has wildtype immunity, the escape variant has higher fitness.
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
-      % \tbc{I don't like the fact that in panels B and C you're showing $\varTransmission-1$ rather than $\varTransmission$. But I understand that you're doing so because it's more intuitive to start at zero. I'd propose to move from $\varTransmission \beta$ to $(1-\varTransmission) \beta$ throughout the text. This would bring $\varTransmission$ and $\varEscape$ in line with each other where 0 is equivalent to wildtype.}
-      %MF: I've moved \rho -> 1 + \rho throughout.
-      % \tbc{Please attend to this in all figures, but I noticed it most obviously here. Currently legend and axes text is often too small. Even after I blew this up to 100\% page width the font on the x axis is 6pt or smaller. \tiny{Here's an example of 6pt for comparison.} \footnotesize{I prefer legends to be at least 8 pt as shown here.}}
     }
     \label{fig:transmission_tradeoff}
 \end{figure}
@@ -301,7 +295,6 @@ The first step to addressing this is to understand how the relative fitness may 
 
 We find that the mechanistic forms analyzed in this paper (see Supplementary Text \ref{ssec:frequency_dynamics}) can be represented as weighted combinations of $B$ time-varying functions $\Upsilon_{b}(t)$ with weights $\beta_{b}$.
 We can think of each of these functions $\Upsilon_b$ as an immune background and the coefficient $\beta_{b}$ as a transmission differential, so that
-% TB: Shouldn't both of these be \Upsilon_b? Rather than the current "time-varying functions $\upsilon_{b}(t)$" and "these functions $\Upsilon_b$". I've made this change, but could be missing something.
 \begin{align*}
 \lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \Upsilon_{b}(t).
 \end{align*}
@@ -411,12 +404,9 @@ We observe a strong correspondence between observed epidemic growth rate and mod
 \tbc{Please fill in these values.}
 
 
-% \tbc{Statement on predictive performance here.}
 We validate this method by testing this model to estimate epidemic growth rates in England derived from the Office for National Statistics (ONS) Coronavirus Infection Survey between February 2022 and November 2022.
 The ONS Infection Survey represented a randomly sampled panel survey of households where nasal swabs were collected regardless of symptom status allowing for prevalence estimates despite faltering case reporting \cite{pouwels2021community}.
 Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a coefficient of variation of $R^2 = 0.328$ and mean absolute error of 0.019.
-% TB: I'm used to using \rho and not \rho^2 to report Spearman correlations
-%MF: This is a typo on my end. I'm using coefficient of variation / explained variance here.
 Performance is significantly better for the first two subsequent waves, falling off in accuracy for the fall 2022 BQ.1 (clade 22E) wave.
 
 Although these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
@@ -435,7 +425,6 @@ Although these predictions can be biased by non-evolutionary effects on the epid
       K. Prevalence estimates for England.
       \tbc{Please swap panels J and K to mirror panels B and C that are ordered as cases then selective pressure.}
       L. Empirical growth rates (gray) computed from prevalence estimates and predictions from our model (green) computed from selective pressure.
-      \tbc{Again, I think the vertical dashed line can be dropped. It's not described in the caption and the darker background covers this anyway.}
     }
     \label{fig:selective_pressure_prediction}
 \end{figure}
@@ -658,10 +647,7 @@ We then use the past 28 days of selective pressure to predict the empirical grow
 
 We use a gradient boosting regressor model with 100 estimators and max tree depth of 5 which is fit using a mean absolute error loss function.
 This model was selected as it achieved the minimal error via time series cross-validation averaged across 5 splits among candidate models (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
-% \tbc{Currently Fig.~\ref{fig:growth_rate_predictions_model_comparison} is never referenced in the text. I believe you want to reference it here.}V
-%MF: Moved this to where we describe the model selection component.
 The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
-
 
 We validate our model by comparing our predicted epidemic growth rates to estimates of the epidemic growth rates in England derived from ONS data between January 2022 and September 2022 as well as to held-out testing data for US states.
 
