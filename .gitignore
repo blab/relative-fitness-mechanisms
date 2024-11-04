@@ -23,6 +23,7 @@ data/antigenic_map_data*
 
 # Compiled manuscript
 relative-fitness-mechanisms.pdf
+cover-letter.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
