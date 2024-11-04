@@ -400,9 +400,8 @@ Using empirical SARS-CoV-2 case and sequence data from 50 US states between Janu
 Here we group variants at the granularity of Nextstrain clades \cite{aksamentov2021nextclade} resulting in 37 distinct variants over this time period.
 As expected we see that relative fitness increases through time and that selective pressure corresponds to speed of clade turnover where the sweep of Omicron BA.1 (clade 21K) yields the strongest signal of selective pressure (Figs.~\ref{fig:selective_pressure_group_1}--\ref{fig:selective_pressure_group_5}).
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
-We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of XXX and Pearson $R^2$ in the testing period of XXX.
-\tbc{Please fill in these values.}
-
+We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of 0.365 and Pearson $R^2$ in the testing period of 0.01.
+% \tbc{Please fill in these values.}
 
 We validate this method by testing this model to estimate epidemic growth rates in England derived from the Office for National Statistics (ONS) Coronavirus Infection Survey between February 2022 and November 2022.
 The ONS Infection Survey represented a randomly sampled panel survey of households where nasal swabs were collected regardless of symptom status allowing for prevalence estimates despite faltering case reporting \cite{pouwels2021community}.
@@ -454,8 +453,9 @@ Further, our model shows that these groups of lineages tend to target particular
 If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
 Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
 We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.26).
-We bootstrap this analysis among 1000 replicates to assess signficance of this correlation (Fig.~\ref{fig:latent_immune_bootstrap}, $p = $).
-\tbc{Insert p-value as the fraction of the 1000 replicates with correlation coefficient greater than 0 (I think this is what you want).}
+We bootstrap this analysis among 1000 replicates to assess signficance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p = 0.0$).
+% \tbc{Insert p-value as the fraction of the 1000 replicates with correlation coefficient greater than 0 (I think this is what you want).}
+% MF: Edited this. We're working with R^2 not correlation. Point stands and all replicates have R^2 > 0.
 
 This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
@@ -576,13 +576,13 @@ These sequences were tallied according to either their annotated Nextstrain clad
 \paragraph{Likelihood of sequence counts given frequencies}
 
 The models discussed in this paper use observed counts of variant sequences to inform the underlying variant frequency in the population.
-This is accomplished using a multinomial likelihood, so that given count of sequences $C_{t,v}$ of variant $v$ at time $t$ and total sequences $N_{t}$ collected at time $t$, we have that
+This is accomplished using a multinomial likelihood, so that given count of sequences $S_{v}(t)$ of variant $v$ at time $t$ and total sequences $N(t)$ collected at time $t$, we have that
 \begin{equation*}
-    C_{t, \cdot} \sim \text{Multinomial}(N_{t}, f_{v}(t)),
+    S_{v}(t) \sim \text{Multinomial}(N(t), f_{v}(t)),
 \end{equation*}
 where $f_{v}(t)$ is the frequency of variant $v$ at time $t$.
-\tbc{I'm a little confused on why this isn't $N(t)$ and $C_v(t)$. I think it's because it's fundementally an array of observations rather than a continuous variable, but the differing subscripting is still confusing to me. It's okay if you feel it's best to keep it as it stands, but just noting my surprise.}
-\tbc{Also, I'd think with $f_{v}(t)$ in the equation you want $C_{t, v}$ on the left rather than the existing $C_{t, \cdot}$.}
+% \tbc{I'm a little confused on why this isn't $N(t)$ and $C_v(t)$. I think it's because it's fundementally an array of observations rather than a continuous variable, but the differing subscripting is still confusing to me. It's okay if you feel it's best to keep it as it stands, but just noting my surprise.}
+% \tbc{Also, I'd think with $f_{v}(t)$ in the equation you want $C_{t, v}$ on the left rather than the existing $C_{t, \cdot}$.}
 This is a simple model of sequence counts to frequencies and does not account for over-dispersion of sequence counts relative to a multinomial.
 However, all models can be extended to estimate and account for over-dispersion by replacing the above likelihood with a Dirichlet-Multinomial likelihood.
 
@@ -596,8 +596,8 @@ That is, we model the relative fitness for each variant over time $\lambda_v(t)$
     \vec{\Sigma}_{s, t} &= K_{\theta}(s, t),
 \end{align*}
 where $K_{\theta}$ is a potentially parameterized kernel function.
-\tbc{What is $s$?}
-This induces a structure on the covariance of the relative fitness values over time.
+% \tbc{What is $s$?}
+This induces a structure on the covariance of the relative fitness values over time points $s$ and $t$.
 
 For computational efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes.
 This approximation allow us to share basis functions between variants \cite{riutortmayol2022practical}.
