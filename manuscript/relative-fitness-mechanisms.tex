@@ -422,7 +422,7 @@ Although these predictions can be biased by non-evolutionary effects on the epid
       The light gray period is the training period and the darker gray is the testing period.
       J. Estimated selective pressure in England.
       K. Prevalence estimates for England.
-      \tbc{Please swap panels J and K to mirror panels B and C that are ordered as cases then selective pressure.}
+      % \tbc{Please swap panels J and K to mirror panels B and C that are ordered as cases then selective pressure.}
       L. Empirical growth rates (gray) computed from prevalence estimates and predictions from our model (green) computed from selective pressure.
     }
     \label{fig:selective_pressure_prediction}
@@ -474,7 +474,7 @@ This enables an embedding similar to those from antigenic cartography but withou
       D, E. Dimensionality-reduced pseudo-escape rates using multidimensional scaling (MDS).
       F. Estimated pseudo-escape rates for each variant relative to pivot variant.
       \tbc{Currently the colors in panels D and E are meaningful but it's hard to convey that. You could do so by coloring the clade and lineage label text at the bottom and top of the matrix by these same colors.}
-      \tbc{It would be nice if these clade and lineage labels were larger. I struggle to read them at the moment.}
+      % \tbc{It would be nice if these clade and lineage labels were larger. I struggle to read them at the moment.}
       H. Comparing pairwise distance between variants in the pseudo-immune space to observed distances in human titer data.
     }
     \label{fig:latent_immune}
@@ -749,7 +749,6 @@ where the growth rate of $v$ is expressed as relative to an arbitrary pivot vari
 Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals $\Lambda_{v,u}(0, t) = \int_{0}^{t} \lambda_{v, u}(s)ds$.
 We can then characterize approaches for modeling frequency change in terms of how they represent, estimate, and forecast these relative fitnesses.
 This framework includes various existing methods for analyzing frequency data such as the seasonal influenza forecasting models of L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020}, multinomial logistic regression for frequency estimation \cite{Annavajhala2021} and the SARS-CoV-2 mutational fitness model of Obermeyer et al \cite{Obermeyer2022}.
-%Question: How would I nest Piantham in this framework? Can I?
 
 Though this framework can be used to describe existing statistical methods for frequency modeling, it is also applicable to traditional compartmental models of epidemics.
 In fact, applying these ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
