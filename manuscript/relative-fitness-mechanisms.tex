@@ -208,10 +208,10 @@ By considering the difference in these growth rates, we can define the relative 
 This relative fitness determines the change in the frequencies of the variants in the population
 
 \begin{equation}
-    f_v(t) = \frac{f_v(0) \exp \left( \int_0^t \lambda_{v, \text{pivot}}(s)ds \right)}{ \sum_{u=1}^{V} f_u(0) \exp \left( \int_0^t \lambda_{u, \text{pivot}}(s)ds \right)},
+    f_v(t) = \frac{f_v(0) \exp \left( \int_0^t \lambda_{v, v^*}(s)ds \right)}{ \sum_{u=1}^{V} f_u(0) \exp \left( \int_0^t \lambda_{u, v^*}(s)ds \right)},
 \end{equation}
 
-where $\text{pivot}$ is a chosen pivot variant which fitness is defined relative to.
+where $v^*$ is a chosen pivot variant which fitness is defined relative to.
 
 In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Supplementary Text \ref{ssec:frequency_dynamics}).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
@@ -666,8 +666,9 @@ We model $\text{logit}(\phi_{d}^{g})$ using 4th order splines with 6 knots place
 Though we choose to model these latent factors with splines, other models would work here.
 For example, one alternative would be the approximate Gaussian processes described above.
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\varEscape_{v^*, d} = 0$ for all $1\leq d\leq D$.
-\tbc{Can we be more consistent in notation for base or pivot variant? It's $*$ here, but $\mathrm{pivot}$ in Equation 1. What about just using $*$ throughout?}
-For the same reason, we fix the order of components, so that the components are numbered in decreasing order by their share in the a arbitrarily defined base geography.
+% \tbc{Can we be more consistent in notation for base or pivot variant? It's $*$ here, but $\mathrm{pivot}$ in Equation 1. What about just using $*$ throughout?}
+% MF: Updated everywhere
+For the same reason, we fix the order of components, so that the components are numbered in decreasing order by their share in the arbitrarily defined base geography.
 
 We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024 for 14 countries.
 To access the necessary number of immune dimensions, we vary the number of immune dimensions between $D=2$ to $D=12$.
@@ -739,9 +740,9 @@ We can see that there is a symmetry in the relative fitnesses and that the assoc
 This suggests that absolute fitness (in terms of the growth of infections) may not be inferable from frequencies alone.
 This definition of relative fitness becomes essential in describing various existing modeling approaches for frequency dynamic data and motivates possible extensions since we can represent these models as having the form:
 \begin{align}
-    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, \text{pivot}}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, \text{pivot}}(s) ds)},
+    f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, v^*}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, v^*}(s) ds)},
 \end{align}
-where the growth rate of $v$ is expressed as relative to an arbitrary pivot variant.
+where the growth rate of $v$ is expressed as relative to an arbitrary pivot variant $v^*$.
 
 \paragraph{Cumulative relative-fitness and frequency change}
 
