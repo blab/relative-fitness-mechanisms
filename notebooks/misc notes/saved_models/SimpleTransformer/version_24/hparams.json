@@ -1,0 +1,21 @@
+{
+    "model_class": "SimpleTransformer",
+    "model_hparams": {
+        "num_heads": 8,
+        "d_model": 64,
+        "d_ff": 64,
+        "dropout_rate": 0.3,
+        "output_dim": 1
+    },
+    "optimizer_hparams": {
+        "lr": 0.0004
+    },
+    "logger_params": {
+        "base_log_dir": "/Users/marlinfiggins/Documents/relative-fitness-mechanisms/notebooks/saved_models"
+    },
+    "enable_progress_bar": true,
+    "debug": false,
+    "check_val_every_n_epoch": 1,
+    "seed": 42,
+    "optimizer": "adamw"
+}
