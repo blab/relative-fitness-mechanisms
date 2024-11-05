@@ -401,7 +401,6 @@ Here we group variants at the granularity of Nextstrain clades \cite{aksamentov2
 As expected we see that relative fitness increases through time and that selective pressure corresponds to speed of clade turnover where the sweep of Omicron BA.1 (clade 21K) yields the strongest signal of selective pressure (Figs.~\ref{fig:selective_pressure_group_1}--\ref{fig:selective_pressure_group_5}).
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of 0.365 and Pearson $R^2$ in the testing period of 0.01.
-% \tbc{Please fill in these values.}
 
 We validate this method by testing this model to estimate epidemic growth rates in England derived from the Office for National Statistics (ONS) Coronavirus Infection Survey between February 2022 and November 2022.
 The ONS Infection Survey represented a randomly sampled panel survey of households where nasal swabs were collected regardless of symptom status allowing for prevalence estimates despite faltering case reporting \cite{pouwels2021community}.
@@ -422,7 +421,6 @@ Although these predictions can be biased by non-evolutionary effects on the epid
       The light gray period is the training period and the darker gray is the testing period.
       J. Estimated selective pressure in England.
       K. Prevalence estimates for England.
-      % \tbc{Please swap panels J and K to mirror panels B and C that are ordered as cases then selective pressure.}
       L. Empirical growth rates (gray) computed from prevalence estimates and predictions from our model (green) computed from selective pressure.
     }
     \label{fig:selective_pressure_prediction}
@@ -441,7 +439,7 @@ Small lineages which do not meet a count threshold are collapsed into their pare
 This leaves us with a total of 41 variants, so that each variant met a threshold for number of sequences available.
 
 Using these sequence counts, we apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $D=10$ pseudo-immune groups.
-Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the "elbow" method (Fig.~\ref{fig:latent_factor_dimension}).
+Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
 With $D=10$ we fit 10 pseudo-immune pools for each country resulting in 140 immune pools and a matrix of pseudo escape per variant per pseudo-immune pool resulting in 410 escape values.
 Thus, per-country per-variant relative fitnesses are defined by these 550 parameters.
 Compare this parameterization to estimating relative fitness per variant per country that would require 574 parameters.
@@ -473,8 +471,6 @@ This enables an embedding similar to those from antigenic cartography but withou
       C. Estimated pseudo-immunity cohorts (PIC) over time for multiple countries ordered by decreasing share in the first geography
       D, E. Dimensionality-reduced pseudo-escape rates using multidimensional scaling (MDS).
       F. Estimated pseudo-escape rates for each variant relative to pivot variant.
-      % \tbc{Currently the colors in panels D and E are meaningful but it's hard to convey that. You could do so by coloring the clade and lineage label text at the bottom and top of the matrix by these same colors.}
-      % \tbc{It would be nice if these clade and lineage labels were larger. I struggle to read them at the moment.}
       H. Comparing pairwise distance between variants in the pseudo-immune space to observed distances in human titer data.
     }
     \label{fig:latent_immune}
@@ -581,8 +577,6 @@ This is accomplished using a multinomial likelihood, so that given count of sequ
     S_{v}(t) \sim \text{Multinomial}(N(t), f_{v}(t)),
 \end{equation*}
 where $f_{v}(t)$ is the frequency of variant $v$ at time $t$.
-% \tbc{I'm a little confused on why this isn't $N(t)$ and $C_v(t)$. I think it's because it's fundementally an array of observations rather than a continuous variable, but the differing subscripting is still confusing to me. It's okay if you feel it's best to keep it as it stands, but just noting my surprise.}
-% \tbc{Also, I'd think with $f_{v}(t)$ in the equation you want $C_{t, v}$ on the left rather than the existing $C_{t, \cdot}$.}
 This is a simple model of sequence counts to frequencies and does not account for over-dispersion of sequence counts relative to a multinomial.
 However, all models can be extended to estimate and account for over-dispersion by replacing the above likelihood with a Dirichlet-Multinomial likelihood.
 
@@ -596,7 +590,6 @@ That is, we model the relative fitness for each variant over time $\lambda_v(t)$
     \vec{\Sigma}_{s, t} &= K_{\theta}(s, t),
 \end{align*}
 where $K_{\theta}$ is a potentially parameterized kernel function.
-% \tbc{What is $s$?}
 This induces a structure on the covariance of the relative fitness values over time points $s$ and $t$.
 
 For computational efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes.
@@ -666,8 +659,6 @@ We model $\text{logit}(\phi_{d}^{g})$ using 4th order splines with 6 knots place
 Though we choose to model these latent factors with splines, other models would work here.
 For example, one alternative would be the approximate Gaussian processes described above.
 Additionally, in order to ensure identifiability of the parameter estimates, we fix some base variant $v^*$ which fitness is defined relative to, so that $\varEscape_{v^*, d} = 0$ for all $1\leq d\leq D$.
-% \tbc{Can we be more consistent in notation for base or pivot variant? It's $*$ here, but $\mathrm{pivot}$ in Equation 1. What about just using $*$ throughout?}
-% MF: Updated everywhere
 For the same reason, we fix the order of components, so that the components are numbered in decreasing order by their share in the arbitrarily defined base geography.
 
 We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024 for 14 countries.
@@ -968,9 +959,6 @@ We can then use this to reconstruct the relative incidence as:
     \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/selective-pressure-analysis_group_1.png}
     \caption{
       \textbf{Estimated variant frequencies, relative fitnesses, and selective pressure. Alabama through Georgia.}
-      % \tbc{These requests are for all five selection pressure supp figures.}
-      % \tbc{I believe the legend has been clipped from the top of figure, restore legend and add WHO / Pango parenthicals to each legend entry, e.g.\ `20I (Alpha)'. An appropriate set of labels can be seen here \url{http://github.com/nextstrain/ncov/blob/master/defaults/clade_display_names.yml}}
-      % MF: Yes, this was a random matplotlib export error! Fixed.
     }
     \label{fig:selective_pressure_group_1}
 \end{figure}
