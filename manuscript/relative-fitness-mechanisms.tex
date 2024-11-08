@@ -891,10 +891,12 @@ Beginning again from our assumption of inhomogeneous exponential growth, we can 
 where we've used that $I_{v}(t) = f_{v}(t) I(t)$.
 This allows us to see that $\overline{r}(t) = \sum_{v} r_{v}(t) f_{v}(t)$ is the average growth rate of the prevalence.
 Re-writing the average in terms of some base exponential growth rate and the relative fitnesses so that $r_{v}(t) = \lambda_{v}(t) + r_\wt(t)$, we get that $\overline{r}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t) + r_\wt(t)$.
+We can simplify this by writing $\overline{r}(t) = \overline{\lambda}(t) + r_\wt(t)$ where $\overline{\lambda}(t) = \sum_{v} \lambda_{v}(t)f_{v}(t)$ is the mean fitness of the population.
 We can now look at the rate of change in the average growth rate by taking its derivative.
 
 \begin{align*}
-    \frac{d \overline{r}}{d t} &= \frac{d r_{\wt}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
+    \frac{d \overline{r}}{d t} &= \frac{d r_{\wt}}{d t} + \frac{d \overline{\lambda}}{d t} \\
+                               &= \frac{d r_{\wt}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v}(t) + \lambda_{v}(t) \frac{d f_{v}}{d t} \right]\\
                                &= \frac{d r_{\wt}}{d t} + \sum_{v} \left[\frac{d \lambda_v}{d t} f_{v} + \lambda_{v} f_{v} (\lambda_{v} - \overline{\lambda})  \right]\\
                                &= \frac{d r_{\wt}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v} (\lambda_{v} - \overline{\lambda}) f_{v}\\
                                &= \frac{d r_{\wt}}{dt} + \sum_{v} \frac{d \lambda_v}{d t} f_{v}(t) + \sum_{v} \lambda_{v}^{2} f_{v} - \overline{\lambda}\sum_{v} \lambda_{v} f_{v}\\
