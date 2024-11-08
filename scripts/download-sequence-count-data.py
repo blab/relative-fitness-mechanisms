@@ -25,6 +25,11 @@ PANGO_LINEAGE_URL = "https://data.nextstrain.org/files/workflows/forecasts-ncov/
 NEXTSTRAIN_CLADE_PATH = "./nextstrain-clade/global.tsv.gz"
 NEXTSTRAIN_CLADE_URL = "https://data.nextstrain.org/files/workflows/forecasts-ncov/gisaid/nextstrain_clades/global.tsv.gz"
 
+NEXTSTRAIN_CLADE_PATH_USA = "./nextstrain-clade-usa/usa.tsv.gz"
+NEXTSTRAIN_CLADE_URL_USA = "https://data.nextstrain.org/files/workflows/forecasts-ncov/gisaid/nextstrain_clades/usa.tsv.gz"
+
 if __name__ == "__main__":
-    check_and_download_file(NEXTSTRAIN_CLADE_PATH, NEXTSTRAIN_CLADE_URL)
     check_and_download_file(PANGO_LINEAGE_PATH, PANGO_LINEAGE_URL)
+    check_and_download_file(NEXTSTRAIN_CLADE_PATH, NEXTSTRAIN_CLADE_URL)
+    check_and_download_file(NEXTSTRAIN_CLADE_PATH_USA, NEXTSTRAIN_CLADE_URL_USA)
+
