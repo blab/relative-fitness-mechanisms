@@ -1,9 +1,9 @@
 python3 ../../scripts/prepare-data.py \
     --seq-counts global.tsv.gz \
-    --max-date "2024-03-01" \
-    --included-days 365 \
+    --max-date "2024-06-01" \
+    --included-days 460 \
     --location-min-seq 300 \
-    --location-min-seq-days 30 \
+    --location-min-seq-days 60 \
     --output-seq-counts prepared-sequence-counts.tsv
 
 python3 ../../scripts/collapse-counts.py \

@@ -7,8 +7,8 @@ We can prune and collapse the Nextstrain clades based on the global sequence cou
 ```bash
 python3 ../../scripts/prepare-data.py \
     --seq-counts usa.tsv.gz \
-    --max-date "2023-12-01" \
-    --included-days 720 \
+    --max-date "2022-12-31" \
+    --included-days 730 \
     --location-min-seq 300 \
     --location-min-seq-days 365 \
     --output-seq-counts prepared-sequence-counts.tsv
