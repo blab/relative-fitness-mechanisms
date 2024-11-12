@@ -433,25 +433,28 @@ To generate pseudo-estimates of this latent factors, we develop and implement ou
 This model assumes that variants intrinsically escape the immune responses with particular groups and that differences in a variant's relative fitness between geographies is attributable to differences in immunity between populations.
 This enables us to estimate a pseudo-escape rates for variants as well as pseudo-immunity groups within geographies over time.
 
-We generate Pango lineage-level sequence counts for 14 countries and 41 variants between March 2023 and March 2024.
-These 14 countries were chosen based on availability of sequence data.
+We generate Pango lineage-level sequence counts for 18 countries and 53 variants between March 2023 and March 2024.
+These 18 countries were chosen based on availability of sequence data.
 Small lineages which do not meet a count threshold are collapsed into their parent lineages.
-This leaves us with a total of 41 variants, so that each variant met a threshold for number of sequences available.
+This leaves us with a total of 53 variants, so that each variant met a threshold for number of sequences available.
 
 Using these sequence counts, we apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $D=10$ pseudo-immune groups.
-Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
-With $D=10$ we fit 10 pseudo-immune pools for each country resulting in 140 immune pools and a matrix of pseudo escape per variant per pseudo-immune pool resulting in 410 escape values.
-Thus, per-country per-variant relative fitnesses are defined by these 550 parameters.
-Compare this parameterization to estimating relative fitness per variant per country that would require 574 parameters.
-\tbc{This probably needs to be cleaned up, but I think important to emphasize that this seemingly fancier model is actually more constrained than the earlier variant x country models.}
+We select $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
+This model is significantly constrained relative to estimating the time-varying fitness independently in each location, resulting in a model with PARAMETERS compared to 7,488 parameters.
+
+% Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
+% With $D=10$ we fit 10 pseudo-immune pools for each country resulting in 140 immune pools and a matrix of pseudo escape per variant per pseudo-immune pool resulting in 410 escape values.
+% Thus, per-country per-variant relative fitnesses are defined by these 550 parameters.
+% Compare this parameterization to estimating relative fitness per variant per country that would require 574 parameters.
+% \tbc{This probably needs to be cleaned up, but I think important to emphasize that this seemingly fancier model is actually more constrained than the earlier variant x country models.}
 
 The results of this model are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
-Further, our model shows that these groups of lineages tend to target particular immune groups such as clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimension 3.
+Further, our model shows that these groups of lineages tend to target particular immune groups such as clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimensions 3 and 4.
 If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
 Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
-We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.26).
-We bootstrap this analysis among 1000 replicates to assess signficance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p = 0.0$).
+We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
+We bootstrap this analysis among 1,000 replicates to assess significance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p < 0.001$).
 % \tbc{Insert p-value as the fraction of the 1000 replicates with correlation coefficient greater than 0 (I think this is what you want).}
 % MF: Edited this. We're working with R^2 not correlation. Point stands and all replicates have R^2 > 0.
 
@@ -466,7 +469,7 @@ This enables an embedding similar to those from antigenic cartography but withou
     \caption{
       \textbf{Latent factor models of immunity describe variant dynamics.}
       We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
-      A. Variant frequency. Lines are colored to show 4 variants of interest (of 41 total variants) with the style of the line denoting 3 countries of interest (of 14 total countries).
+      A. Variant frequency. Lines are colored to show 4 variants of interest (of 53 total variants) with the style of the line denoting 3 countries of interest (of 18 total countries).
       B. Estimated relative fitness for selected variants and countries.
       C. Estimated pseudo-immunity cohorts (PIC) over time for multiple countries ordered by decreasing share in the first geography
       D, E. Dimensionality-reduced pseudo-escape rates using multidimensional scaling (MDS).
@@ -1025,7 +1028,11 @@ We can then use this to reconstruct the relative incidence as:
     \centering
     \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/loss_by_latent_dimension.png}
     \caption{
-      \textbf{Maximum a posteriori loss for latent factor model by number of latent immune dimensions.}
+      \textbf{Comparing latent factor model by number of latent immune dimensions.}
+      A. Maximum a posteriori loss by number of latent immune dimensions.
+      B. Spearman correlation between pseudo-immune and titer distance by number of latent immune dimensions.
+      C. Number of parameters by number of latent immune dimensions.
+      D. Bayesian Information Criterion by number of latent immune dimensions.
     }
     \label{fig:latent_factor_dimension}
 \end{figure}
