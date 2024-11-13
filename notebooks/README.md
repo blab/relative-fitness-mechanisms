@@ -33,6 +33,7 @@ This notebook generates figures:
 - `../manuscript/supplementary_figures/selective-pressure-analysis_group_3.png`
 - `../manuscript/supplementary_figures/selective-pressure-analysis_group_4.png`
 - `../manuscript/supplementary_figures/selective-pressure-analysis_group_5.png`
+- `../manuscript/supplementary_figures/selective-pressure-analysis_group_6.png`
 
 The notebook `SelectivePressureModelComparison.ipynb` uses time-series cross-validation to compare several models for predicting epidemic growth rates from selective pressure.
 It generates figures:
