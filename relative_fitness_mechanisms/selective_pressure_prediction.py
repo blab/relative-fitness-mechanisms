@@ -1,4 +1,5 @@
 from functools import partial
+from typing import Optional
 
 import jax
 import jax.numpy as jnp
@@ -28,6 +29,87 @@ def create_lagged_features(
     for col in columns:
         for lag in range(1, max_lag + 1):
             result_df[f"{col}_lag_{lag}"] = df[col].shift(lag)
+
+    if dropna:
+        result_df = result_df.dropna().reset_index(drop=True)
+
+    return result_df
+
+def create_lagged_features_with_dynamics(
+    df: pd.DataFrame, columns: list[str], max_lag: int, window_size: Optional[int] = None, dropna: bool = True
+):
+    """
+    Generate lagged predictors along with windowed (or global) average rate of change 
+    and acceleration for specified columns in a pandas DataFrame.
+
+    Parameters:
+    - df: pandas DataFrame containing the original data.
+    - columns: list of column names for which to generate lagged predictors.
+    - max_lag: maximum number of lags to generate.
+    - window_size: size of the windows for computing dynamics. If None, use the entire lagged period.
+    - dropna: boolean indicating whether to drop rows with NaN values resulting from lagging.
+
+    Returns:
+    - A pandas DataFrame with original, lagged predictors, windowed/global average rate of change,
+      and windowed/global average acceleration.
+    """
+    # Start by creating lagged features
+    result_df = create_lagged_features(df, columns, max_lag, dropna=False)
+
+    for col in columns:
+        lagged_cols = [f"{col}_lag_{lag}" for lag in range(1, max_lag + 1)]
+        
+        # Handle the special case for no windows
+        if window_size is None or window_size >= max_lag:
+            # Compute first differences across all lags
+            first_diffs = result_df[lagged_cols].sub(result_df[lagged_cols].shift(-1, axis=1), axis=1)
+            result_df[f"{col}_avg_rate_of_change"] = first_diffs.mean(axis=1)
+            
+            # Compute second differences across all lags
+            second_diffs = first_diffs.sub(first_diffs.shift(-1, axis=1), axis=1)
+            result_df[f"{col}_avg_acceleration"] = second_diffs.mean(axis=1)
+        else:
+            # Divide the lags into windows
+            num_windows = max_lag // window_size
+            for w in range(num_windows):
+                # Get the columns for this window
+                window_cols = lagged_cols[w * window_size: (w + 1) * window_size]
+                
+                # Compute first differences
+                first_diffs = result_df[window_cols].sub(result_df[window_cols].shift(-1, axis=1), axis=1)
+                result_df[f"{col}_window_{w+1}_avg_rate_of_change"] = first_diffs.mean(axis=1)
+                
+                # Compute second differences
+                second_diffs = first_diffs.sub(first_diffs.shift(-1, axis=1), axis=1)
+                result_df[f"{col}_window_{w+1}_avg_acceleration"] = second_diffs.mean(axis=1)
+
+    # Drop rows with NaN values if specified
+    if dropna:
+        result_df = result_df.dropna().reset_index(drop=True)
+    
+    return result_df
+
+
+
+def create_lagged_difference_features(
+    df: pd.DataFrame, columns: list[str], max_lag: int, dropna: bool = True
+):
+    """
+    Generate lagged predictors for specified columns in a pandas DataFrame.
+
+    Parameters:
+    - df: pandas DataFrame containing the original data.
+    - columns: list of column names for which to generate lagged predictors.
+    - max_lag: maximum number of lags to generate.
+    - dropna: boolean indicating whether to drop rows with NaN values resulting from lagging.
+
+    Returns:
+    - A pandas DataFrame with original and lagged difference predictors.
+    """
+    result_df = df.copy()
+    for col in columns:
+        for lag in range(1, max_lag + 1):
+            result_df[f"{col}_lag_diff_{lag}"] = df[col].shift(lag-1) - df[col].shift(lag)
 
     if dropna:
         result_df = result_df.dropna().reset_index(drop=True)
