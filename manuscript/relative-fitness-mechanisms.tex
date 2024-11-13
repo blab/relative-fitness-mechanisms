@@ -215,6 +215,7 @@ where $v^*$ is a chosen pivot variant which fitness is defined relative to.
 
 In order to better understand frequency dynamics of pathogens with multiple co-circulating variants, we apply the above framework to compartmental models of epidemics, which can be written as time-varying exponential growth (detailed in Supplementary Text \ref{ssec:frequency_dynamics}).
 These models provide an intuition of how strain-level selection depends on the assumed transmission mechanism of the underlying epidemic model.
+This framework also generalizes several existing methods for relative fitness estimation and prediction (detailed in Supplementary Text \ref{ssec:existing_frequency_models}).
 We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=0.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
 
 \begin{figure}[h]
@@ -397,14 +398,19 @@ The full derivation of this metric and its contribution to the overall growth ra
 Motivated by the relationship between epidemic growth rate and selective pressure demonstrated above, we develop a predictive model of epidemic growth rate using estimates of selective pressure.
 % By integrating fitness estimates and variant frequency dynamics, selective pressure can be used to predict epidemic growth rates, empowering public health agencies to anticipate and respond to new variant-driven outbreaks.
 Using empirical SARS-CoV-2 case and sequence data from 50 US states between January 2021 and November 2022, we estimate epidemic growth rates through time in each state using case counts, and estimate selective pressure through time using our approximate Gaussian process model on sequence counts  (Fig.~\ref{fig:selective_pressure_prediction} A--C.)
-Here we group variants at the granularity of Nextstrain clades \cite{aksamentov2021nextclade} resulting in 37 distinct variants over this time period.
+Here we group variants at the granularity of Nextstrain clades \cite{aksamentov2021nextclade} resulting in 28 distinct variants over this time period.
 As expected we see that relative fitness increases through time and that selective pressure corresponds to speed of clade turnover where the sweep of Omicron BA.1 (clade 21K) yields the strongest signal of selective pressure (Figs.~\ref{fig:selective_pressure_group_1}--\ref{fig:selective_pressure_group_5}).
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
-We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of 0.365 and Pearson $R^2$ in the testing period of 0.01.
+This regressor is chosen via time series cross-validation among model architectures and grid-search parameter tuning (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
 
-We validate this method by testing this model to estimate epidemic growth rates in England derived from the Office for National Statistics (ONS) Coronavirus Infection Survey between February 2022 and November 2022.
+We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of 0.576 and a weaker Pearson $R^2$ in the testing period of 0.077.
+
+As case reporting declined over this period, we expect weaker correspondence between our predictions and epidemic growth rates computed from case data.
+To address this, we sought to evaluate the out-of-sample fit on case data from other countries e.g. South Africa, South Korea, and the United Kingdom, achieving an $R^2$ of $0.196$.
+
+To address the potential for this method under steady reporting rates, we validate this method by predicting the epidemic growth rates in England derived from the Office for National Statistics (ONS) Coronavirus Infection Survey between February 2022 and November 2022.
 The ONS Infection Survey represented a randomly sampled panel survey of households where nasal swabs were collected regardless of symptom status allowing for prevalence estimates despite faltering case reporting \cite{pouwels2021community}.
-Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a coefficient of variation of $R^2 = 0.328$ and mean absolute error of 0.019.
+Our model is able to replicate patterns seen in epidemic growth rates in England derived from ONS data (Fig.~\ref{fig:selective_pressure_prediction} J--L), achieving a coefficient of variation of $R^2 = 0.329$ and mean absolute error of 0.026.
 Performance is significantly better for the first two subsequent waves, falling off in accuracy for the fall 2022 BQ.1 (clade 22E) wave.
 
 Although these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
@@ -440,7 +446,7 @@ This leaves us with a total of 53 variants, so that each variant met a threshold
 
 Using these sequence counts, we apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $D=10$ pseudo-immune groups.
 We select $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
-This model is significantly constrained relative to estimating the time-varying fitness independently in each location, resulting in a model with PARAMETERS compared to 7,488 parameters.
+This model is significantly constrained relative to estimating the time-varying fitness independently in each location, resulting in a model with 2,752 parameters compared to 7,488 parameters in the independent model.
 
 % Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
 % With $D=10$ we fit 10 pseudo-immune pools for each country resulting in 140 immune pools and a matrix of pseudo escape per variant per pseudo-immune pool resulting in 410 escape values.
@@ -632,20 +638,22 @@ The derivation of the selective pressure metric shows that the selective pressur
 To develop a predictive model of epidemic growth rate using selective pressure, we begin by generating estimates of selective pressure and epidemic growth rate from a period with high sequencing and case surveillance.
 
 We take sequence count and case count data from all states in the United States between January 2021 and November 2022.
-State-level daily case counts were obtained from \tbc{fill in... I think it's CDC}
+State-level daily case counts were obtained from USAFacts downloaded on August 7, 2024.
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$.
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
-\tbc{I don't like the reuse of $C$ to mean both case count $C_t$ and sequence count of a particular variant $C_{t,v}$. I'd suggest picking a different letter for either sequence count or case count.}
+% \tbc{I don't like the reuse of $C$ to mean both case count $C_t$ and sequence count of a particular variant $C_{t,v}$. I'd suggest picking a different letter for either sequence count or case count.}
 
-We use a gradient boosting regressor model with 100 estimators and max tree depth of 5 which is fit using a mean absolute error loss function.
-This model was selected as it achieved the minimal error via time series cross-validation averaged across 5 splits among candidate models (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
-\tbc{This is the first reference to this figure. If you want it as S8 then you should cite in the appropriate place in main text, otherwise please move the figure down to be referenced in linear order with the text.}
+We use a gradient boosting regressor model which is fit using a mean absolute error loss function.
+This model was selected as it achieved the minimal error via time series cross-validation averaged across 10 splits among candidate models (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
+% \tbc{This is the first reference to this figure. If you want it as S8 then you should cite in the appropriate place in main text, otherwise please move the figure down to be referenced in linear order with the text.}
 The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
+We additionally tune the hyperparameters of this model using grid search cross-validation.
 
 We validate our model by comparing our predicted epidemic growth rates to held-out case data for US states, and additionally to estimates of the epidemic growth rates in England derived from data from the Office for National Statistics (ONS) Coronavirus Infection Survey \cite{pouwels2021community}.
 Estimates of prevalence from the ONS Infection Survey were obtained for January 2022 to September 2022 from \href{https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}{www.ons.gov.uk/peoplepopulationandcommunity/ healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}.
-\tbc{I'm assuming that you have to estimate epidemic growth rate from the prevalence data in a slightly different fashion as the case, aka incidence, data. If so, please restate the equivalent of $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$ here.}
+Epidemic growth rates are computed on this data in way as the state-level analysis.
+% \tbc{I'm assuming that you have to estimate epidemic growth rate from the prevalence data in a slightly different fashion as the case, aka incidence, data. If so, please restate the equivalent of $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$ here.}
 
 \paragraph{Latent immune factor model}
 
@@ -669,8 +677,8 @@ To access the necessary number of immune dimensions, we vary the number of immun
 Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
 
 We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
-Using human titer data from Jian et al \cite{Jian2023}, we compute titer distances as the average log2 differences in titer values between pairs of variants for individuals.
-\tbc{Can you say a bit more here? I'm assuming this is is neutralization of variant A against sera from a cohort of individuals? And then you also have neutralization of variant B against the same set of individuals? And then you define average log2 difference as...? Just spell things out a bit more.}
+Using human titer data from Jian et al \cite{Jian2023}, we compute neutralization titer distances as the average of differences in log2 neutralization titers between pairs of variants for a cohort of individuals.
+% \tbc{Can you say a bit more here? I'm assuming this is is neutralization of variant A against sera from a cohort of individuals? And then you also have neutralization of variant B against the same set of individuals? And then you define average log2 difference as...? Just spell things out a bit more.}
 This analysis is repeated among 1,000 bootstrapped samples to create a distribution of $R^2$ values (Fig.~\ref{fig:latent_immune_bootstrap}).
 Additionally, we subset this by exposure history and repeat this analysis to find which exposure groups best explain distances in pseudo-escape space (Fig.~\ref{fig:titer_distance_correlations_by_group}).
 
@@ -682,7 +690,7 @@ Source code used to generate figures, model implementations, and sequence count 
 
 \section*{Supplementary Text}
 
-\tbc{It would be good if each of these sections S1, S2 and S3 were explicitly referenced in the Main Text or Materials and Methods. Ideally a reader is working through the Main Text / Methods and knows when it's most appropriate to read section S1, etc...}
+% \tbc{It would be good if each of these sections S1, S2 and S3 were explicitly referenced in the Main Text or Materials and Methods. Ideally a reader is working through the Main Text / Methods and knows when it's most appropriate to read section S1, etc...}
 
 \subsection{Exponentially growing populations to frequency dynamics}\label{ssec:frequency_dynamics}
 
@@ -1009,7 +1017,7 @@ We can then use this to reconstruct the relative incidence as:
     \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/growth-rate-prediction-model-comparison.png}
     \caption{
       \textbf{Cross-validation error by model}
-      We compare the errors between models fit on 5 time series cross-validation splits.
+      We compare the errors between models fit on 10 time series cross-validation splits.
     }
     \label{fig:growth_rate_predictions_model_comparison}
 \end{figure}
