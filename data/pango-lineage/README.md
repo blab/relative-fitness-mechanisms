@@ -14,7 +14,7 @@ python3 ../../scripts/prepare-data.py \
     --output-seq-counts prepared-sequence-counts.tsv
 ```
 
-### Collapsing small lineages with script
+### Collapsing small lineages into their parental lineage with script
 
 ```bash
 python3 ../../scripts/collapse-counts.py \
@@ -25,4 +25,4 @@ python3 ../../scripts/collapse-counts.py \
 
 ### Output
 
-This will output a final file of sequence counts called `collapsed-sequences-counts-global.tsv`.
+This will output a final file of sequence counts called `collapsed-sequences-counts-global.tsv`. This file is versioned to the repository.

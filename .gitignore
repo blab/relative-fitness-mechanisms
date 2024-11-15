@@ -6,6 +6,11 @@ Desktop.ini
 # Protect environment variables
 environment*
 data/antigenic_map_data*
+data/nextstrain-clade/global.tsv.gz
+data/nextstrain-clade-usa/usa.tsv.gz
+data/pango-lineage/global.tsv.gz
+data/nextstrain-clade/prepared-sequence-counts.tsv
+data/nextstrain-clade-usa/prepared-sequence-counts.tsv
 
 # LaTeX Files
 *.aux
