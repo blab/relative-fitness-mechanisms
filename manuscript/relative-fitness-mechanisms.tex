@@ -240,7 +240,7 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
 
 % \subsection*{Estimating relative fitness using Gaussian Processes}
 
-Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplementary Text \ref{ssec:frequency_dynamics}).
+Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplementary Text \ref{ssec:frequency_dynamics} and extended to full immune history models in Supplementary Text \ref{ssec:full_immune_history}).
 This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
 Additionally, when working with variant classifications, non-neutral evolution within a variant will cause the relative fitness of that variant to change in time.
 However, even in the absence of external data that can inform relative fitness, there is still hope.
@@ -330,18 +330,6 @@ Later in the epidemic, this relationship reverses with estimated growth advantag
 % At very high vaccination levels, we see the estimated growth advantage falls off sharply when both variants are declining in prevalence.
 % This occurs at a critical vaccination threshold of $1 / R_v$ where $R_v$ is the effective reproduction number of the variant (Fig.~\ref{fig:mechanism_identification}E).
 
-% This analysis shows a limitation in the ability of correlation-based analyses on growth advantage to identify the underlying mechanisms of variant fitness.
-% By explicitly accounting for the dynamics of immunity and transmissibility within populations, incorporating epidemiological structure in these models might provide a good foundation for understanding variant success under assumed or scientific-motivated mechanisms and enable comparison between competing mechanisms.
-
-This analysis shows that correlation-based methods alone may struggle to identify the true mechanisms driving a variant’s success especially under the assumption of a fixed growth advantage.
-By explicitly considering how immunity and transmissibility interact within populations, models that incorporate these dynamics may provide a stronger foundation for understanding why certain variants spread.
-% This approach also enables clearer comparison between different potential mechanisms behind variant fitness.
-
-% Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
-% Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
-% We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape (Fig.~\ref{fig:mechanism_identification}).
-% This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./figures/mechanism_identification.png}
@@ -358,6 +346,18 @@ By explicitly considering how immunity and transmissibility interact within popu
     }
     \label{fig:mechanism_identification}
 \end{figure}
+
+% This analysis shows a limitation in the ability of correlation-based analyses on growth advantage to identify the underlying mechanisms of variant fitness.
+% By explicitly accounting for the dynamics of immunity and transmissibility within populations, incorporating epidemiological structure in these models might provide a good foundation for understanding variant success under assumed or scientific-motivated mechanisms and enable comparison between competing mechanisms.
+
+This analysis shows that correlation-based methods alone may struggle to identify the true mechanisms driving a variant’s success especially under the assumption of a fixed growth advantage.
+By explicitly considering how immunity and transmissibility interact within populations, models that incorporate these dynamics may provide a stronger foundation for understanding why certain variants spread.
+% This approach also enables clearer comparison between different potential mechanisms behind variant fitness.
+
+% Variant growth advantages can be correlated with vaccination proportions even in the absence of immune escape.
+% Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
+% We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape (Fig.~\ref{fig:mechanism_identification}).
+% This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
 
 \subsection*{Quantifying selective pressure}
 
@@ -403,8 +403,26 @@ As expected we see that relative fitness increases through time and that selecti
 We use these estimates to fit a gradient-boosted regressor to predict epidemic growth rates using selective pressure from the most recent 28 days, reserving data between July 2022 and November 2022 for testing (Fig.~\ref{fig:selective_pressure_prediction} D--I, Fig.~\ref{fig:empirical_growth_rate_predictions_all}).
 This regressor is chosen via time series cross-validation among model architectures and grid-search parameter tuning (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
 
-We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of 0.576 and a weaker Pearson $R^2$ in the testing period of 0.077.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{./figures/selective_pressure_prediction.png}
+    \caption{
+      \textbf{Predicting epidemic growth rate using estimated selective pressure.}
+      A. Variant frequency estimated using the Gaussian process relative fitness model between January 2021 and November 2022 for sequence count data from Washington state.
+      B. Case counts from Washington state.
+      C. Selective pressure computed using estimated variant frequencies and relative fitnesses from Washington state.
+      D-F. Predictions for empirical growth rate from selective pressure for selected US states.
+      The light gray period is the training period and the darker gray is the testing period.
+      G-I. Predictions for empirical growth rate from selective pressure for countries South Africa, South Korea and the UK.
+      J. Prevalence estimates for England from ONS Infection Survey.
+      K. Estimated selective pressure in England.
+      \tbc{The bottom left panel should be labeled as `J' and the bottom center panel should be labeled `K'.}
+      L. Empirical growth rates (gray) computed from prevalence estimates and predictions from our model (green) computed from selective pressure.
+    }
+    \label{fig:selective_pressure_prediction}
+\end{figure}
 
+We observe a strong correspondence between observed epidemic growth rate and model predictions with Pearson $R^2$ in the training period of 0.576 and a weaker Pearson $R^2$ in the testing period of 0.077.
 As case reporting declined over this period, we expect weaker correspondence between our predictions and epidemic growth rates computed from case data.
 To address this, we sought to evaluate the out-of-sample fit on case data from other countries e.g. South Africa, South Korea, and the United Kingdom, achieving an $R^2$ of $0.196$.
 
@@ -414,23 +432,6 @@ Our model is able to replicate patterns seen in epidemic growth rates in England
 Performance is significantly better for the first two subsequent waves, falling off in accuracy for the fall 2022 BQ.1 (clade 22E) wave.
 
 Although these predictions can be biased by non-evolutionary effects on the epidemic growth, this approach provides a simple measure of epidemic growth in the absence of high quality case counts using sequence data alone.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1.0\linewidth]{./figures/selective_pressure_prediction.png}
-    \caption{
-      \textbf{Predicting epidemic growth rate using estimated selective pressure.}
-      A. Variant frequency estimated using the Gaussian process relative fitness model between January 2021 and November 2022.
-      B. Case counts from Washington state.
-      C. Selective pressure computed using estimated variant frequencies and relative fitnesses from Washington state.
-      D-I. Predictions for empirical growth rate from selective pressure for selected US states.
-      The light gray period is the training period and the darker gray is the testing period.
-      J. Estimated selective pressure in England.
-      K. Prevalence estimates for England.
-      L. Empirical growth rates (gray) computed from prevalence estimates and predictions from our model (green) computed from selective pressure.
-    }
-    \label{fig:selective_pressure_prediction}
-\end{figure}
 
 \subsection*{Latent factor model of relative fitness}
 
@@ -445,7 +446,6 @@ Small lineages which do not meet a count threshold are collapsed into their pare
 This leaves us with a total of 53 variants, so that each variant met a threshold for number of sequences available.
 
 Using these sequence counts, we apply our latent factor model to estimate the relative fitness of each variant over time in each country, pseudo-escape rates for each variant, and pseudo-immunity for each country simultaneously for $D=10$ pseudo-immune groups.
-We select $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
 This model is significantly constrained relative to estimating the time-varying fitness independently in each location, resulting in a model with 2,752 parameters compared to 7,488 parameters in the independent model.
 
 The results of this model are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
@@ -455,11 +455,8 @@ If immune escape is the dominant mechanism for relative fitness difference, we e
 Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
 We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
 We bootstrap this analysis among 1,000 replicates to assess significance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p < 0.001$).
-
-This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
-In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
-By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
-This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant fitness.
+Additionally, we subset by exposure history and find that cohorts with only very recent infection correlate more poorly than WT vaccine cohort or cohorts with more complex exposure histories (Fig.~\ref{fig:titer_distance_correlations_by_group}).
+\tbc{This figure should correspond to primary analysis with $D=8$}
 
 \begin{figure}[h]
     \centering
@@ -476,6 +473,18 @@ This enables an embedding similar to those from antigenic cartography but withou
     }
     \label{fig:latent_immune}
 \end{figure}
+
+We chose $D=8$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
+\tbc{The text says that $D=10$ but figure \ref{fig:latent_immune} shows 8 groups. I believe that 8 is correct and I've corrected text accordingly. Please update if this was incorrect.}
+Further, we observe that Bayesian Information Criterion (BIC) is minimized between 7 and 9 groups (Fig.~\ref{fig:latent_factor_dimension}D).
+However, the exact choice of latent immune dimensionality is necessarily somewhat arbitrary and we observe significant correlations with empirical titer data for fewer dimensions as well, although $D=8$ also maximizes this correlation (Fig.~\ref{fig:latent_factor_dimension}B).
+Analogous figures showing pseudo immunity and pseudo antigenic relationships across variants can be seen for $D=2$ in Fig.~\ref{fig:latent_factor_2}, $D=4$ in Fig.~\ref{fig:latent_factor_4}, $D=6$ in Fig.~\ref{fig:latent_factor_6} and $D=10$ in Fig.~\ref{fig:latent_factor_8}.
+\tbc{Fix this last supp figure to be $D=10$.}
+
+This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
+In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
+By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
+This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant fitness.
 
 \subsection*{Conclusions, limitations, and future work}
 
@@ -520,6 +529,9 @@ While our work has been applied to SARS-CoV-2, the methods developed here are br
 \subsection*{Acknowledgements}
 
 We thank Ivana Bozic, Betz Halloran, Mark Kot and Erick Matsen, as well as members of the Bedford Lab for their feedback on this work.
+We gratefully acknowledge all data contributors, ie the Authors and their Originating
+laboratories responsible for obtaining the specimens, and their Submitting laboratories for generating the genetic sequence and metadata and sharing via the GISAID Initiative, on which this research is based.
+We have included an acknowledgements table in the associated GitHub repository under \tbc{...}.
 
 \subsubsection*{Funding}
 
@@ -631,6 +643,7 @@ To develop a predictive model of epidemic growth rate using selective pressure, 
 
 We take sequence count and case count data from all states in the United States between January 2021 and November 2022.
 State-level daily case counts were obtained from USAFacts downloaded on August 7, 2024.
+\tbc{Please provide URL}
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$.
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
@@ -642,7 +655,7 @@ We additionally tune the hyperparameters of this model using grid search cross-v
 
 We validate our model by comparing our predicted epidemic growth rates to held-out case data for US states, and additionally to estimates of the epidemic growth rates in England derived from data from the Office for National Statistics (ONS) Coronavirus Infection Survey \cite{pouwels2021community}.
 Estimates of prevalence from the ONS Infection Survey were obtained for January 2022 to September 2022 from \href{https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}{www.ons.gov.uk/peoplepopulationandcommunity/ healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}.
-Epidemic growth rates are computed on this data in way as the state-level analysis.
+Epidemic growth rates are computed on this data in the same way as the state-level analysis.
 
 \paragraph{Latent immune factor model}
 
@@ -921,6 +934,7 @@ We can then use this to reconstruct the relative incidence as:
          &= \exp \left(\int_{0}^{t} [r_{\wt}(s) + \Psi(s)]ds \right).
 \end{align*}
 
+\newpage
 
 \section*{Supplementary Figures}
 
@@ -1000,16 +1014,6 @@ We can then use this to reconstruct the relative incidence as:
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/growth-rate-prediction-model-comparison.png}
-    \caption{
-      \textbf{Cross-validation error by model}
-      We compare the errors between models fit on 10 time series cross-validation splits.
-    }
-    \label{fig:growth_rate_predictions_model_comparison}
-\end{figure}
-
-\begin{figure}[t!]
-    \centering
     \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/empirical_growth_rate_predictions_all.png}
     \caption{
       \textbf{Predictions for empirical growth rate using selective pressure for all locations.}
@@ -1017,54 +1021,14 @@ We can then use this to reconstruct the relative incidence as:
     \label{fig:empirical_growth_rate_predictions_all}
 \end{figure}
 
-
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/loss_by_latent_dimension.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/growth-rate-prediction-model-comparison.png}
     \caption{
-      \textbf{Comparing latent factor model by number of latent immune dimensions.}
-      A. Maximum a posteriori loss by number of latent immune dimensions.
-      B. Spearman correlation between pseudo-immune and titer distance by number of latent immune dimensions.
-      C. Number of parameters by number of latent immune dimensions.
-      D. Bayesian Information Criterion by number of latent immune dimensions.
+      \textbf{Cross-validation error by model}
+      We compare the errors between models fit on 10 time series cross-validation splits.
     }
-    \label{fig:latent_factor_dimension}
-\end{figure}
-
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_2_dims.png}
-    \caption{
-      \textbf{Latent factor model. $D=2$}
-    }
-    \label{fig:latent_factor_2}
-\end{figure}
-
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_4_dims.png}
-    \caption{
-      \textbf{Latent factor model. $D=4$}
-    }
-    \label{fig:latent_factor_4}
-\end{figure}
-
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_6_dims.png}
-    \caption{
-      \textbf{Latent factor model. $D=6$}
-    }
-    \label{fig:latent_factor_6}
-\end{figure}
-
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_8_dims.png}
-    \caption{
-      \textbf{Latent factor model. $D=8$}
-    }
-    \label{fig:latent_factor_8}
+    \label{fig:growth_rate_predictions_model_comparison}
 \end{figure}
 
 \begin{figure}[t!]
@@ -1085,6 +1049,54 @@ We can then use this to reconstruct the relative incidence as:
     \label{fig:titer_distance_correlations_by_group}
 \end{figure}
 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/loss_by_latent_dimension.png}
+    \caption{
+      \textbf{Comparing latent factor model by number of latent immune dimensions.}
+      A. Maximum a posteriori loss by number of latent immune dimensions.
+      B. Spearman correlation between pseudo-immune and titer distance by number of latent immune dimensions.
+      C. Number of parameters by number of latent immune dimensions.
+      D. Bayesian Information Criterion (BIC) by number of latent immune dimensions.
+    }
+    \label{fig:latent_factor_dimension}
+\end{figure}
 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_2_dims.png}
+    \caption{
+      \textbf{Latent factor model with $D=2$ pseudo immune dimensions.}
+    }
+    \label{fig:latent_factor_2}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_4_dims.png}
+    \caption{
+      \textbf{Latent factor model with $D=4$ pseudo immune dimensions.}
+    }
+    \label{fig:latent_factor_4}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_6_dims.png}
+    \caption{
+      \textbf{Latent factor model with $D=6$ pseudo immune dimensions.}
+    }
+    \label{fig:latent_factor_6}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_8_dims.png}
+    \caption{
+      \textbf{Latent factor model with $D=8$ pseudo immune dimensions.}
+      \tbc{Swap to $D=10$}
+    }
+    \label{fig:latent_factor_8}
+\end{figure}
 
 \end{document}
