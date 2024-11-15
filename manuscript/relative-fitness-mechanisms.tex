@@ -474,9 +474,10 @@ Additionally, we subset by exposure history and find that cohorts with only very
 \end{figure}
 
 We chose $D=8$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
-\tbc{The text says that $D=10$ but figure \ref{fig:latent_immune} shows 8 groups. I believe that 8 is correct and I've corrected text accordingly. Please update if this was incorrect.}
+% \tbc{The text says that $D=10$ but figure \ref{fig:latent_immune} shows 8 groups. I believe that 8 is correct and I've corrected text accordingly. Please update if this was incorrect.}
+% MF: Made slight changes to text here
 Further, we observe that Bayesian Information Criterion (BIC) is minimized between 7 and 9 groups (Fig.~\ref{fig:latent_factor_dimension}D).
-However, the exact choice of latent immune dimensionality is necessarily somewhat arbitrary and we observe significant correlations with empirical titer data for fewer dimensions as well, although $D=8$ also maximizes this correlation (Fig.~\ref{fig:latent_factor_dimension}B).
+However, the exact choice of latent immune dimensionality is necessarily somewhat arbitrary and we observe significant correlations with empirical titer data for fewer dimensions as well, although $D=8$ also maximizes this correlation (Fig.~\ref{fig:latent_factor_dimension}B) and its significance is maintained for all dimensions $D > 8$ tested.
 Analogous figures showing pseudo immunity and pseudo antigenic relationships across variants can be seen for $D=2$ in Fig.~\ref{fig:latent_factor_2}, $D=4$ in Fig.~\ref{fig:latent_factor_4}, $D=6$ in Fig.~\ref{fig:latent_factor_6} and $D=10$ in Fig.~\ref{fig:latent_factor_10}.
 
 This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
