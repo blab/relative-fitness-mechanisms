@@ -1,4 +1,4 @@
-# Transmission mechanisms determine relative fitness and frequency dynamics of viral variants
+# Frequency dynamics predict viral fitness, antigenic relationships and epidemic growth
 
 **Marlin Figgins**<sup>1,2</sup>, **Trevor Bedford**<sup>1,3</sup>
 
