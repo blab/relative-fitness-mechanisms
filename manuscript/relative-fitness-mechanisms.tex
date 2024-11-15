@@ -640,8 +640,8 @@ The derivation of the selective pressure metric shows that the selective pressur
 To develop a predictive model of epidemic growth rate using selective pressure, we begin by generating estimates of selective pressure and epidemic growth rate from a period with high sequencing and case surveillance.
 
 We take sequence count and case count data from all states in the United States between January 2021 and November 2022.
-State-level daily case counts were obtained from USAFacts downloaded on August 7, 2024.
-\tbc{Please provide URL}
+State-level daily case counts were obtained from USAFacts downloaded on August 7, 2024 at \href{https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/}{https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/}.
+
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$.
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
