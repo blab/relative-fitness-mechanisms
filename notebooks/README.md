@@ -15,7 +15,7 @@ This generates `../manuscript/figures/transmission_tradeoff.png`.
 
 ##  Initial growth rates insufficient for predicting short-term frequency growth
 
-The notebook `Short-Term-Divergence-By-Mechanism.ipynb` shows how different transmission mechanisms can lead to large transmsission differences in the short-term and can limit the ability for short-term forecasts to reliably predict growth.
+The notebook `Short-Term-Divergence-By-Mechanism.ipynb` shows how different transmission mechanisms can lead to large transmission differences in the short-term and can limit the ability for short-term forecasts to reliably predict growth.
 This generates `../manuscript/supplementary_figures/short_term_divergence.png`.
 
 ## Correlations insufficient for mechanism identification
