@@ -28,7 +28,7 @@ These can be found within `./relative_fitness_mechanisms`.
 
 ## Notebooks and reproducing figures
 
-Notebooks for reproducing the major results, main figures, and supplementary figures are found in `./notebooks/`. 
+Notebooks for reproducing the major results, main figures, and supplementary figures are found in `./notebooks/`.
 Details on the outputs of these notebooks can be found in `./notebooks/`.
 
 ## Package management and reproducibility
@@ -41,7 +41,7 @@ Once poetry is installed, you can clone this repository:
 git clone https://github.com/blab/relative-fitness-mechanisms.git
 ```
 
-You can then navigate to the cloned repositiory and install the project dependencies:
+You can then navigate to the cloned repository and install the project dependencies:
 
 ```bash
 cd relative-fitness-mechanisms
@@ -62,7 +62,7 @@ After running `poetry install`, you can also directly launch the jupyter environ
 poetry run jupyter notebook
 ```
 
-## Further development
+### Further development
 
 If you'd like to develop this further, you can add dependencies with
 
