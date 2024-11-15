@@ -477,8 +477,7 @@ We chose $D=8$ for our primary analysis by noting the point at which the loss fu
 \tbc{The text says that $D=10$ but figure \ref{fig:latent_immune} shows 8 groups. I believe that 8 is correct and I've corrected text accordingly. Please update if this was incorrect.}
 Further, we observe that Bayesian Information Criterion (BIC) is minimized between 7 and 9 groups (Fig.~\ref{fig:latent_factor_dimension}D).
 However, the exact choice of latent immune dimensionality is necessarily somewhat arbitrary and we observe significant correlations with empirical titer data for fewer dimensions as well, although $D=8$ also maximizes this correlation (Fig.~\ref{fig:latent_factor_dimension}B).
-Analogous figures showing pseudo immunity and pseudo antigenic relationships across variants can be seen for $D=2$ in Fig.~\ref{fig:latent_factor_2}, $D=4$ in Fig.~\ref{fig:latent_factor_4}, $D=6$ in Fig.~\ref{fig:latent_factor_6} and $D=10$ in Fig.~\ref{fig:latent_factor_8}.
-\tbc{Fix this last supp figure to be $D=10$.}
+Analogous figures showing pseudo immunity and pseudo antigenic relationships across variants can be seen for $D=2$ in Fig.~\ref{fig:latent_factor_2}, $D=4$ in Fig.~\ref{fig:latent_factor_4}, $D=6$ in Fig.~\ref{fig:latent_factor_6} and $D=10$ in Fig.~\ref{fig:latent_factor_10}.
 
 This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
@@ -1090,12 +1089,11 @@ We can then use this to reconstruct the relative incidence as:
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_8_dims.png}
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/latent_immune_10_dims.png}
     \caption{
-      \textbf{Latent factor model with $D=8$ pseudo immune dimensions.}
-      \tbc{Swap to $D=10$}
+      \textbf{Latent factor model with $D=10$ pseudo immune dimensions.}
     }
-    \label{fig:latent_factor_8}
+    \label{fig:latent_factor_10}
 \end{figure}
 
 \end{document}
