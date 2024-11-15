@@ -448,12 +448,6 @@ Using these sequence counts, we apply our latent factor model to estimate the re
 We select $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
 This model is significantly constrained relative to estimating the time-varying fitness independently in each location, resulting in a model with 2,752 parameters compared to 7,488 parameters in the independent model.
 
-% Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e.\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
-% With $D=10$ we fit 10 pseudo-immune pools for each country resulting in 140 immune pools and a matrix of pseudo escape per variant per pseudo-immune pool resulting in 410 escape values.
-% Thus, per-country per-variant relative fitnesses are defined by these 550 parameters.
-% Compare this parameterization to estimating relative fitness per variant per country that would require 574 parameters.
-% \tbc{This probably needs to be cleaned up, but I think important to emphasize that this seemingly fancier model is actually more constrained than the earlier variant x country models.}
-
 The results of this model are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
 Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
 Further, our model shows that these groups of lineages tend to target particular immune groups such as clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimensions 3 and 4.
@@ -461,8 +455,6 @@ If immune escape is the dominant mechanism for relative fitness difference, we e
 Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
 We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
 We bootstrap this analysis among 1,000 replicates to assess significance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p < 0.001$).
-% \tbc{Insert p-value as the fraction of the 1000 replicates with correlation coefficient greater than 0 (I think this is what you want).}
-% MF: Edited this. We're working with R^2 not correlation. Point stands and all replicates have R^2 > 0.
 
 This approach can be applied to other antigenically variable, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
@@ -642,18 +634,15 @@ State-level daily case counts were obtained from USAFacts downloaded on August 7
 Using the sequence counts, we compute selective pressure estimates from relative fitness and frequencies estimated with our approximate Gaussian process relative fitness model.
 From the case data, we derive the empirical growth rate using a 14-day moving average on case counts $\hat{C}_{t}$ and computing the empirical growth rate as $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$.
 We then use the past 28 days of selective pressure to predict the empirical growth rate.
-% \tbc{I don't like the reuse of $C$ to mean both case count $C_t$ and sequence count of a particular variant $C_{t,v}$. I'd suggest picking a different letter for either sequence count or case count.}
 
 We use a gradient boosting regressor model which is fit using a mean absolute error loss function.
 This model was selected as it achieved the minimal error via time series cross-validation averaged across 10 splits among candidate models (Fig.~\ref{fig:growth_rate_predictions_model_comparison}).
-% \tbc{This is the first reference to this figure. If you want it as S8 then you should cite in the appropriate place in main text, otherwise please move the figure down to be referenced in linear order with the text.}
 The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
 We additionally tune the hyperparameters of this model using grid search cross-validation.
 
 We validate our model by comparing our predicted epidemic growth rates to held-out case data for US states, and additionally to estimates of the epidemic growth rates in England derived from data from the Office for National Statistics (ONS) Coronavirus Infection Survey \cite{pouwels2021community}.
 Estimates of prevalence from the ONS Infection Survey were obtained for January 2022 to September 2022 from \href{https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}{www.ons.gov.uk/peoplepopulationandcommunity/ healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}.
 Epidemic growth rates are computed on this data in way as the state-level analysis.
-% \tbc{I'm assuming that you have to estimate epidemic growth rate from the prevalence data in a slightly different fashion as the case, aka incidence, data. If so, please restate the equivalent of $\hat{r}_{t} = \log(\hat{C}_{t}) - \log(\hat{C}_{t-1})$ here.}
 
 \paragraph{Latent immune factor model}
 
@@ -678,7 +667,6 @@ Looking at the loss for the latent factor model for increasing $D$, we choose $D
 
 We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
 Using human titer data from Jian et al \cite{Jian2023}, we compute neutralization titer distances as the average of differences in log2 neutralization titers between pairs of variants for a cohort of individuals.
-% \tbc{Can you say a bit more here? I'm assuming this is is neutralization of variant A against sera from a cohort of individuals? And then you also have neutralization of variant B against the same set of individuals? And then you define average log2 difference as...? Just spell things out a bit more.}
 This analysis is repeated among 1,000 bootstrapped samples to create a distribution of $R^2$ values (Fig.~\ref{fig:latent_immune_bootstrap}).
 Additionally, we subset this by exposure history and repeat this analysis to find which exposure groups best explain distances in pseudo-escape space (Fig.~\ref{fig:titer_distance_correlations_by_group}).
 
@@ -689,8 +677,6 @@ Source code used to generate figures, model implementations, and sequence count 
 \newpage
 
 \section*{Supplementary Text}
-
-% \tbc{It would be good if each of these sections S1, S2 and S3 were explicitly referenced in the Main Text or Materials and Methods. Ideally a reader is working through the Main Text / Methods and knows when it's most appropriate to read section S1, etc...}
 
 \subsection{Exponentially growing populations to frequency dynamics}\label{ssec:frequency_dynamics}
 
