@@ -162,14 +162,14 @@ This transition from transmissibility-driven to immune escape-driven success is 
 % Given the rapid emergence and spread of SARS-CoV-2 variants, it is important to assess the rate of turnover as this is an indicator of variant advantage and in addition to understanding how quickly a particular variant is spreading, it may signal the mechanism by which it spreads.
 
 With the increased temporal and geographical scale of sequencing alongside a detailed genetic nomenclature \cite{rambaut2020dynamic} and bioinformatic tools for lineage assignment \cite{turakhia2021ultrafast, aksamentov2021nextclade}, we have gained more data for SARS-CoV-2 than for other circulating viruses giving a unique opportunity for insight into its evolution.
-Several models of variant frequency have been developed to estimate the fitness of emerging SARS-CoV-2 variants \cite{Annavajhala2021, Piantham2022, Figgins2021, susswein2023leveraging, Lefrancq2023, abousamra2024fitness}.
+Several models of variant frequency have been developed to estimate the fitness of emerging SARS-CoV-2 variants \cite{Annavajhala2021, Piantham2022, figgins2022sars, susswein2023leveraging, Lefrancq2023, abousamra2024fitness}.
 These models estimate the relative fitness (or selective advantage) of circulating variant viruses from their frequency in sequencing data, typically represented by counts of variant sequences over time within a geographic region.
 Relative fitness in these models is often assumed to be constant and intrinsic to the variant of interest.
 However, this may be an oversimplification of the transmission process.
 
-It has been shown that these transmission advantages differ geographically and temporally, suggesting that variant transmission advantages are not necessarily fixed and may be informed by within-region population differences \cite{Figgins2021, vanDorp2022}.
+It has been shown that these transmission advantages differ geographically and temporally, suggesting that variant transmission advantages are not necessarily fixed and may be informed by within-region population differences \cite{figgins2022sars, vanDorp2022}.
 In fact, heterogeneity in transmission advantages may be well explained by regional differences in immune structure as Dadonaite et al.\ \cite{Dadonaite2023} show deep mutational scanning estimates of immune escape are well correlated with estimated variant growth advantages.
-Existing models that allow variant transmission advantages to change in time generally do not have a mechanistic underpinning for why transmission advantages exist and vary geographically and temporally \cite{Figgins2021, susswein2023leveraging}.
+Existing models that allow variant transmission advantages to change in time generally do not have a mechanistic underpinning for why transmission advantages exist and vary geographically and temporally \cite{figgins2022sars, susswein2023leveraging}.
 % These non-mechanistic transmission advantages are useful for real-time situation analysis though more work is required to develop theory for how various mechanisms determine viral fitness.
 % In particular, distinguishing between mechanisms of immune escape and transmissibility may improve our ability to make informed short-term forecasts or include other forms of data to explain patterns of relative fitness.
 This lack of mechanistic grounding limits our ability to accurately predict variant dynamics, especially in diverse geographic regions with varying levels of population immunity.
@@ -748,7 +748,7 @@ where the growth rate of $v$ is expressed as relative to an arbitrary pivot vari
 
 Above we saw that within our framework frequency change over time intervals depends only on the cumulative relative fitness over time intervals $\Lambda_{v,u}(0, t) = \int_{0}^{t} \lambda_{v, u}(s)ds$.
 We can then characterize approaches for modeling frequency change in terms of how they represent, estimate, and forecast these relative fitnesses.
-This framework includes various existing methods for analyzing frequency data such as the seasonal influenza forecasting models of L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{huddleston2020integrating}, multinomial logistic regression for frequency estimation \cite{Annavajhala2021} and the SARS-CoV-2 mutational fitness model of Obermeyer et al \cite{obermeyer2022analysis}.
+This framework includes various existing methods for analyzing frequency data such as the seasonal influenza forecasting models of L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020}, multinomial logistic regression for frequency estimation \cite{Annavajhala2021} and the SARS-CoV-2 mutational fitness model of Obermeyer et al \cite{Obermeyer2022}.
 
 Though this framework can be used to describe existing statistical methods for frequency modeling, it is also applicable to traditional compartmental models of epidemics.
 In fact, applying these ideas to compartmental models enables to see how mechanistic assumptions on the transmission process determine relative fitness of variant viruses.
@@ -842,7 +842,7 @@ This assumption is useful since it requires no outside knowledge of the at-risk 
 
 \paragraph{Fitness models of seasonal influenza}%
 
-Motivated by the observed antigenic evolution of seasonal influenza, L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{huddleston2020integrating} approximate the cumulative relative fitness between influenza seasons on the level of individual strains as
+Motivated by the observed antigenic evolution of seasonal influenza, L{\"a}ssig and {\L}uksza \cite{luksza2014predictive} and Huddleston et al \cite{Huddleston2020} approximate the cumulative relative fitness between influenza seasons on the level of individual strains as
 
 \begin{align}
     \Lambda_{v,u}(t + \Delta t,t) = (\beta_{1} x_{v,1} + \cdots + \beta_{p} x_{v, p})\Delta t = (\vec{\beta} \cdot \vec{x}_{v}) \Delta t,
