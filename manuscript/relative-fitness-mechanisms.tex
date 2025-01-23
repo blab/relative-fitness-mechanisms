@@ -145,7 +145,7 @@ These insights refine real-time forecasting and lay the groundwork for research 
 % Champredon paper on SE^nI^mR models so that we can extend to models with non-exponential generation times including latent periods .etc
 
 
-\section*{Main text}
+\section*{Introduction}
 
 %%% Introduction
 
@@ -197,6 +197,8 @@ Overall, our framework bridges the gap between genetic data and transmission dyn
 % The selective pressure metric and latent immunity model provide critical insights into the epidemiological and immunological factors that drive variant success, improving real-time analysis using genetic sequence data alone and informing public health strategy.
 
 %%% Results
+
+\section*{Results}
 
 \subsection*{Variant dynamics and relative fitness in multistrain models}
 
@@ -485,7 +487,9 @@ In fact, there is more utility for pathogens with larger geographic differences 
 By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
 This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant fitness.
 
-\subsection*{Conclusions, limitations, and future work}
+% \subsection*{Conclusions, limitations, and future work}
+
+\section*{Discussion}
 
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
 This enables a more detailed picture of variant success in environments with heterogeneous population immunity.
@@ -524,55 +528,6 @@ In conclusion, our framework represents a significant advance in our understandi
 By linking variant fitness to specific transmission mechanisms, we provide a more nuanced and accurate prediction of how variants will spread and impact population-level epidemic growth.
 The selective pressure metric and latent immunity model offer new tools for public health agencies to monitor viral evolution in real time, enabling proactive intervention and insight into the variant difference and wave potential.
 While our work has been applied to SARS-CoV-2, the methods developed here are broadly applicable to other evolving pathogens, offering a versatile approach for improving epidemic forecasting, variant monitoring, and overall pandemic preparedness.
-
-\subsection*{Acknowledgements}
-
-We thank Ivana Bozic, Betz Halloran, Mark Kot and Erick Matsen, as well as members of the Bedford Lab for their feedback on this work.
-We gratefully acknowledge all data contributors, ie the Authors and their Originating
-laboratories responsible for obtaining the specimens, and their Submitting laboratories for generating the genetic sequence and metadata and sharing via the GISAID Initiative, on which this research is based.
-We have included an acknowledgements table in the associated GitHub repository under \texttt{data/final\_acknowledgements\_gisaid.tsv.xz}.
-
-\subsubsection*{Funding}
-
-This work is supported by NIH NIGMS award R35 GM119774 to TB and a Howard Hughes Medical Institute COVID-19 Collaboration Initiative award to TB.
-MDF is an ARCS Foundation scholar and was supported by the National Science Foundation Graduate Research Fellowship Program under grant No.\ DGE1762114.
-TB is a Howard Hughes Medical Institute Investigator.
-
-\subsubsection*{Author contributions}
-MF conceived the study.
-MF, TB gathered sequence and case count data.
-MF designed and implemented the models.
-MF performed the analysis.
-MF, TB interpreted the results.
-MF, TB wrote the paper.
-
-\subsubsection*{Competing interests}
-
-All authors declare no competing interests.
-
-\subsubsection*{Data and materials availability}
-
-Source code used to generate figures, model implementations, and sequence count data are available at \href{https://github.com/blab/relative-fitness-mechanisms}{github.com/blab/relative-fitness-mechanisms}.
-
-\bibliographystyle{plos}
-\bibliography{relative-fitness-mechanisms}
-
-\newpage
-
-\appendix
-
-\setcounter{figure}{0}
-\setcounter{table}{0}
-\setcounter{page}{1}
-\renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\thetable}{S\arabic{table}}
-\renewcommand{\thepage}{S\arabic{page}}
-\renewcommand{\thesubsection}{S\arabic{subsection}}
-
-\begin{center}\Large
-Supplementary Information for \\
-\bf Frequency dynamics predict viral fitness, antigenic relationships and epidemic growth
-\end{center}
 
 \section*{Materials and Methods}
 
@@ -682,11 +637,55 @@ Using human titer data from Jian et al \cite{Jian2023}, we compute neutralizatio
 This analysis is repeated among 1,000 bootstrapped samples to create a distribution of $R^2$ values (Fig.~\ref{fig:latent_immune_bootstrap}).
 Additionally, we subset this by exposure history and repeat this analysis to find which exposure groups best explain distances in pseudo-escape space (Fig.~\ref{fig:titer_distance_correlations_by_group}).
 
-\subsection*{Data and code accessibility}
+\subsection*{Acknowledgements}
+
+We thank Ivana Bozic, Betz Halloran, Mark Kot and Erick Matsen, as well as members of the Bedford Lab for their feedback on this work.
+We gratefully acknowledge all data contributors, ie the Authors and their Originating
+laboratories responsible for obtaining the specimens, and their Submitting laboratories for generating the genetic sequence and metadata and sharing via the GISAID Initiative, on which this research is based.
+We have included an acknowledgements table in the associated GitHub repository under \texttt{data/final\_acknowledgements\_gisaid.tsv.xz}.
+
+\subsubsection*{Funding}
+
+This work is supported by NIH NIGMS award R35 GM119774 to TB and a Howard Hughes Medical Institute COVID-19 Collaboration Initiative award to TB.
+MDF is an ARCS Foundation scholar and was supported by the National Science Foundation Graduate Research Fellowship Program under grant No.\ DGE1762114.
+TB is a Howard Hughes Medical Institute Investigator.
+
+\subsubsection*{Author contributions}
+MF conceived the study.
+MF, TB gathered sequence and case count data.
+MF designed and implemented the models.
+MF performed the analysis.
+MF, TB interpreted the results.
+MF, TB wrote the paper.
+
+\subsubsection*{Competing interests}
+
+All authors declare no competing interests.
+
+\subsubsection*{Data and materials availability}
 
 Source code used to generate figures, model implementations, and sequence count data are available at \href{https://github.com/blab/relative-fitness-mechanisms}{github.com/blab/relative-fitness-mechanisms}.
 
+\bibliographystyle{plos}
+\bibliography{relative-fitness-mechanisms}
+
 \newpage
+
+\appendix
+
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{page}{1}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thepage}{S\arabic{page}}
+\renewcommand{\thesubsection}{S\arabic{subsection}}
+
+\begin{center}\Large
+Supplementary Information for \\
+\bf Frequency dynamics predict viral fitness, antigenic relationships and epidemic growth
+\end{center}
+
 
 \section*{Supplementary Text}
 
