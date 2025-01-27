@@ -15,6 +15,9 @@ We advance a selective pressure metric that provides an early signal of epidemic
 Additionally, we show that a latent immunity space model approximates immunological distances, offering insights into population susceptibility and immune evasion.
 These insights refine real-time forecasting and lay the groundwork for research into the interplay between viral genetics, immunity, and epidemic growth.
 
+## Citation
+Figgins and Bedford. 2024. Frequency dynamics predict viral fitness, antigenic relationships and epidemic growth. medRxiv: 2024.12.02.24318334. DOI: [10.1101/2024.12.02.24318334](https://doi.org/10.1101/2024.12.02.24318334).
+
 ## Data
 
 The data files used for the analyses can be found in `./data`.
