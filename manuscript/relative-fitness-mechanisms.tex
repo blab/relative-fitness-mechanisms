@@ -221,22 +221,15 @@ We summarize dynamics of a three-variant mechanistic transmission model in Fig.~
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1.0\linewidth]{./figures/vis_mechanisms.png}
+    \includegraphics[width=1.0\linewidth]{./figures/vis-mechanisms-sketch.png}
     \caption{
-      \textbf{Simulated variant dynamics in a mechanistic model.}
-      Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
-      Simulations of a three-variant model including wildtype $W$, an intrinsic transmission variant $T$, and an immune escape variant $E$ show the relationship between population-level transmission and selection.
-      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
-      We introduce transmissibility variant $T$ at $t=20$ with frequency $f_T(20) = 10^{-5}$ and a 50\% increase in transmissibility $\varTransmission_T = 0.5$.
-      We introduce escape variant $E$ at $t=70$ with frequency $f_E(70) = 10^{-6}$ that infects 5\% of hosts possessing wildtype immunity $\varEscape_E = 0.05$.
-      A. Prevalence $I$ by variant.
-      B. Exponential growth rate $r$ by variant.
-      C. Variant frequency $f$.
-      D. Fitness relative to wildtype $\lambda$.
-      E. Underlying immune pools.
-      F. Effective reproduction number $R_t$ by variant.
+      \textbf{Mechanistic transmission models inform frequency dynamics.}
+      (A) Genomic surveillance reveals changes in the frequency of genetic variations over time.
+      (B) These frequency changes can arise due to differences in phenotypes related to transmission (e.g, immune escape, transmissibility, binding) and changes in population immunity due to recent exposure.
+      (C) Despite being instrumental for real-time analysis, both variant phenotype and population immunity are rarely observed in real time.
+      (D) We use mechanistic transmission models to infer relative fitness from frequency data alone, taking advantage of known structure in transmission dynamics. This enables us to quantify trade-offs between variant phenotypes and develop new methods for estimating fitness in populations undergoing antigenic evolution.
     }
-    \label{fig:vis_mechanisms}
+    \label{fig:vis_mechanisms-sketch}
 \end{figure}
 
 % \subsection*{Estimating relative fitness using Gaussian Processes}
@@ -438,7 +431,7 @@ Although these predictions can be biased by non-evolutionary effects on the epid
 \subsection*{Latent factor model of relative fitness}
 
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
-To generate pseudo-estimates of this latent factors, we develop and implement our method for latent factors models of relative fitness.
+To elucidate the factors, we develop and implement a method for latent factor analysis of relative fitness from sequence data alone.
 This model assumes that variants intrinsically escape the immune responses with particular groups and that differences in a variant's relative fitness between geographies is attributable to differences in immunity between populations.
 This enables us to estimate a pseudo-escape rates for variants as well as pseudo-immunity groups within geographies over time.
 
@@ -451,43 +444,68 @@ Using these sequence counts, we apply our latent factor model to estimate the re
 This model is significantly constrained relative to estimating the time-varying fitness independently in each location, resulting in a model with 2,752 parameters compared to 7,488 parameters in the independent model.
 
 The results of this model are visualized in Fig.~\ref{fig:latent_immune} for several selected variants and countries of interest.
-Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
-Further, our model shows that these groups of lineages tend to target particular immune groups such as clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimensions 3 and 4.
-If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
-Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
-We compare these distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune}G), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
-We bootstrap this analysis among 1,000 replicates to assess significance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p < 0.001$).
-Additionally, we subset by exposure history and find that cohorts with only very recent infection correlate more poorly than WT vaccine cohort or cohorts with more complex exposure histories (Fig.~\ref{fig:titer_distance_correlations_by_group}).
+
+We chose $D=8$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$, i.e.,\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
+Further, we observe that Bayesian Information Criterion (BIC) is minimized between 7 and 9 groups (Fig.~\ref{fig:latent_factor_dimension}D).
+However, the exact choice of latent immune dimensionality is necessarily somewhat arbitrary, and we observe significant correlations with empirical titer data for fewer dimensions as well, although $D=8$ also maximizes this correlation (Fig.~\ref{fig:latent_factor_dimension}B) and its significance is maintained for all dimensions $D > 8$ tested.
+Analogous figures showing pseudo immunity and pseudo antigenic relationships across variants can be seen for $D=2$ in Fig.~\ref{fig:latent_factor_2}, $D=4$ in Fig.~\ref{fig:latent_factor_4}, $D=6$ in Fig.~\ref{fig:latent_factor_6} and $D=10$ in Fig.~\ref{fig:latent_factor_10}.
+
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./figures/latent_immune.png}
     \caption{
       \textbf{Latent factor models of immunity describe variant dynamics.}
-      We fit the latent immunity factor model to recent SARS-CoV-2 sequence data globally.
+      We fit our latent immunity factor model using only SARS-CoV-2 sequence count data.
       A. Variant frequency. Lines are colored to show 4 variants of interest (of 53 total variants) with the style of the line denoting 3 countries of interest (of 18 total countries).
       B. Estimated relative fitness for selected variants and countries.
-      C. Estimated pseudo-immunity cohorts (PIC) over time for multiple countries ordered by decreasing share in the first geography
+      C. Estimated pseudo-immunity cohorts (PIC) over time for multiple countries ordered by decreasing share in the first geography using sequence data alone.
       D, E. Dimensionality-reduced pseudo-escape rates using multidimensional scaling (MDS).
       F. Estimated pseudo-escape rates for each variant relative to pivot variant.
-      H. Comparing pairwise distance between variants in the pseudo-immune space to observed distances in human titer data.
     }
     \label{fig:latent_immune}
 \end{figure}
 
-We chose $D=8$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$, i.e.,\ the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}A).
-% \tbc{The text says that $D=10$ but figure \ref{fig:latent_immune} shows 8 groups. I believe that 8 is correct and I've corrected text accordingly. Please update if this was incorrect.}
-% MF: Made slight changes to text here
-Further, we observe that Bayesian Information Criterion (BIC) is minimized between 7 and 9 groups (Fig.~\ref{fig:latent_factor_dimension}D).
-However, the exact choice of latent immune dimensionality is necessarily somewhat arbitrary and we observe significant correlations with empirical titer data for fewer dimensions as well, although $D=8$ also maximizes this correlation (Fig.~\ref{fig:latent_factor_dimension}B) and its significance is maintained for all dimensions $D > 8$ tested.
-Analogous figures showing pseudo immunity and pseudo antigenic relationships across variants can be seen for $D=2$ in Fig.~\ref{fig:latent_factor_2}, $D=4$ in Fig.~\ref{fig:latent_factor_4}, $D=6$ in Fig.~\ref{fig:latent_factor_6} and $D=10$ in Fig.~\ref{fig:latent_factor_10}.
+Our results show that closely related Pango lineages are often assigned similar pseudo-escape values suggesting that this is capturing some evolutionary structure to immune escape.
+Further, our model shows that these groups of lineages tend to target particular immune groups such as clade 24A (JN.1, JN.1.1, JN.1.4) has high pseudo-escape in dimensions 3 and 4.
+If immune escape is the dominant mechanism for relative fitness difference, we expect that differences in immune response between variants from serological data would mirror differences in our pseudo-escape space.
+Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{./figures/latent-immune-structure.png}
+    \caption{
+      \textbf{Latent factor models of immunity predict titers across varying exposure histories.}
+      Using pseudo-escape values from our latent factor model (Fig.~\ref{fig:latent_immune}) and human titer data, we show that pseudo-escape values predict antigenic distance and titers.
+      (A) Comparing pairwise distance between variants in the pseudo-immune space to observed distances in human titer data.
+      (B-C) Principal component analysis of subject-level titers, colored by learned immune clusters (B) and subject infection history (C).
+      (D) Estimated escape burden by immune cluster, showing variant escape potential against individual immune clusters.
+      (E-F) Correlation between log mean titer against a variant and that variant's pseudo-escape by group.
+      (G) Co-occurence matrix between learned immune clusters and infection histories.
+    }
+    \label{fig:latent_immune_structure}
+\end{figure}
+
+We compare these titer distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune_structure}A), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
+We bootstrap this analysis among 1,000 replicates to assess significance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p < 0.001$).
+Additionally, we subset by exposure history and find that cohorts with only very recent infection correlate more poorly than WT vaccine cohort or cohorts with more complex exposure histories (Fig.~\ref{fig:titer_distance_correlations_by_group}).
+
+To examine how the learned immune structure relates to subject-level serology, we projected titers into principal-component space then performed clustering with k-means, arriving at $K=5$ clusters (Fig.~\ref{fig:choosing_k_k_means}) using the elbow method.
+
+Our learned immune clusters yields clear separation (Fig.~\ref{fig:latent_immune_structure}B) in PCA-space, whereas as reported exposure history shows broader overlap between groups (Fig.~\ref{fig:latent_immune_structure}C).
+This indicates that coarse exposure histories may be an imperfect proxy for serological phenotype, and that titer-based clusters may better capture immunological heterogeneity within exposure categories.
+
+
+We quantified which immune clusters are preferentially targeted by circulating lineages using the model-predicted escape $\eta_{v,\cdot}$ (normalized relative to the pivot) for each variant $v$ to predict titers against that variant for individuals in eachimmune cluster (Fig.~\ref{fig:latent_immune_structure}D).
+Variants such as XBB descendants and the JN.1 clade show elevated escape against specific clusters, with immune cluster~4 standing out as the most broadly targeted.
+This is consistent with the pseudo-escape patterns in Fig.~\ref{fig:latent_immune}F, where JN.1-family lineages exhibit high pseudo-escape along the dominant dimensions.
+
+% TODO: Finish this paragraph
 
 This approach can be applied to other antigenically variable pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
 By approximating antigenic differences using sequence data alone, this method offers for a deeper understanding of immune dynamics and how they shape variant success in the presence of immune escape.
-This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant fitness.
-
-% \subsection*{Conclusions, limitations, and future work}
+This enables an embedding similar to those from antigenic cartography but without the need for serological data and based purely on observed variant frequencies and estimated variant fitness.
 
 \section*{Discussion}
 
@@ -630,7 +648,7 @@ For the same reason, we fix the order of components, so that the components are 
 
 We apply this model to SARS-CoV-2 sequence counts in the period between March 2023 to March 2024 for 14 countries.
 To access the necessary number of immune dimensions, we vary the number of immune dimensions between $D=2$ to $D=12$.
-Looking at the loss for the latent factor model for increasing $D$, we choose $D=10$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
+Looking at the loss for the latent factor model for increasing $D$, we choose $D=8$ for our primary analysis by noting the point at which the loss function seems to stagnate with increasing $D$ i.e. the ``elbow'' method (Fig.~\ref{fig:latent_factor_dimension}).
 
 We compare the distances between variant pairs in our estimated pseudo-escape space to distances in log2 titer.
 Using human titer data from Jian et al \cite{Jian2023}, we compute neutralization titer distances as the average of differences in log2 neutralization titers between pairs of variants for a cohort of individuals.
@@ -932,6 +950,27 @@ We can then use this to reconstruct the relative incidence
 
 \section*{Supplementary Figures}
 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{./figures/vis_mechanisms.png}
+    \caption{
+      \textbf{Simulated variant dynamics in a mechanistic model.}
+      Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
+      Simulations of a three-variant model including wildtype $W$, an intrinsic transmission variant $T$, and an immune escape variant $E$ show the relationship between population-level transmission and selection.
+      We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
+      We introduce transmissibility variant $T$ at $t=20$ with frequency $f_T(20) = 10^{-5}$ and a 50\% increase in transmissibility $\varTransmission_T = 0.5$.
+      We introduce escape variant $E$ at $t=70$ with frequency $f_E(70) = 10^{-6}$ that infects 5\% of hosts possessing wildtype immunity $\varEscape_E = 0.05$.
+      A. Prevalence $I$ by variant.
+      B. Exponential growth rate $r$ by variant.
+      C. Variant frequency $f$.
+      D. Fitness relative to wildtype $\lambda$.
+      E. Underlying immune pools.
+      F. Effective reproduction number $R_t$ by variant.
+    }
+    \label{fig:vis_mechanisms}
+\end{figure}
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{./supplementary_figures/gp_example.png}
@@ -1090,6 +1129,33 @@ We can then use this to reconstruct the relative incidence
       \textbf{Latent factor model with $D=10$ pseudo immune dimensions.}
     }
     \label{fig:latent_factor_10}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/clustering_k.png}
+    \caption{
+        \textbf{Choosing the number of immune clusters ($k=5$) using inertia and silhouette score.}
+    }
+    \label{fig:choosing_k_k_means}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/groupwise_titer_correlation_immune_group.png}
+    \caption{
+        \textbf{Titers predicted with pseudo-escape values and observed titers within infection cohorts.}
+    }
+    \label{fig:titer_pseudo-escape_correlations_by_immune_group}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1.0\textwidth=0.01]{./supplementary_figures/groupwise_titer_correlation_immune_cluster.png}
+    \caption{
+        \textbf{Titers predicted with pseudo-escape values and observed titers within immune clusters.}
+    }
+    \label{fig:titer_pseudo-escape_correlations_by_immune_cluster}
 \end{figure}
 
 \end{document}
