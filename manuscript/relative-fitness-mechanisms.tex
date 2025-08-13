@@ -472,11 +472,11 @@ If immune escape is the dominant mechanism for relative fitness difference, we e
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1.0\linewidth]{./figures/latent-immune-structure.png}
+    \includegraphics[width=0.8\linewidth]{./figures/latent-immune-structure.png}
     \caption{
       \textbf{Latent factor models of immunity predict titers across varying exposure histories.}
       Using pseudo-escape values from our latent factor model (Fig.~\ref{fig:latent_immune}) and human titer data, we show that pseudo-escape values predict antigenic distance and titers.
-      (A-B) Principal component analysis of subject-level titers, colored by learned immune clusters (B) and subject infection history (C).
+      (A-B) Principal component analysis of subject-level titers, colored by learned immune clusters (A) and subject infection history (B).
       (C) Co-occurence matrix between learned immune clusters and infection histories.
       (D) Comparing pairwise distance between variants in the pseudo-immune space to observed distances in human titer data.
       (E-F) Correlation between log mean titer against a variant and that variant's pseudo-escape by group.
@@ -485,26 +485,31 @@ If immune escape is the dominant mechanism for relative fitness difference, we e
     \label{fig:latent_immune_structure}
 \end{figure}
 
-Using human serological data from Jian et al \cite{Jian2023}, we compute titer distances as average log2 differences in titer values between pairs of variants.
-
-To examine how the learned immune structure relates to subject-level serology, we projected titers into principal-component space then performed clustering with k-means, arriving at $K=5$ clusters (Fig.~\ref{fig:choosing_k_k_means}) using the elbow method.
+To examine how the learned immune structure relates to subject-level serology, we projected titers from Jian et al \cite{Jian2023} into principal-component space then performed clustering with k-means, arriving at $K=5$ clusters using the elbow method (Fig.~\ref{fig:choosing_k_k_means}).
 
 Our learned immune clusters yields clear separation (Fig.~\ref{fig:latent_immune_structure}A) in PCA-space, whereas as reported exposure history shows broader overlap between groups (Fig.~\ref{fig:latent_immune_structure}B).
+
+A co-occurrence analysis links learned clusters to reported exposure histories (Fig.~\ref{fig:latent_immune_structure}C).
+These groups split and aggregate multiple exposure histories.
+For example, individuals with a BA.5/BF.7 breakthrough infections split into both clusters 1 and 2, and cluster 3 contains individuals with XBB infection, JN.1 infection, and wildtype vaccine.
 This indicates that coarse exposure histories may be an imperfect proxy for serological phenotype, and that titer-based clusters may better capture immunological heterogeneity within exposure categories.
 
-% TODO: Add line about co-occurence
+To interpret our learned pseudo-escape values, we use human serological data from Jian et al \cite{Jian2023}.
 
-% Then segue...
-
-We compare these titer distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune_structure}A), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
+To assess whether pseudo-escape captures the notion of similar in titer, we compute titer distances as average log2 differences in titer values between pairs of variants.
+We compare these titer distances to distances in our pseudo-escape space (Fig.~\ref{fig:latent_immune_structure}D), finding the distances between distinct pairs in the pseudo-escape space are correlated with these titer differences between variants ($R^2$ = 0.402).
 We bootstrap this analysis among 1,000 replicates to assess significance of this relationship (Fig.~\ref{fig:latent_immune_bootstrap}, $p < 0.001$).
-Additionally, we subset by exposure history and find that cohorts with only very recent infection correlate more poorly than WT vaccine cohort or cohorts with more complex exposure histories (Fig.~\ref{fig:titer_distance_correlations_by_group}).
+Next, we subset by exposure history and find a similar relationship in most cohorts with the distances being poorly explained for individuals with primary XBB infection and primary JN.1 infection (Fig.~\ref{fig:titer_distance_correlations_by_group}).
 
-We quantified which immune clusters are preferentially targeted by circulating lineages using the model-predicted escape $\eta_{v,\cdot}$ for each variant $v$ to predict titers against that variant for individuals in each immune cluster (Fig.~\ref{fig:latent_immune_structure}D).
-Variants such as XBB descendants and the JN.1 clade show elevated escape against specific clusters, with immune cluster~4 standing out as the most broadly targeted.
+We quantified which immune clusters are preferentially targeted by circulating lineages using the model-predicted pseudo-escape $\eta_{v,\cdot}$ for each variant $v$ to predict titers against that variant for individuals in each immune cluster and exposure history group (Fig.~\ref{fig:latent_immune_structure}E-F).
+
+To assess variant-level escape against each cluster, we analyze the escape burden (the negative of the predicted titer) on our 
+Variants within JN.1 clade show elevated escape burden in specific clusters, with immune cluster~4 standing out as the most broadly targeted.
 This is consistent with the pseudo-escape patterns in Fig.~\ref{fig:latent_immune}F, where JN.1-family lineages exhibit high pseudo-escape along the dominant dimensions.
+Further, we find that immune cluster~4 shows a strong negative escape burden again viruses in clade 23B, likely owing the fact that individuals immune cluster~4 corresponds to a subset of individuals with past XBB infection (Fig.~\ref{fig:latent_immune_structure}G).
 
-% TODO: Finish this paragraph
+In short, this shows that a sequence-only latent immunity model can recover an antigenic geometry that agrees with human serology and that learned pseudo-escape values can be used to predict cohort-level neutralization patterns.
+These properties make the latent representation useful for analyzing population susceptibility and explaining geographic variation in variant success, even when contemporaneous titer data are unavailable.
 
 This approach can be applied to other antigenically variable pathogens, such as influenza, making it broadly applicable beyond SARS-CoV-2.
 In fact, there is more utility for pathogens with larger geographic differences in immunity since this approach enables to estimate the proportion of these latent immune pools in the population and how they vary geographically and over time alongside variant difference.
@@ -524,7 +529,7 @@ Our mechanistic grounding of variant fitness allows for investigations into trad
 Despite these advances, there are limitations to our approach.
 Long-term forecasts remain difficult, particularly as new variants with unknown fitness profiles emerge.
 This framework suggests that considering both the escape against individual immune backgrounds and the diversity in human immune escape is most useful for improving forecasts of relative fitness.
-Additionally, our models, while powerful in estimating short-term variant dynamics, rely on assumptions about transmission mechanisms that may not always hold across different pathogens or contexts.
+Our models, while powerful in estimating short-term variant dynamics, rely on assumptions about transmission mechanisms that may not always hold across different pathogens or contexts.
 In fact, as we've shown, it's entirely possible for shifts in population immunity to change the dominant transmission mechanism.
 
 Furthermore, the models considered here are deterministic in nature and do not explicitly model the emergence of variant viruses only the dynamics after their successful introduction.
