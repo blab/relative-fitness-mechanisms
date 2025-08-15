@@ -632,7 +632,7 @@ This model was selected as it achieved the minimal error via time series cross-v
 The candidate models include linear regression, ridge regression, Lasso regression, random forests, and gradient-boosted trees as implemented in scikit-learn \cite{scikit-learn}.
 We additionally tune the hyperparameters of this model using grid search cross-validation.
 
-We validate our model by comparing our predicted epidemic growth rates to held-out case data for US states, and additionally to estimates of the epidemic growth rates in England derived from data from the Office for National Statistics (ONS) Coronavirus Infection Survey \cite{pouwels2021community}.
+We validate our model by comparing our predicted epidemic growth rates to held-out case data for US states, South Africa, South Korea, the United Kingdom, and additionally to estimates of the epidemic growth rates in England derived from data from the Office for National Statistics (ONS) Coronavirus Infection Survey \cite{pouwels2021community}.
 Estimates of prevalence from the ONS Infection Survey were obtained for January 2022 to September 2022 from \href{https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}{www.ons.gov.uk/peoplepopulationandcommunity/ healthandsocialcare/conditionsanddiseases/datasets/coronaviruscovid19infectionsurveydata}.
 Epidemic growth rates are computed on this data in the same way as the state-level analysis.
 
