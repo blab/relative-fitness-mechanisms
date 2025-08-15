@@ -149,8 +149,6 @@ These insights refine real-time forecasting and lay the groundwork for research 
 
 %%% Introduction
 
-%TODO: Flesh out, focusing on the emergence of looking at empirical variant advantage with frequency based model due to increased sequencing globally + tools like Nextclade.
-
 The COVID-19 pandemic was marked by the successive emergence of SARS-CoV-2 variant viruses, driving repeated epidemics globally \cite{tegally2021detection, Volz2021}.
 While these repeated large waves occurred with the emergence of novel variants, the mechanism driving these variants' success changed over time.
 The spread of early variants such as Alpha, Beta, Gamma and Delta were largely driven by increases in intrinsic transmissibility \cite{carabelli2023sars}.
@@ -170,16 +168,17 @@ However, this may be an oversimplification of the transmission process.
 It has been shown that these transmission advantages differ geographically and temporally, suggesting that variant transmission advantages are not necessarily fixed and may be informed by within-region population differences \cite{figgins2022sars, vanDorp2022}.
 In fact, heterogeneity in transmission advantages may be well explained by regional differences in immune structure as Dadonaite et al.\ \cite{Dadonaite2023} show deep mutational scanning estimates of immune escape are well correlated with estimated variant growth advantages.
 Existing models that allow variant transmission advantages to change in time generally do not have a mechanistic underpinning for why transmission advantages exist and vary geographically and temporally \cite{figgins2022sars, susswein2023leveraging}.
-% These non-mechanistic transmission advantages are useful for real-time situation analysis though more work is required to develop theory for how various mechanisms determine viral fitness.
-% In particular, distinguishing between mechanisms of immune escape and transmissibility may improve our ability to make informed short-term forecasts or include other forms of data to explain patterns of relative fitness.
 This lack of mechanistic grounding limits our ability to accurately predict variant dynamics, especially in diverse geographic regions with varying levels of population immunity.
+
+Further, when mechanistic grounding has been considered, these modeling approaches have relied on molecular or serological data that is rarely available in real-time due to the speed and cost of experiments \cite{Meijers2023, Raharinirina2025}. 
 
 In response to this gap, we introduce a novel framework that links variant dynamics directly to transmission mechanisms using compartmental models of infectious diseases.
 By modeling both intrinsic transmissibility and immune escape, we explain how shifts in population immunity shape the relative fitness of viral variants and select for immune escape over intrinsic transmissibility with increasing past exposure.
 Furthermore, including these mechanisms suggests that relative fitness varies in time, reflecting the evolving landscape of population immunity and exposure regardless of the underlying mechanism.
 
 Here, we present a novel non-parametric method for estimating time-varying fitness regardless of the underlying transmission mechanism.
-Alongside this development we introduce a ``selective pressure'' metric that quantifies the impact of variant turnover on population-level epidemic growth rates, as well as a latent immunity model that we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants.
+Alongside this development we introduce a ``selective pressure'' metric that quantifies the impact of variant turnover on population-level epidemic growth rates.
+Finally, we develop a latent immunity model that we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants which recreates antigenic distances using sequence data alone.
 Overall, our framework bridges the gap between genetic data and transmission dynamics, offering a new way to predict and manage viral outbreaks.
 
 % TB: These two below paragraphs on predicting epidemic growth and latent immunity are too detailed for the normal `preview' of manuscript contents.
@@ -472,7 +471,7 @@ If immune escape is the dominant mechanism for relative fitness difference, we e
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{./figures/latent-immune-structure.png}
+    \includegraphics[width=0.6\linewidth]{./figures/latent-immune-structure.png}
     \caption{
       \textbf{Latent factor models of immunity predict titers across varying exposure histories.}
       Using pseudo-escape values from our latent factor model (Fig.~\ref{fig:latent_immune}) and human titer data, we show that pseudo-escape values predict antigenic distance and titers.
@@ -503,10 +502,11 @@ Next, we subset by exposure history and find a similar relationship in most coho
 
 We quantified which immune clusters are preferentially targeted by circulating lineages using the model-predicted pseudo-escape $\eta_{v,\cdot}$ for each variant $v$ to predict titers against that variant for individuals in each immune cluster and exposure history group (Fig.~\ref{fig:latent_immune_structure}E-F).
 
-To assess variant-level escape against each cluster, we analyze the escape burden (the negative of the predicted titer) on our 
+To assess variant-level escape against each cluster, we predict an escape burden as the negative of the predicted titer as a proxy for the escape potential against individuals of a certain background.
 Variants within JN.1 clade show elevated escape burden in specific clusters, with immune cluster~4 standing out as the most broadly targeted.
 This is consistent with the pseudo-escape patterns in Fig.~\ref{fig:latent_immune}F, where JN.1-family lineages exhibit high pseudo-escape along the dominant dimensions.
-Further, we find that immune cluster~4 shows a strong negative escape burden again viruses in clade 23B, likely owing the fact that individuals immune cluster~4 corresponds to a subset of individuals with past XBB infection (Fig.~\ref{fig:latent_immune_structure}G).
+Further, we find that immune cluster 4 shows a strong negative escape burden again viruses in clade 23B, likely owing the fact that individuals immune cluster 4 corresponds to a subset of individuals with past XBB infection (Fig.~\ref{fig:latent_immune_structure}G).
+This is further supported by the fact that among all infection histories, pseudo-escape best predicts titers in individuals with past XBB infection including those with BA.5/BF.7 breakthrough infection (Fig.~\ref{fig:titer_pseudo_escape_correlations_by_immune_group}-\ref{fig:titer_pseudo_escape_correlations_by_immune_cluster}).
 
 In short, this shows that a sequence-only latent immunity model can recover an antigenic geometry that agrees with human serology and that learned pseudo-escape values can be used to predict cohort-level neutralization patterns.
 These properties make the latent representation useful for analyzing population susceptibility and explaining geographic variation in variant success, even when contemporaneous titer data are unavailable.
@@ -521,6 +521,9 @@ This enables an embedding similar to those from antigenic cartography but withou
 Our study demonstrates the utility of multi-strain mechanistic models in interpreting variant frequency dynamics.
 This enables a more detailed picture of variant success in environments with heterogeneous population immunity.
 Our mechanistic grounding of variant fitness allows for investigations into trade-offs between intrinsic transmissibility increase and immune escape, prediction of epidemic dynamics from sequence data alone and inference of antigenic relatedness among variants from differences in success across geographies.
+
+In particular, our latent factor model is most easily compared to the approaches of Meijers et al. and Raharinirina et al. which use cross-neutralization and deep mutational scanning data (respectively) to forecast variant fitness \cite{Meijers2023, Raharinirina2025}.
+Our approach differs significantly in that our model does not require any data other than sequences counts for each variant over time, enabling real-time analysis of fitness and heterogeneity in population immunity before cross-neutralization and deep mutational scanning data are available.
 
 % One key insight from this was the trade-off between intrinsic transmissibility increase and immune escape.
 % We showed that this trade-off is shifted by changes in population immunity, so that immune escape dominates as exposure increases.
@@ -663,6 +666,33 @@ We compare the distances between variant pairs in our estimated pseudo-escape sp
 Using human titer data from Jian et al \cite{Jian2023}, we compute neutralization titer distances as the average of differences in log2 neutralization titers between pairs of variants for a cohort of individuals.
 This analysis is repeated among 1,000 bootstrapped samples to create a distribution of $R^2$ values (Fig.~\ref{fig:latent_immune_bootstrap}).
 Additionally, we subset this by exposure history and repeat this analysis to find which exposure groups best explain distances in pseudo-escape space (Fig.~\ref{fig:titer_distance_correlations_by_group}).
+
+\paragraph{Regression of pseudo-escape onto neutralization titers}
+
+To assess the relationship between our estimated pseudo-escape values and empirical neutralization titers, we use human titer data from Jian et al.~\cite{Jian2023}.  
+For each exposure group, we have a set of neutralization titers measured against multiple variants.  
+Our goal is to determine whether variation in titers across variants can be explained by the pseudo-escape values inferred from our latent immune factor model.
+
+Let $t_{i,v}$ denote the neutralization titer of individual $i$ against variant $v$.  
+For each exposure group $G$, we first aggregate titers by computing the group-level mean and applying a log$_2$ transformation with a pseudocount of one, i.e.
+\begin{equation}
+    y_{v}^G = \log_2\left(\mathrm{mean}_{i \in G}(t_{i,v}) + 1\right).
+\end{equation}
+Let $\varEscape_v \in \mathbb{R}^D$ denote the pseudo-escape vector of variant $v$ estimated from the latent immune factor model across $D$ latent factors.  
+We then fit an ordinary least squares (OLS) model separately for each exposure group,
+\begin{equation}
+    y_{v}^G = \beta_0 + \boldsymbol{\beta}^\top \varEscape_v + \varepsilon_{g,v},
+\end{equation}
+where $\beta_0$ is an intercept term and $\boldsymbol{\beta}$ is a vector of regression coefficients mapping latent factors to predicted group-level titers.  
+This yields a coefficient of determination $R^2_g$ for each group, quantifying how well variation in pseudo-escape explains variation in group-level titers.
+
+To assess statistical significance, we performed a permutation test in which the association between variants and their pseudo-escape vectors was randomly permuted 1,000 times.  
+For each permutation, we re-fit the OLS model and recorded the resulting $R^2_g$, yielding a null distribution under the hypothesis that pseudo-escape and titers are unrelated.  
+The empirical $p$-value for each group was computed as the fraction of permutations with $R^2_g$ greater than or equal to the observed $R^2_g$.
+This procedure controls for the correlation structure in the titer data while directly testing whether the inferred pseudo-escape values have predictive power for neutralization measurements.
+
+We summarize the results across groups by reporting both the observed $R^2$ values and the permutation-derived $p$-values (Fig.~\ref{fig:titer_pseudo_escape_correlations_by_immune_group} and \ref{fig:titer_pseudo_escape_correlations_by_immune_cluster}).  
+This analysis identifies exposure groups where pseudo-escape provides a statistically significant explanation of the neutralization response profile.
 
 \subsection*{Acknowledgements}
 
@@ -1155,7 +1185,7 @@ We can then use this to reconstruct the relative incidence
     \caption{
         \textbf{Titers predicted with pseudo-escape values and observed titers within infection cohorts.}
     }
-    \label{fig:titer_pseudo-escape_correlations_by_immune_group}
+    \label{fig:titer_pseudo_escape_correlations_by_immune_group}
 \end{figure}
 
 \begin{figure}[t!]
@@ -1164,7 +1194,7 @@ We can then use this to reconstruct the relative incidence
     \caption{
         \textbf{Titers predicted with pseudo-escape values and observed titers within immune clusters.}
     }
-    \label{fig:titer_pseudo-escape_correlations_by_immune_cluster}
+    \label{fig:titer_pseudo_escape_correlations_by_immune_cluster}
 \end{figure}
 
 \end{document}
