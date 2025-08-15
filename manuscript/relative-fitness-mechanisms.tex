@@ -256,9 +256,10 @@ To understand the fitness trade-off between transmissibility and immune escape, 
 
 Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape variant or transmissibility variant as
 \begin{align}
-    \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t)\\
-    \lambda_{\varT, \wt} &= \varTransmission \beta S(t).
+    \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t),\\
+    \lambda_{\varT, \wt} &= \varTransmission \beta S(t),
 \end{align}
+where $\beta$ is the transmissibility coefficient, $\varEscape$ is escape proportion against the wildtype, $\varTransmission$ is the variant's proportional increase to transmissibility.
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
@@ -798,7 +799,7 @@ This definition of relative fitness becomes essential in describing various exis
 \begin{align}
     f_{v}(t) &= \frac{ f_{v}(0) \exp( \int_{0}^{t} \lambda_{v, v^*}(s) ds)}{\sum_{u=1}^{V}  f_{u}(0) \exp( \int_{0}^{t} \lambda_{u, v^*}(s) ds)},
 \end{align}
-where the growth rate of $v$ is expressed as relative to an arbitrary pivot variant $v^*$.
+where the relative fitness of $v$ is expressed as relative to an arbitrary pivot variant $v^*$.
 
 \paragraph{Cumulative relative-fitness and frequency change}
 
@@ -815,7 +816,7 @@ For simplicity, we will begin by analyzing a two-strain SIR model in which a var
 This gives a system of 5 ordinary differential equations
 
 \begin{align}
-    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta \varTransmission S I_{v},\\
+    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta (1+\varTransmission) S I_{v},\\
     \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt},\\
     \frac{d I_{v}}{dt} &= \beta (1+\varTransmission) S I_{v} + \beta (1+\varTransmission) \varEscape \phi_{\wt} I_{v} - \gamma I_{v},\\
     \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta (1+\varTransmission) \varEscape \phi_{\wt} I_{v},\\
@@ -837,10 +838,10 @@ From this representation of relative fitness, we can see that given fixed increa
 This model can also be extended to an $n$-strain SIR model where each variant strain $v_i$ with $2\leq i \leq n$ is described by its own advantage parameters $\theta_{i} = (\varTransmission^{(i)}, \varEscape ^{(i)})$  relative to the wildtype ($\theta_{\wt} = \theta_{1} = (0, 0)$)
 
 \begin{align}
-    \frac{d S}{d t} &= - \beta S I_{\wt} - \beta (1+\varTransmission) S I_{v_{i}}\\
+    \frac{d S}{d t} &= - \beta S I_{\wt} - \sum_{i} \beta (1+\varTransmission_i) S I_{v_{i}}\\
     \frac{d I_{\wt}}{dt} &= \beta S I_{\wt} - \gamma I_{\wt}\\
     \frac{d I_{v_{i}}}{dt} &= \beta (1+\varTransmission_i) S I_{v_{i}} + \beta (1+\varTransmission_i) \varEscape_i \phi_{\wt} I_{v_{i}} - \gamma I_{v_{i}}\\
-    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \beta (1+\varTransmission_i) \varEscape_i \phi_{\wt} I_{v_{i}}\\
+    \frac{d \phi_{\wt}}{dt} &= \gamma I_{\wt} - \sum_{i} \beta (1+\varTransmission_i) \varEscape_i \phi_{\wt} I_{v_{i}}\\
     \frac{d \phi_{v_{i}}}{dt} &= \gamma I_{v_{i}}, \quad i \in \{2, \ldots, n\}.
 \end{align}
 
@@ -891,7 +892,7 @@ This model can be written as
 where $f_{v}(t)$ is the frequency of variant $v$ at time $t$ and $\lambda_{v}$ is the relative fitness of variant $v$.
 This provides estimates of the relative fitness compared to some reference strain $u^{*}$ for which $\lambda_{u^*} = 0$.
 In this model, initial frequencies $f_{v}(0)$ and relative fitness $\lambda_{v}$ are estimated from frequency dynamics.
-Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a delta distribution of the generation time \cite{Wallinga2006}.
+Converting this estimate to an estimate of transmission advantage (relative effective reproduction number) requires assuming a Dirac delta distribution of the generation time \cite{Wallinga2006}.
 
 Comparing this to equation \ref{eq:two_strain_relative_fitness}, we can see this model of fixed relative fitness results from assuming that the at-risk populations are constant over-time.
 This assumption is useful since it requires no outside knowledge of the at-risk population and relative infection rates, though this may be less useful for longer forecasts or when there is large turnover in at-risk populations due to infection.
@@ -1019,7 +1020,7 @@ We can then use this to reconstruct the relative incidence
       This figure uses Gaussian processes to model the 3 variant example shown in Fig.~\ref{fig:vis_mechanisms}.
       A. Synthetic sequence counts generated using a multinomial distribution with frequencies from Fig.~\ref{fig:vis_mechanisms}C.
       B. Frequencies and posterior frequencies according to Gaussian process model. Intervals show the 80\% credible interval.
-      C. Relative fitnesses. Dashed line shows true relative fitnesses from underlying mechanistic model.
+      C. Posterior relative fitnesses. Intervals show the 80\% credible interval. Dashed line shows true relative fitnesses from underlying mechanistic model.
     }
     \label{fig:gp_example}
 \end{figure}
