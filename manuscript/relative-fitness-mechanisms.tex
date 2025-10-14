@@ -816,7 +816,7 @@ This gives a system of 5 ordinary differential equations
 \end{align}
 where $I_{\wt}$ denotes wild-type prevalence, $I_{v}$ denotes variant prevalence and $\phi_{\wt}$ denotes immunity derived from wild-type infection.
 In this model, the variant virus can infect both susceptible individuals $S$ and individuals with immunity to wild-type virus $\phi_{\wt}$.
-Increased intrinsic transmissibility increases the baseline transmission rate from $\beta$ in wild-type to $\beta \varTransmission$ in the variant virus and immune escape increases the transmission rate against those with wildtype immunity, so that the at-risk population is $\varEscape \phi_{\wt}$.
+Increased intrinsic transmissibility increases the baseline transmission rate from $\beta$ in wild-type to $\beta (1+\varTransmission)$ in the variant virus and immune escape increases the transmission rate against those with wildtype immunity, so that the at-risk population is $\varEscape \phi_{\wt}$.
 
 Writing that $r_{\wt}(t) = \beta S - \gamma$ and $r_{v}(t) = \varTransmission \beta  S + \beta (1+\varTransmission) \varEscape \phi_{\wt} - \gamma$, we can then write the relative fitnesses as:
 \begin{equation} \label{eq:two_strain_relative_fitness}
@@ -992,8 +992,8 @@ We can then use this to reconstruct the relative incidence
       Mechanistic transmission models constrain variant frequency dynamics by specifying a functional form for relative fitnesses.
       Simulations of a three-variant model including wildtype $W$, an intrinsic transmission variant $T$, and an immune escape variant $E$ show the relationship between population-level transmission and selection.
       We begin the simulation with initial wildtype prevalence $I_\wt(0) = 1$, effective reproduction number $R_{0,\wt} = 1.4$, and duration of infection $1/\gamma = 3.0$ days.
-      We introduce transmissibility variant $T$ at $t=20$ with frequency $f_T(20) = 10^{-5}$ and a 50\% increase in transmissibility $\varTransmission_T = 0.5$.
-      We introduce escape variant $E$ at $t=70$ with frequency $f_E(70) = 10^{-6}$ that infects 5\% of hosts possessing wildtype immunity $\varEscape_E = 0.05$.
+      We introduce transmissibility variant $T$ at $t=20$ with frequency $f_T(20) = 10^{-5}$ and a 50\% increase in transmissibility $\varTransmission=\varTransmission_T = 0.5$.
+      We introduce escape variant $E$ at $t=70$ with frequency $f_E(70) = 10^{-6}$ that infects 5\% of hosts possessing wildtype immunity $\varEscape = \varEscape_E = 0.05$.
       A. Prevalence $I$ by variant.
       B. Exponential growth rate $r$ by variant.
       C. Variant frequency $f$.
