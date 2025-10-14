@@ -428,7 +428,7 @@ Although these predictions can be biased by non-evolutionary effects on the epid
 The representation of relative fitness using discrete immune backgrounds suggests that there may be low-dimensional structure to variant relative fitness.
 To elucidate these factors, we develop and implement a method for latent factor analysis of relative fitness from sequence data alone.
 This model assumes that variants intrinsically escape the immune responses with particular groups and that differences in a variant's relative fitness between geographies is attributable to differences in immunity between populations.
-This enables us to estimate a pseudo-escape rates for variants as well as pseudo-immunity groups within geographies over time.
+This enables us to estimate pseudo-escape rates for variants as well as pseudo-immunity groups within geographies over time.
 
 We generate Pango lineage-level sequence counts for 18 countries and 53 variants between March 2023 and March 2024.
 These 18 countries were chosen based on availability of sequence data.
@@ -554,6 +554,22 @@ While our work has been applied to SARS-CoV-2, the methods developed here are br
 
 \section*{Materials and Methods}
 
+\paragraph{Correlations are insufficient for mechanism identification}
+
+To assess how vaccination uptake affects the growth advantage of a variant with increased transmissibility, we simulate the spread of a more transmissible variant across populations with different initial past exposure and vaccination levels.
+This enables us to isolate the effects of transmissibility within different immunity landscapes, examining how relative fitness and growth advantage shift based on population vaccination coverage alone in the absence of immune escape.
+We begin with the 2-variant SIR model described in Supplementary Text \ref{ssec:frequency_dynamics}.
+We simulate this model for 100 days with generation time $\tau = 1 / \gamma = 3.0$ days, $R_{0, \wt} = 1.4$, $I_{\wt}(0) = 100$ individuals, $I_v(0) = 1$ individual, a 50\% transmissibility increase $\varTransmission=0.5$, and no immune escape $\varEscape=0.0$.
+We divide the period into early and late epidemic with the breakpoint being $t=50$.
+In Fig.~\ref{fig:mechanism_identification}D-E, we estimate the log growth advantage for the variant in the early and full periods using a logit-linear model
+
+\begin{equation}
+\log \left( \frac{f_v(t)}{1 - f_v(t)} \right) = \beta t / \tau + \alpha,
+\end{equation}
+where we take the model slope $\beta$ to be our log growth advantage.
+
+We repeat these simulations for a range of vaccination levels starting from 0\% and ending at 65\%.
+
 \paragraph{Generating sequence counts}
 
 We prepared sequence count data sets using the Nextstrain-curated SARS-CoV-2 sequence metadata \cite{Hadfield2018} which is created using the GISAID EpiCoV database \cite{khare2021gisaid}.
@@ -580,7 +596,7 @@ That is, we model the relative fitness for each variant over time $\lambda_v(t)$
     \vec{\Sigma}_{s, t} &= K_{\theta}(s, t),
 \end{align}
 where $K_{\theta}$ is a potentially parameterized kernel function.
-This induces a structure on the covariance of the relative fitness values over time points $s$ and $t$.
+This induces a structure on the covariance of the relative fitness values over time points $s$ and $t$, causing relative fitness to vary smoothly in time.
 
 For computational efficiency, we implement a Hilbert Space Gaussian Process (HSGP) approximation instead of fitting $V$ independent Gaussian processes.
 This approximation allows us to share basis functions between variants \cite{riutortmayol2022practical}.
@@ -588,7 +604,7 @@ Under this approximation, the relative fitnesses are computed as
 \begin{equation}
     \lambda_{v}(t) \approx \sum_{j=1}^{m} S_{\theta}(\sqrt{\mu_{j}})^{1/2} \cdot \phi_{j}(t) \cdot \beta_{j},
 \end{equation}
-where $S_{\theta}$ is the spectral density of the kernel $K_\theta$, $\mu_{j}$ and $\phi_{j}$ are the eigenvalues and eigenfunctions of the Laplacian, and $\beta_{j} \sim \text{Normal}(0,1)$ \cite{riutortmayol2022practical}.
+where $S_{\theta}$ is the spectral density of the kernel $K_\theta$, $\mu_{j}$ and $\phi_{j}$ are the $m$ eigenvalues and eigenfunctions of the Laplacian, and $\beta_{j} \sim \text{Normal}(0,1)$ \cite{riutortmayol2022practical}.
 Since the eigenvalues and eigenfunctions are shared across variants, this allows us to re-use values across variants, simplifying the computation to a matrix multiplication as
 \begin{equation}
     \vec{\lambda}_{t} = \vec{\Phi}_{t} \sqrt{\vec{S}_{\theta}}\vec{\beta}.
@@ -596,22 +612,6 @@ Since the eigenvalues and eigenfunctions are shared across variants, this allows
 
 For the analyses in this paper, we use this approximate Gaussian process with a Mat\'ern 5/2 kernel and shared hyperparameters across variants.
 We demonstrate this model for simulated data from Fig.~\ref{fig:vis_mechanisms} and show resulting relative fitnesses through time in Fig.~\ref{fig:gp_example}.
-
-\paragraph{Correlations are insufficient for mechanism identification}
-
-To assess how vaccination uptake affects the growth advantage of a variant with increased transmissibility, we simulate the spread of a more transmissible variant across populations with different initial past exposure and vaccination levels.
-This enables us to isolate the effects of transmissibility within different immunity landscapes, examining how relative fitness and growth advantage shift based on population vaccination coverage alone in the absence of immune escape.
-We begin with the 2-variant SIR model described in Supplementary Text \ref{ssec:frequency_dynamics}.
-We simulate this model for 100 days with generation time $\tau = 1 / \gamma = 3.0$ days, $R_{0, \wt} = 1.4$, $I_{\wt}(0) = 100$ individuals, $I_v(0) = 1$ individual, a 50\% transmissibility increase $\varTransmission=0.5$, and no immune escape $\varEscape=0.0$.
-We divide the period into early and late epidemic with the breakpoint being $t=50$.
-In Fig.~\ref{fig:mechanism_identification}D-E, we estimate the log growth advantage for the variant in the early and full periods using a logit-linear model
-
-\begin{equation}
-\log \left( \frac{f_v(t)}{1 - f_v(t)} \right) = \beta t / \tau + \alpha,
-\end{equation}
-where we take the model slope $\beta$ to be our log growth advantage.
-
-We repeat these simulations for a range of vaccination levels starting from 0\% and ending at 65\%.
 
 \paragraph{Predicting epidemic growth rate from selective pressure}
 
