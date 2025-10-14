@@ -170,7 +170,7 @@ By modeling both intrinsic transmissibility and immune escape, we explain how sh
 Furthermore, including these mechanisms suggests that relative fitness varies in time, reflecting the evolving landscape of population immunity and exposure regardless of the underlying mechanism.
 
 Here, we present a novel non-parametric method for estimating time-varying fitness regardless of the underlying transmission mechanism.
-Alongside this development we introduce a ``selective pressure'' metric that quantifies the impact of variant turnover on population-level epidemic growth rates.
+Alongside this development, we introduce a ``selective pressure'' metric that quantifies the impact of variant turnover on population-level epidemic growth rates.
 Finally, we develop a latent immunity model that we use to estimate the underlying proportion of pseudo-immune groups within multiple geographies and pseudo-immune escape rates for circulating variants that predicts antigenic distances using sequence data alone.
 Overall, our framework bridges the gap between genetic data and transmission dynamics, offering a new way to predict and manage viral outbreaks.
 
@@ -211,8 +211,8 @@ Overall, our framework bridges the gap between genetic data and transmission dyn
 Multi-strain models of epidemics have been developed to understand the competition between different viral strains that exhibit different levels of cross-immunity \cite{Gog2002, bedford2012canalization}.
 These models have typically been used to explain strain evolution in antigenically variable pathogens like seasonal influenza virus \cite{bedford2014integrating} and seasonal coronaviruses \cite{Kistler2021, Eguia2021}.
 
-We begin by modeling a population of $V$ exponentially growing variant viruses each with prevalence $I_v(t)$ and time-varying growth rate $r_v(t)$.
-By considering the difference in these growth rates, we can define the relative fitness as $\lambda_{v, u}(t) = r_v(t) - r_u(t)$.
+We begin by modeling a population of $V$ exponentially growing variant viruses $v$ each with prevalence $I_v(t)$ and time-varying growth rate $r_v(t)$.
+By considering the difference in growth rates for variants $v$ and $u$, we can define the relative fitness as $\lambda_{v, u}(t) = r_v(t) - r_u(t)$.
 This relative fitness determines the change in the frequencies of the variants in the population
 
 \begin{equation}
