@@ -225,35 +225,16 @@ These models provide an intuition of how strain-level selection depends on the a
 This framework also generalizes several existing methods for relative fitness estimation and prediction (detailed in Supplementary Text \ref{ssec:existing_frequency_models}).
 We summarize dynamics of a three-variant mechanistic transmission model in Fig.~\ref{fig:vis_mechanisms}, where we compare a transmission variant $T$ with a 50\% increase in transmissibility ($\varTransmission=0.5$) to an escape variant $E$ that infects 5\% of hosts possessing wildtype immunity ($\varEscape=0.05$).
 
-% \subsection*{Estimating relative fitness using Gaussian Processes}
-
-Our approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplementary Text \ref{ssec:frequency_dynamics} and extended to full immune history models in Supplementary Text \ref{ssec:full_immune_history}).
-This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
-Additionally, when working with variant classifications, non-neutral evolution within a variant will cause the relative fitness of that variant to change in time.
-However, even in the absence of external data that can inform relative fitness, there is still hope.
-
-We develop a method for using approximate Gaussian processes to model variant relative fitness.
-Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
-These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
-Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
-
-Traditional Gaussian processes, while flexible, face challenges for large time series and large data sets.
-Our approach overcomes this using a Hilbert Space Gaussian Process (HSGP) approximation, making the framework scalable for many variants and long time periods \cite{riutortmayol2022practical}.
-This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying mechanism.
-This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
-
-Later, we apply this model to empirical SARS-CoV-2 sequence data from 50 US states and England from 2021 to 2022 to estimate relative fitness for variants circulating in that period, but first we continue analytic investigation into fitness dynamics.
-
 \subsection*{Determining the transmissibility-escape tradeoff}
 
-To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with a wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission_\varT > 0$ and $\varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 0$ and $\varEscape_\varE > 0$.
+To understand the fitness trade-off between transmissibility and immune escape, we consider dynamics with a wildtype virus $\wt$ with $\varTransmission_\wt = 0$ and $\varEscape_\wt = 0$, an increased transmissibility variant $\varT$ with $\varTransmission = \varTransmission_\varT > 0$ and $\varEscape = \varEscape_\varT = 0$ and an immune escape variant $\varE$ with $\varTransmission_\varE = 0$ and $\varEscape_\varE > 0$.
 
 Following Equation \ref{eq:two_strain_relative_fitness}, we write relative fitnesses of the escape variant or transmissibility variant as
 \begin{align}
     \lambda_{\varE, \wt} &= \varEscape \beta \phi_{\wt}(t),\\
     \lambda_{\varT, \wt} &= \varTransmission \beta S(t),
 \end{align}
-where $\beta$ is the transmissibility coefficient, $\varEscape$ is escape proportion against the wildtype and $\varTransmission$ is the variant's proportional increase to transmissibility.
+where $\beta$ is the transmissibility coefficient, $\varEscape$ is escape proportion against the wildtype, $\varTransmission$ is the variant's proportional increase to transmissibility, and $S(t)$ and $\phi_{\wt}$ are the proportions of the population who are susceptible and have wildtype immunity respectively.
 
 In the simplest case where individuals are either susceptible or have wildtype immunity ($S(t) + \phi_{\wt}(t) = 1$), we can compute the critical immune fraction $\phi^{*}$ at which $\lambda_{\varE, \wt}(\phi^{*}) = \lambda_{\varT, \wt}(\phi^{*})$ as
 \begin{equation} \label{eq:critical_immunity}
@@ -269,7 +250,7 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
     \includegraphics[width=1.0\linewidth]{./figures/transmission_tradeoff.png}
     \caption{
       \textbf{Trade-off between degree of immune escape and increased transmissibility.}
-      A. Relative fitness for a transmissibility increasing variant $T$ with $\varTransmission_T=0.2$ and an immune escaping variant $E$ with $\varEscape_E=0.3$ for $R_{0, \wt}=2.8$ and $1 / \gamma = 3.0$ days.
+      A. Relative fitness for a transmissibility increasing variant $T$ with $\varTransmission=0.2$ and an immune escaping variant $E$ with $\varEscape=0.3$ for $R_{0, \wt}=2.8$ and $1 / \gamma = 3.0$ days.
       The intersection point shows that after 40\% of the population has wildtype immunity, the escape variant has higher fitness.
       B. The critical exposure proportion is shown for various escape fraction and transmissibility increase. Above the critical exposure proportion, we expect dominance of escape variants.
       C. The minimum escape fraction needed for second waves to be comprised of escape variant assuming competition with transmissibility increase variants and first wave with a given $R_{0}$.
@@ -282,19 +263,19 @@ Additionally, this shows that when intrinsic transmissibility increases are limi
 One question of interest is whether knowledge of mechanism meaningfully informs our ability to forecast short-term frequency growth.
 The first step to addressing this is to understand how the relative fitness may change in time to understand the predictability of relative fitness in the short-term.
 
-We find that the mechanistic forms analyzed in this paper (Supplementary Text \ref{ssec:frequency_dynamics}) can be represented as weighted combinations of $B$ time-varying functions $\Upsilon_{b}(t)$ with weights $\beta_{b}$.
-We can think of each of these functions $\Upsilon_b$ as an immune background and the coefficient $\beta_{b}$ as a transmission differential, so that
+We find that the mechanistic forms analyzed in this paper (Supplementary Text \ref{ssec:frequency_dynamics}) can be represented as weighted combinations of $B$ time-varying functions $\Upsilon_{b}(t)$ with weights $\beta_{b}^{(v,u)}$.
+We can think of each of these functions $\Upsilon_b$ as an immune background and the coefficient $\beta_{b}^{(v,u)} $ as a transmission differential between variants $v$ and $u$, so that
 \begin{align}
-\lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b} \Upsilon_{b}(t).
+    \lambda_{v,u}(t) = \sum_{1 \leq b \leq B} \beta_{b}^{(v,u)} \Upsilon_{b}(t).
 \end{align}
 
 Even in the case of complete knowledge of the relative fitness and the underlying fitness contributions in the present and past, we have that change in the relative fitness is determined by
 \begin{align}
-    \frac{d\lambda_{v,u}}{dt} = \sum_{1 \leq b \leq B} \beta_{b} \frac{d\Upsilon_{b}}{dt}(t).
+    \frac{d\lambda_{v,u}}{dt} = \sum_{1 \leq b \leq B} \beta_{b}^{(v,u)} \frac{d\Upsilon_{b}}{dt}(t).
 \end{align}
 By considering a Taylor expansion of the relative fitness about the point of estimation $t_{0}$, we can approximate the relative fitness in the future as
 \begin{align}
-    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + (t - t_0)\sum_{1\leq b \leq B} \beta_b \frac{d\Upsilon_b}{dt}(t_0).
+    \lambda_{v,u}(t) \approx \lambda_{v,u}(t_{0}) + (t - t_0)\sum_{1\leq b \leq B} \beta_b^{(v,u)} \frac{d\Upsilon_b}{dt}(t_0).
 \end{align}
 This suggests small differences in the form of $\lambda_{v,u}(t)$ can lead to meaningful differences in the future relative fitnesses through changes in the underlying immune backgrounds.
 
@@ -304,7 +285,7 @@ We fix the relative fitness of the novel variant at a prediction time $t_{0}$ us
 We find that although relative fitness trajectories share the same decreasing shape, they may decline at different rates depending on the mechanism (Fig.~\ref{fig:short_term_divergence}).
 This can lead to substantial changes in the predicted incidence depending on the assumed mechanism and affects to overall rate of turnover.
 
-\subsection*{Correlations insufficient for mechanism identification}
+\subsection*{Correlations are insufficient for mechanism identification}
 
 Although correlations between vaccination uptake and variant growth advantage are often observed, these alone may not be sufficient to identify the mechanism behind a variant's success.
 A variant’s fitness advantage may arise from increased transmissibility, immune escape, or a combination of both.
@@ -346,6 +327,25 @@ By explicitly considering how immunity and transmissibility interact within popu
 % Simulated multiple epidemics of a pure increased transmissibility variant at varying levels of initial vaccination and was able to see that estimated growth advantages, computed using a logit linear model, were correlated with initial vaccination fraction.
 % We find that you can estimate association of increased relative fitness due to vaccination in the absence of immune escape (Fig.~\ref{fig:mechanism_identification}).
 % This appears to hold up until both variants' initial effective reproduction number is below 1 i.e. $V_{0} > 1 / R_{v}$.
+
+\subsection*{Estimating relative fitness using approximate Gaussian processes}
+
+Our earlier approach shows that relative fitness is often dependent on the past exposure of a population (as discussed in Supplementary Text \ref{ssec:frequency_dynamics} and extended to full immune history models in Supplementary Text \ref{ssec:full_immune_history}).
+This suggests that serology, vaccination history, and immunological data generally can be informative of relative fitness.
+Additionally, when working with variant classifications, non-neutral evolution within a variant will cause the relative fitness of that variant to change in time.
+However, even in the absence of external data that can inform relative fitness, there is still hope.
+
+We develop a method for using approximate Gaussian processes to model variant relative fitness.
+Gaussian processes are probability distributions over functions, where the structure and smoothness of these functions are defined by a kernel that encodes correlations in time.
+These models are flexible and allow us to encode smoothness constraints, periodicity, and other structures \cite{Gortler2019a}.
+Gaussian processes allow us a non-parametric estimate of the relative fitness for variants through time (see Materials and Methods).
+
+Traditional Gaussian processes, while flexible, face challenges for large time series and large data sets.
+Our approach overcomes this using a Hilbert Space Gaussian Process (HSGP) approximation and shared eigenbasis, making the framework scalable for many variants and long time periods \cite{riutortmayol2022practical}.
+This enables real-time variant fitness estimation and can be applied to any frequency data regardless of the underlying transmission mechanism or immunity assumptions.
+This model is used in Fig.~\ref{fig:gp_example} to estimate the relative fitnesses of different variants through time based on simulated variant sequence counts from frequencies shown in Fig.~\ref{fig:vis_mechanisms}.
+
+Later, we also apply this model to empirical SARS-CoV-2 sequence data from 50 US states and England from 2021 to 2022 to estimate relative fitness for variants circulating in that period.
 
 \subsection*{Quantifying selective pressure}
 
